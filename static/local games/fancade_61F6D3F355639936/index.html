@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Drive Monster</title>
+<meta name="fancade:guid" content="61F6D3F355639936">
+<link rel="icon" href="webapp/favicon.ico">
+<link rel="stylesheet" href="webapp/fancade_stripped.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: #000; }
+  #modal_parent, #play_content, #bottom_content, #gradient,
+  #webview_content, [id*="progress"], [class*="sponsor"] { display: none !important; }
+  .emscripten_border { position: fixed !important; inset: 0 !important; width: 100vw !important; height: 100vh !important; margin: 0 !important; padding: 0 !important; border: none !important; background: #000 !important; }
+  canvas.emscripten, #canvas {
+    position: fixed !important; top: 0 !important; left: 0 !important;
+    width: 100vw !important; height: 100vh !important;
+    border: none !important; border-radius: 0 !important; outline: none !important;
+    z-index: 1; display: block !important;
+  }
+  #start_overlay {
+    position: fixed; inset: 0; z-index: 9999;
+    background: #000; display: flex; align-items: center;
+    justify-content: center; cursor: pointer;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  #start_overlay .inner { text-align: center; color: #fff; }
+  #start_overlay .play-icon {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: rgba(255,255,255,0.1); border: 2px solid rgba(255,255,255,0.3);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1.5rem; transition: all 0.3s;
+  }
+  #start_overlay:hover .play-icon { background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.5); transform: scale(1.05); }
+  #start_overlay .play-icon svg { width: 32px; height: 32px; fill: #fff; margin-left: 4px; }
+  #start_overlay h2 { font-size: 1.5rem; font-weight: 600; margin-bottom: 0.5rem; }
+  #start_overlay p { font-size: 0.85rem; opacity: 0.4; }
+</style>
+<script src="webapp/poki_stubs.js"></script>
+</head>
+<body id="body">
+<div id="modal_parent"><div id="modal_content"><span id="modal_close_button"></span><div id="store_link_modal_content" class="modal_inner"></div><div id="share_file_modal_content" class="modal_inner"></div></div></div>
+<div id="canvas_border" class="emscripten_border">
+  <div id="play_content" class="middle center"></div>
+  <canvas class="emscripten" id="canvas" tabindex="-1"></canvas>
+  <div id="gradient"></div>
+  <div id="webview_content"></div>
+</div>
+<div id="bottom_content"></div>
+
+<div id="start_overlay">
+  <div class="inner">
+    <div class="play-icon"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+    <h2>Drive Monster</h2>
+    <p>Click to play</p>
+  </div>
+</div>
+
+<script src="webapp/firebase_stubs.js"></script>
+<script src="webapp/game_data.js"></script>
+<script>
+try { indexedDB.deleteDatabase('/sandbox'); } catch(e) {}
+try { if (indexedDB.databases) indexedDB.databases().then(function(dbs) {
+  dbs.forEach(function(db) { if (db.name && db.name.indexOf('sandbox') !== -1) indexedDB.deleteDatabase(db.name); });
+}); } catch(e) {}
+</script>
+<script type="text/javascript" src="webapp/source_patched.js"></script>
+<script type="text/javascript" src="webapp/index_stripped.js"></script>
+<script>
+(function() {
+  function resize() {
+    var c = document.getElementById('canvas');
+    if (c) { c.width = window.innerWidth; c.height = window.innerHeight; }
+  }
+  window.addEventListener('resize', resize);
+  window.resizeCanvas = function() { resize(); };
+  document.getElementById('start_overlay').addEventListener('click', function() {
+    this.style.display = 'none';
+    resize();
+    if (typeof checkStartGame === 'function') checkStartGame();
+  });
+  setTimeout(resize, 500);
+  setTimeout(resize, 2000);
+})();
+</script>
+</body>
+</html>

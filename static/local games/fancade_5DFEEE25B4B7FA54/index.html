@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>FarAway</title>
+<meta name="fancade:guid" content="5DFEEE25B4B7FA54">
+<link rel="icon" href="webapp/favicon.ico">
+<link rel="stylesheet" href="webapp/fancade_stripped.css">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-814Y2X3KSF"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-814Y2X3KSF');
+</script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: #000; }
+  #modal_parent, #play_content, #bottom_content, #gradient,
+  #webview_content, [id*="progress"], [class*="sponsor"] { display: none !important; }
+  .emscripten_border { position: fixed !important; inset: 0 !important; width: 100vw !important; height: 100vh !important; margin: 0 !important; padding: 0 !important; border: none !important; background: #000 !important; }
+  canvas.emscripten, #canvas {
+    position: fixed !important; top: 0 !important; left: 0 !important;
+    width: 100vw !important; height: 100vh !important;
+    border: none !important; border-radius: 0 !important; outline: none !important;
+    z-index: 1; display: block !important;
+  }
+  #start_overlay {
+    position: fixed; inset: 0; z-index: 9999;
+    background: #000; display: flex; align-items: center;
+    justify-content: center; cursor: pointer;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  #start_overlay .inner { text-align: center; color: #fff; }
+  #start_overlay .play-icon {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: rgba(255,255,255,0.1); border: 2px solid rgba(255,255,255,0.3);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1.5rem; transition: all 0.3s;
+  }
+  #start_overlay:hover .play-icon { background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.5); transform: scale(1.05); }
+  #start_overlay .play-icon svg { width: 32px; height: 32px; fill: #fff; margin-left: 4px; }
+  #start_overlay h2 { font-size: 1.5rem; font-weight: 600; margin-bottom: 0.5rem; }
+  #start_overlay p { font-size: 0.85rem; opacity: 0.4; }
+  #start_overlay .vn-brand {
+    position: absolute; bottom: 28px; left: 0; right: 0;
+    text-align: center; font-size: 0.75rem; color: rgba(255,255,255,0.45);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    letter-spacing: 0.3px;
+  }
+  #start_overlay .vn-brand a { color: rgba(255,255,255,0.55); text-decoration: none; }
+  #start_overlay .vn-brand a:hover { color: rgba(255,255,255,0.8); text-decoration: underline; }
+  #vn_watermark {
+    position: fixed; bottom: 12px; left: 0; right: 0;
+    text-align: center; z-index: 10000; pointer-events: none;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 0.7rem; color: rgba(255,255,255,0.22);
+    letter-spacing: 0.5px; user-select: none;
+    -webkit-text-stroke: 0.5px rgba(0,0,0,0.6);
+    text-shadow: 0 0 4px rgba(0,0,0,0.9), 0 0 8px rgba(0,0,0,0.7), 0 1px 2px rgba(0,0,0,1);
+    transition: opacity 0.3s;
+  }
+  #vn_watermark a { color: rgba(255,255,255,0.26); text-decoration: none; pointer-events: auto; }
+  #vn_watermark a:hover { color: rgba(255,255,255,0.45); }
+  #_vn_block {
+    display: none; position: fixed; inset: 0; z-index: 99999;
+    background: #000; align-items: center; justify-content: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  #_vn_block .msg {
+    text-align: center; color: #fff; max-width: 420px; padding: 2rem;
+  }
+  #_vn_block .msg .icon {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: rgba(255,60,60,0.15); border: 2px solid rgba(255,60,60,0.3);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1.5rem; font-size: 1.8rem;
+  }
+  #_vn_block .msg h2 { font-size: 1.2rem; font-weight: 600; margin-bottom: 0.75rem; color: #ff6b6b; }
+  #_vn_block .msg p { font-size: 0.85rem; color: rgba(255,255,255,0.5); line-height: 1.7; }
+</style>
+<script src="webapp/poki_stubs.js"></script>
+</head>
+<body id="body">
+<div id="modal_parent"><div id="modal_content"><span id="modal_close_button"></span><div id="store_link_modal_content" class="modal_inner"></div><div id="share_file_modal_content" class="modal_inner"></div></div></div>
+<div id="canvas_border" class="emscripten_border">
+  <div id="play_content" class="middle center"></div>
+  <canvas class="emscripten" id="canvas" tabindex="-1"></canvas>
+  <div id="gradient"></div>
+  <div id="webview_content"></div>
+</div>
+<div id="bottom_content"></div>
+
+<!-- Launch overlay -->
+<div id="start_overlay">
+  <div class="inner">
+    <div class="play-icon"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+    <h2>FarAway</h2>
+    <p>Click to play</p>
+  </div>
+  <div class="vn-brand" id="_vnb1" data-vn="1">Locally Provisioned by Void Network / <a href="https://vng.lol" target="_blank">https://vng.lol</a></div>
+</div>
+
+<!-- In-game watermark -->
+<div id="vn_watermark"><span id="_vnb2" data-vn="2">Void Network / <a href="https://vng.lol" target="_blank">https://vng.lol</a></span></div>
+
+<!-- Tamper block screen (hidden by default) -->
+<div id="_vn_block">
+  <div class="msg">
+    <div class="icon">⚠</div>
+    <h2>Branding Integrity Violation</h2>
+    <p>Void Network branding elements have been modified or removed. This game was compiled and distributed by Void Network and must retain its original branding. Please restore the original files to continue playing.</p>
+  </div>
+</div>
+
+<script src="webapp/firebase_stubs.js"></script>
+<script src="webapp/game_data.js"></script>
+<script>
+try { indexedDB.deleteDatabase('/sandbox'); } catch(e) {}
+try { if (indexedDB.databases) indexedDB.databases().then(function(dbs) {
+  dbs.forEach(function(db) { if (db.name && db.name.indexOf('sandbox') !== -1) indexedDB.deleteDatabase(db.name); });
+}); } catch(e) {}
+</script>
+<script type="text/javascript" src="webapp/source_patched.js"></script>
+<script type="text/javascript" src="webapp/index_stripped.js"></script>
+<script>
+(function() {
+  function resize() {
+    var c = document.getElementById('canvas');
+    if (c) { c.width = window.innerWidth; c.height = window.innerHeight; }
+  }
+  window.addEventListener('resize', resize);
+  window.resizeCanvas = function() { resize(); };
+  document.getElementById('start_overlay').addEventListener('click', function() {
+    this.style.display = 'none';
+    resize();
+    if (typeof checkStartGame === 'function') checkStartGame();
+  });
+  setTimeout(resize, 500);
+  setTimeout(resize, 2000);
+})();
+</script>
+<script>
+// ── Branding integrity verification ──
+(function(){
+  var _k1 = 'Void Network', _k2 = 'vng.lol', _seal = true;
+  function _h(){
+    if(!_seal) return;
+    var b1 = document.getElementById('_vnb1');
+    var b2 = document.getElementById('_vnb2');
+    var wm = document.getElementById('vn_watermark');
+    var ov = document.getElementById('start_overlay');
+    var fail = false;
+    // Check launch screen brand (only when overlay is visible)
+    if(ov && ov.style.display !== 'none'){
+      if(!b1 || b1.offsetParent === null) fail = true;
+      else {
+        var t1 = (b1.textContent || b1.innerText || '');
+        if(t1.indexOf(_k1) === -1 || t1.indexOf(_k2) === -1) fail = true;
+        var s1 = window.getComputedStyle(b1);
+        if(s1.display === 'none' || s1.visibility === 'hidden' || parseFloat(s1.opacity) < 0.1) fail = true;
+      }
+    }
+    // Check in-game watermark (always)
+    if(!b2 || !wm) fail = true;
+    else {
+      var t2 = (b2.textContent || b2.innerText || '');
+      if(t2.indexOf(_k1) === -1 || t2.indexOf(_k2) === -1) fail = true;
+      var s2 = window.getComputedStyle(wm);
+      if(s2.display === 'none' || s2.visibility === 'hidden' || parseFloat(s2.opacity) < 0.05) fail = true;
+      var s2b = window.getComputedStyle(b2);
+      if(s2b.display === 'none' || s2b.visibility === 'hidden' || parseFloat(s2b.opacity) < 0.05) fail = true;
+      // Check position - must be on screen
+      var rect = wm.getBoundingClientRect();
+      if(rect.width < 10 || rect.height < 5) fail = true;
+      if(rect.top > window.innerHeight + 50 || rect.left > window.innerWidth + 200) fail = true;
+    }
+    if(fail){
+      _seal = false;
+      var bl = document.getElementById('_vn_block');
+      if(bl) bl.style.display = 'flex';
+      var cv = document.getElementById('canvas');
+      if(cv) cv.style.display = 'none';
+      var so = document.getElementById('start_overlay');
+      if(so) so.style.display = 'none';
+      try { if(typeof Module !== 'undefined' && Module._app_pause) Module._app_pause(); } catch(e){}
+    }
+  }
+  // Staggered checks to catch both immediate and delayed tampering
+  var _iv = [800, 2000, 4000, 7000, 12000, 20000, 35000, 60000];
+  _iv.forEach(function(t){ setTimeout(_h, t); });
+  // Recurring check every 30s
+  setInterval(_h, 30000);
+  // Also check on visibility change (tab switch back)
+  document.addEventListener('visibilitychange', function(){ if(!document.hidden) setTimeout(_h, 500); });
+  // MutationObserver on watermark elements
+  try {
+    var mo = new MutationObserver(function(){ setTimeout(_h, 100); });
+    var targets = ['_vnb1','_vnb2','vn_watermark'];
+    targets.forEach(function(id){
+      var el = document.getElementById(id);
+      if(el) mo.observe(el, { childList: true, characterData: true, subtree: true, attributes: true, attributeFilter: ['style','class'] });
+    });
+    // Also watch for removal from DOM
+    mo.observe(document.body, { childList: true, subtree: false });
+  } catch(e){}
+})();
+</script>
+</body>
+</html>
