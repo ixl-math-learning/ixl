@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+
+    <script defer src="/s/script.js" data-website-id="b9510d8e-e1e5-4dff-ad86-297ebece5574"></script>
+    <noscript><img src="/t/p?payload=%7B%22website%22%3A%22b9510d8e-e1e5-4dff-ad86-297ebece5574%22%2C%22url%22%3A%22%2F%22%2C%22hostname%22%3A%22vng.lol%22%2C%22name%22%3A%22pageview%22%7D" style="display:none;"></noscript>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BuildNow GG - Auto Loader</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        #game-frame {
+            width: 100vw;
+            height: 100vh;
+            border: none;
+            display: block;
+        }
+    </style>
+
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-814Y2X3KSF"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-814Y2X3KSF');
+</script>
+</head>
+<body>
+    <iframe id="game-frame" src="https://games.crazygames.com/en_US/buildnow-gg/index.html?v=1.345"></iframe>
+
+    <script>
+        const gameFrame = document.getElementById('game-frame');
+        
+        function checkAndClickElements() {
+            try {
+                const iframeDoc = gameFrame.contentDocument || gameFrame.contentWindow.document;
+                
+                // Check for all footer elements to remove
+                const footers = iframeDoc.querySelectorAll('.css-1h1938b, .css-1xe247z, .MuiGrid-wrap-xs-nowrap');
+                footers.forEach(footer => {
+                    if (footer && footer.style.display !== 'none') {
+                        footer.style.display = 'none';
+                    }
+                });
+                
+                // Check for any button with "Play now" text
+                const allButtons = iframeDoc.querySelectorAll('button');
+                allButtons.forEach(button => {
+                    const text = button.textContent.trim().toLowerCase();
+                    if (text.includes('play now') || text.includes('play here')) {
+                        button.click();
+                    }
+                    if (text.includes('continue offline')) {
+                        button.click();
+                    }
+                });
+                
+            } catch (error) {
+                // Silently handle cross-origin errors
+            }
+        }
+
+        // Wait for iframe to load
+        gameFrame.addEventListener('load', function() {
+            // Start checking for elements every 100ms for faster response
+            setInterval(checkAndClickElements, 100);
+            
+            // Also check immediately
+            checkAndClickElements();
+        });
+
+        // Fallback: Start checking after 500ms even if load event doesn't fire
+        setTimeout(() => {
+            setInterval(checkAndClickElements, 100);
+            checkAndClickElements();
+        }, 500);
+        
+        // Also check very early
+        setTimeout(checkAndClickElements, 100);
+    </script>
+</body>
+</html>
