@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+
+    <script defer src="/s/script.js" data-website-id="b9510d8e-e1e5-4dff-ad86-297ebece5574"></script>
+    <noscript><img src="/t/p?payload=%7B%22website%22%3A%22b9510d8e-e1e5-4dff-ad86-297ebece5574%22%2C%22url%22%3A%22%2F%22%2C%22hostname%22%3A%22vng.lol%22%2C%22name%22%3A%22pageview%22%7D" style="display:none;"></noscript>
+    <title>ImproveDigital Topics API</title>
+  <meta charset="utf-8">
+  <script type="text/javascript">
+    async function getTopics() {
+      try {
+        if (
+          'browsingTopics' in document &&
+          document.featurePolicy.allowsFeature('browsing-topics')
+        ) {
+          const topics = await document.browsingTopics();
+          return topics;
+        }
+      }
+      catch (e) {
+        console.error(e);
+      }
+    }
+
+    (async function() {
+      const topics = await getTopics();
+      const message = JSON.stringify({
+        segment: {
+          domain: '360yield.com',
+          bidder: 'improvedigital',
+          topics,
+        },
+        date: Date.now(),
+      });
+      window.parent.postMessage(message, '*');
+    })();
+  </script>
+
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-814Y2X3KSF"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-814Y2X3KSF');
+</script>
+</head>
+
+<body>
+</body>
+
+</html>
