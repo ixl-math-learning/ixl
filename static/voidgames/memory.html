@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+
+    <script defer src="/s/script.js" data-website-id="b9510d8e-e1e5-4dff-ad86-297ebece5574"></script>
+    <noscript><img src="/t/p?payload=%7B%22website%22%3A%22b9510d8e-e1e5-4dff-ad86-297ebece5574%22%2C%22url%22%3A%22%2F%22%2C%22hostname%22%3A%22vng.lol%22%2C%22name%22%3A%22pageview%22%7D" style="display:none;"></noscript>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Memory - Void Games</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+:root{--s:1}
+html,body{height:100%;overflow:hidden;background:#000;color:#f5f5f5}
+body{display:flex;flex-direction:column;user-select:none}
+.header{display:flex;justify-content:space-between;align-items:center;padding:calc(8px * var(--s)) calc(12px * var(--s));background:rgba(0,0,0,0.95);border-bottom:1px solid rgba(255,255,255,0.1);flex-shrink:0}
+.header-left{display:flex;gap:calc(8px * var(--s));align-items:center}
+.btn{padding:calc(8px * var(--s)) calc(14px * var(--s));background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:calc(8px * var(--s));color:#f5f5f5;font-size:calc(13px * var(--s));cursor:pointer;text-decoration:none;transition:background 0.2s}
+.btn:hover{background:rgba(255,255,255,0.2)}
+.btn.stop{background:rgba(255,80,80,0.2);border-color:rgba(255,80,80,0.4)}
+.header-stats{display:flex;gap:calc(14px * var(--s))}
+.stat{text-align:center}
+.stat-label{font-size:calc(9px * var(--s));color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.5px}
+.stat-value{font-size:calc(16px * var(--s));font-weight:700}
+.stat-value.pending{color:#ffeb3b}
+.stat-value.lost{color:#f44336}
+.game-area{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:space-evenly;padding:calc(10px * var(--s));overflow:hidden}
+.title{font-size:calc(26px * var(--s));font-weight:800;color:#fff;text-shadow:0 0 20px rgba(255,255,255,0.3)}
+.warning{font-size:calc(11px * var(--s));color:#f44336;background:rgba(244,67,54,0.15);padding:calc(5px * var(--s)) calc(12px * var(--s));border-radius:calc(6px * var(--s));text-align:center}
+.status{font-size:calc(22px * var(--s));font-weight:600;min-height:calc(30px * var(--s))}
+.status.watch{color:#ffeb3b}
+.status.turn{color:#4caf50}
+.status.wrong{color:#f44336}
+.tiles-container{display:grid;grid-template-columns:repeat(2,1fr);gap:calc(12px * var(--s));width:calc(280px * var(--s));height:calc(280px * var(--s))}
+.tile{border-radius:calc(16px * var(--s));cursor:pointer;transition:transform 0.1s;position:relative}
+.tile::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.15) 0%,transparent 50%);border-radius:inherit;pointer-events:none}
+.tile.disabled{pointer-events:none;opacity:0.6}
+.tile:active:not(.disabled){transform:scale(0.95)}
+.tile-0{background:linear-gradient(180deg,#4a4a4a,#2a2a2a);border:calc(3px * var(--s)) solid #3a3a3a}
+.tile-0.active,.tile-0.lit{background:linear-gradient(180deg,#f5f5f5,#d0d0d0);border-color:#fff;box-shadow:0 0 calc(40px * var(--s)) rgba(255,255,255,0.6)}
+.tile-1{background:linear-gradient(180deg,#3a3a3a,#1a1a1a);border:calc(3px * var(--s)) solid #2a2a2a}
+.tile-1.active,.tile-1.lit{background:linear-gradient(180deg,#888,#555);border-color:#999;box-shadow:0 0 calc(40px * var(--s)) rgba(150,150,150,0.5)}
+.tile-2{background:linear-gradient(180deg,#2a2a2a,#0a0a0a);border:calc(3px * var(--s)) solid #1a1a1a}
+.tile-2.active,.tile-2.lit{background:linear-gradient(180deg,#666,#333);border-color:#777;box-shadow:0 0 calc(40px * var(--s)) rgba(100,100,100,0.5)}
+.tile-3{background:linear-gradient(180deg,#1a1a1a,#000);border:calc(3px * var(--s)) solid #0a0a0a}
+.tile-3.active,.tile-3.lit{background:linear-gradient(180deg,#444,#222);border-color:#555;box-shadow:0 0 calc(40px * var(--s)) rgba(70,70,70,0.5)}
+.tile.wrong{animation:shake 0.3s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.info-panel{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:calc(10px * var(--s));padding:calc(10px * var(--s)) calc(16px * var(--s));width:100%;max-width:calc(350px * var(--s))}
+.round-counter{text-align:center;font-size:calc(16px * var(--s));margin-bottom:calc(8px * var(--s))}
+.round-counter span{font-weight:700;color:#ffeb3b}
+.legend{display:flex;flex-wrap:wrap;gap:calc(8px * var(--s));justify-content:center;font-size:calc(10px * var(--s))}
+.legend-item{background:rgba(255,255,255,0.05);padding:calc(3px * var(--s)) calc(8px * var(--s));border-radius:calc(4px * var(--s))}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.95);display:none;align-items:center;justify-content:center;flex-direction:column;gap:calc(12px * var(--s));z-index:200;padding:calc(20px * var(--s))}
+.overlay.active{display:flex}
+.overlay-title{font-size:calc(36px * var(--s));font-weight:800}
+.overlay-title.stopped{color:#ff9800}
+.overlay-title.lost{color:#f44336}
+.overlay-vng{font-size:calc(20px * var(--s))}
+.overlay-vng.positive{color:#4caf50}
+.overlay-vng.negative{color:#f44336}
+.overlay-details{font-size:calc(13px * var(--s));color:rgba(255,255,255,0.6)}
+.overlay-penalty{font-size:calc(14px * var(--s));color:#f44336}
+.highscore{font-size:calc(13px * var(--s));color:rgba(255,255,255,0.5)}
+.vng-popup{position:fixed;pointer-events:none;font-weight:700;font-size:calc(16px * var(--s));z-index:150;animation:float 1s forwards}
+@keyframes float{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(calc(-35px * var(--s)))}}
+.vng-popup.positive{color:#4caf50}
+.vng-popup.negative{color:#f44336}
+.loading{position:fixed;inset:0;background:#000;display:flex;align-items:center;justify-content:center;z-index:300;font-size:calc(16px * var(--s))}
+.loading.hidden{display:none}
+    </style>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-814Y2X3KSF"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-814Y2X3KSF');
+</script>
+</head>
+<body>
+    <div class="loading" id="loading"><span>Loading...</span></div>
+    <div class="header">
+        <div class="header-left">
+            <a href="/voidgames/voidgames.html" class="btn">← Back</a>
+            <button class="btn stop" id="stopBtn">Stop (-15)</button>
+        </div>
+        <div class="header-stats">
+            <div class="stat"><div class="stat-label">Round</div><div class="stat-value" id="roundDisplay">1</div></div>
+            <div class="stat"><div class="stat-label">Pending</div><div class="stat-value pending" id="pendingDisplay">+0</div></div>
+            <div class="stat"><div class="stat-label">Lost</div><div class="stat-value lost" id="lostDisplay">-0</div></div>
+        </div>
+    </div>
+    <div class="game-area">
+        <div class="title">Memory</div>
+        <div class="warning">⚠️ Losses INSTANT | Wins PENDING | WRONG -15 | STOP -15</div>
+        <div class="status" id="status">Get ready...</div>
+        <div class="tiles-container" id="tiles">
+            <div class="tile tile-0 disabled" data-i="0"></div>
+            <div class="tile tile-1 disabled" data-i="1"></div>
+            <div class="tile tile-2 disabled" data-i="2"></div>
+            <div class="tile tile-3 disabled" data-i="3"></div>
+        </div>
+        <div class="info-panel">
+            <div class="round-counter">Pattern Length: <span id="patternLen">1</span></div>
+            <div class="legend">
+                <div class="legend-item">R1-5: +1</div>
+                <div class="legend-item">R6-10: +1</div>
+                <div class="legend-item">R11-15: +2</div>
+                <div class="legend-item">R16+: +3</div>
+            </div>
+        </div>
+    </div>
+    <div class="overlay" id="overlay">
+        <div class="overlay-title" id="overlayTitle">GAME OVER</div>
+        <div class="overlay-vng" id="finalVng">+0 VNG</div>
+        <div class="overlay-details" id="detailsText"></div>
+        <div class="overlay-penalty" id="penaltyText"></div>
+        <div class="highscore" id="highscoreText"></div>
+        <button class="btn" id="restartBtn">Play Again</button>
+        <a href="/voidgames/voidgames.html" class="btn">Back to Games</a>
+    </div>
+    <script>
+const API='/api/vg',V_LOSE=15,V_STOP=15,FREQS=[261.63,329.63,392,523.25];
+let user,sessId,pending=0,lost=0,over=false,pattern=[],pIdx=0,round=1,showing=false,audioCtx,best=0;
+
+function calcScale(){const vw=window.innerWidth,vh=window.innerHeight;const s=Math.min(vw/600,vh/600,1.4);document.documentElement.style.setProperty('--s',Math.max(0.55,s).toFixed(3))}
+calcScale();window.addEventListener('resize',calcScale);
+
+function auth(){const s=localStorage.getItem('vg_user');if(!s){location.href='/voidgames/voidgames.html';return false}user=JSON.parse(s);best=parseInt(localStorage.getItem('vg_memory_best')||'0');return true}
+async function startSess(){try{const r=await fetch(API+'/game/start',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId:user.userId,sessionToken:user.sessionToken,gameType:'memory'})});const d=await r.json();if(d.success){sessId=d.gameSessionId;return true}return false}catch{return false}}
+async function deduct(a,r){if(a<=0)return;lost+=a;upd();try{await fetch(API+'/game/deduct',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId:user.userId,sessionToken:user.sessionToken,gameSessionId:sessId,amount:a,reason:r})})}catch{}}
+async function reportEvent(type,data={}){if(!sessId)return null;try{const r=await fetch(API+'/game/event',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId:user.userId,sessionToken:user.sessionToken,gameSessionId:sessId,eventType:type,eventData:data})});return await r.json()}catch{return null}}
+async function endSess(pen=0,netAmount=0){if(!sessId)return{};try{const r=await fetch(API+'/game/end',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId:user.userId,sessionToken:user.sessionToken,gameSessionId:sessId,finalScore:round*100,netAmount:netAmount,penalty:pen})});sessId=null;return r.json()}catch{return{}}}
+function initAudio(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)()}
+function tone(i,dur=300){initAudio();if(audioCtx.state==='suspended')audioCtx.resume();const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.frequency.value=FREQS[i];o.type='sine';g.gain.setValueAtTime(0.3,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(0.01,audioCtx.currentTime+dur/1000);o.start();o.stop(audioCtx.currentTime+dur/1000)}
+function errSound(){initAudio();if(audioCtx.state==='suspended')audioCtx.resume();const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.frequency.value=100;o.type='sawtooth';g.gain.setValueAtTime(0.3,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(0.01,audioCtx.currentTime+0.5);o.start();o.stop(audioCtx.currentTime+0.5)}
+function popup(a,x,y){const d=Math.floor(a);if(d===0)return;const p=document.createElement('div');p.className='vng-popup '+(a>=0?'positive':'negative');p.textContent=(a>=0?'+':'')+d;p.style.left=x+'px';p.style.top=y+'px';document.body.appendChild(p);setTimeout(()=>p.remove(),1000)}
+function upd(){document.getElementById('pendingDisplay').textContent='+'+Math.floor(pending);document.getElementById('lostDisplay').textContent='-'+Math.floor(lost);document.getElementById('roundDisplay').textContent=round;document.getElementById('patternLen').textContent=pattern.length}
+function setDisabled(d){document.querySelectorAll('.tile').forEach(t=>t.classList.toggle('disabled',d))}
+function light(i,dur=400){const t=document.querySelector(`.tile[data-i="${i}"]`);t.classList.add('lit');tone(i,dur);setTimeout(()=>t.classList.remove('lit'),dur)}
+async function showPattern(){showing=true;setDisabled(true);const st=document.getElementById('status');st.textContent='Watch...';st.className='status watch';await new Promise(r=>setTimeout(r,800));for(let i=0;i<pattern.length;i++){light(pattern[i],400);await new Promise(r=>setTimeout(r,550))}await new Promise(r=>setTimeout(r,300));st.textContent='Your turn!';st.className='status turn';pIdx=0;showing=false;setDisabled(false)}
+function addPattern(){pattern.push(Math.floor(Math.random()*4));upd()}
+async function click(i){if(over||showing)return;initAudio();const t=document.querySelector(`.tile[data-i="${i}"]`);t.classList.add('active');tone(i,200);setTimeout(()=>t.classList.remove('active'),200);
+if(pattern[pIdx]===i){pIdx++;if(pIdx===pattern.length){const res=await reportEvent('roundComplete',{round:round});const v=res?.vngReward||0;if(v>0){pending+=v;const r=t.getBoundingClientRect();popup(v,r.left+r.width/2,r.top)}round++;upd();setDisabled(true);document.getElementById('status').textContent='Correct!';await new Promise(r=>setTimeout(r,1000));addPattern();showPattern()}}else{wrong()}}
+async function wrong(){over=true;setDisabled(true);const st=document.getElementById('status');st.textContent='Wrong!';st.className='status wrong';errSound();document.querySelectorAll('.tile').forEach(t=>t.classList.add('wrong'));await new Promise(r=>setTimeout(r,1000));end(false)}
+async function end(stopped){const tit=document.getElementById('overlayTitle'),vEl=document.getElementById('finalVng'),pen=document.getElementById('penaltyText'),det=document.getElementById('detailsText'),hs=document.getElementById('highscoreText');let p=0,net=pending-lost;if(stopped){tit.textContent='STOPPED';tit.className='overlay-title stopped';p=V_STOP;net=pending-lost-V_STOP;pen.textContent='Stop fee: -'+V_STOP+' VNG'}else{tit.textContent='GAME OVER';tit.className='overlay-title lost';p=V_LOSE;net=pending-lost-V_LOSE;pen.textContent='Lose penalty: -'+V_LOSE+' VNG'}det.textContent='Earned: +'+Math.floor(pending)+' | Lost: -'+Math.floor(lost);vEl.textContent='Net: '+(net>=0?'+':'')+Math.floor(net)+' VNG';vEl.className='overlay-vng '+(net>=0?'positive':'negative');if(round>best){best=round;localStorage.setItem('vg_memory_best',best);hs.textContent='🎉 New best!'}else hs.textContent='Best: Round '+best;await endSess(p,net);document.getElementById('overlay').classList.add('active')}
+async function stop(){if(over||showing)return;if(!confirm('Stop? -15 VNG fee'))return;over=true;setDisabled(true);end(true)}
+async function restart(){document.getElementById('overlay').classList.remove('active');document.getElementById('loading').classList.remove('hidden');pending=0;lost=0;over=false;pattern=[];pIdx=0;round=1;showing=false;document.querySelectorAll('.tile').forEach(t=>t.classList.remove('wrong','lit','active'));if(!await startSess()){alert('Failed');location.href='/voidgames/voidgames.html';return}upd();document.getElementById('loading').classList.add('hidden');await new Promise(r=>setTimeout(r,500));addPattern();showPattern()}
+async function init(){if(!auth())return;if(!await startSess()){alert('Session failed');localStorage.removeItem('vg_user');location.href='/voidgames/voidgames.html';return}document.querySelectorAll('.tile').forEach(t=>t.onclick=()=>click(parseInt(t.dataset.i)));upd();document.getElementById('loading').classList.add('hidden');await new Promise(r=>setTimeout(r,1000));addPattern();showPattern()}
+document.getElementById('restartBtn').onclick=restart;
+document.getElementById('stopBtn').onclick=stop;
+init();
+    </script>
+</body>
+</html>

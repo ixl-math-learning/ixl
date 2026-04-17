@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en"> 
+<head>
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+
+    <script defer src="/s/script.js" data-website-id="b9510d8e-e1e5-4dff-ad86-297ebece5574"></script>
+    <noscript><img src="/t/p?payload=%7B%22website%22%3A%22b9510d8e-e1e5-4dff-ad86-297ebece5574%22%2C%22url%22%3A%22%2F%22%2C%22hostname%22%3A%22vng.lol%22%2C%22name%22%3A%22pageview%22%7D" style="display:none;"></noscript>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Students Against New York's Device Restriction</title>
+    <script src="/ultraviolet/uv/uv.bundle.js"></script>
+    <script src="/ultraviolet/uv/uv.config.js"></script>
+    <script src="/ultraviolet/register-sw.js"></script>
+    <script>
+if ('serviceWorker' in navigator) {
+  registerSW().catch(console.error);
+}
+</script>
+    <script>console.log=console.debug=console.info=console.warn=console.error=()=>{};</script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            font-family: 'Poppins', Arial, sans-serif;
+        }
+
+        .container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .iframe-container {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+    </style>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-814Y2X3KSF"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-814Y2X3KSF');
+</script>
+</head>
+<body>
+    <div class="container">
+        <div class="iframe-container">
+            <iframe id="mainFrame" src="" title="Void Network Content"></iframe>
+        </div>
+    </div>
+
+    <script>
+        function encodeUrl(url) {
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                url = 'https://' + url;
+            }
+            try {
+                return window.__uv$config.prefix + window.__uv$config.encodeUrl(url);
+            } catch (err) {
+                console.warn('UV encoding failed:', err);
+                return url;
+            }
+        }
+
+        function loadContent() {
+            const targetUrl = 'https://phones-omega.vercel.app';
+            const encodedUrl = encodeUrl(targetUrl);
+            const iframe = document.getElementById('mainFrame');
+            if (iframe) {
+                iframe.src = encodedUrl;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(loadContent, 100);
+        });
+
+        window.addEventListener('load', function() {
+            if (document.getElementById('mainFrame').src === '') {
+                loadContent();
+            }
+        });
+    </script>
+</body>
+</html>

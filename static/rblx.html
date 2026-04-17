@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Gaming - Void Network</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="/~r/2/index.js" defer></script>
+    <script src="/~r/7/bundle.js" defer></script>
+    <script src="/~r/7/config.js" defer></script>
+    <script src="/lib/register-sw.js" defer></script>
+    <script src="/assets/js/scramjet-preload.js" defer></script>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{--bg:#050505;--card:#0f0f0f;--text:#f0f0f0;--dim:rgba(255,255,255,0.6);--muted:rgba(255,255,255,0.35);--border:rgba(255,255,255,0.06);--bh:rgba(255,255,255,0.1);--r:14px;--green:#22c55e;--red:#ef4444}
+        body{min-height:100vh;background:var(--bg);font-family:'Poppins',sans-serif;color:var(--text);-webkit-font-smoothing:antialiased;overflow:hidden}
+        body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at center,rgba(255,255,255,0.015),transparent 70%);pointer-events:none;z-index:-1}
+        #landing{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:2rem}
+        .card{background:var(--card);border:1px solid rgba(255,255,255,0.04);border-radius:18px;padding:3rem 2.5rem;max-width:460px;width:100%;text-align:center;box-shadow:0 4px 16px rgba(0,0,0,0.4)}
+        .card-icon{width:64px;height:64px;margin:0 auto 1.5rem;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:16px;display:flex;align-items:center;justify-content:center}
+        .card-icon svg{width:28px;height:28px;stroke:var(--dim);fill:none;stroke-width:1.5}
+        .card h1{font-size:1.6rem;font-weight:700;margin-bottom:.6rem;background:linear-gradient(180deg,#4a4a4a,#fff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .card p{color:var(--dim);font-size:.88rem;line-height:1.65;margin-bottom:1.8rem}
+        .btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;background:rgba(255,255,255,0.06);border:1px solid var(--bh);color:var(--text);padding:.85rem 2.2rem;border-radius:var(--r);font-family:'Poppins',sans-serif;font-size:.95rem;font-weight:500;cursor:pointer;transition:all .3s;min-width:200px}
+        .btn:hover:not(:disabled){background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.2)}
+        .btn:disabled{opacity:.4;cursor:not-allowed}
+        .btn .spinner{display:none;width:18px;height:18px;border:2px solid rgba(255,255,255,0.15);border-top-color:var(--text);border-radius:50%;animation:spin .8s linear infinite}
+        .btn.loading .spinner{display:block}.btn.loading .btn-text{display:none}
+        @keyframes spin{to{transform:rotate(360deg)}}
+        .specs{margin-top:1.5rem;display:flex;justify-content:center;gap:1.5rem;font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+        .error-msg{margin-top:1rem;color:var(--red);font-size:.82rem;display:none}.error-msg.show{display:block}
+        .queue-info{margin-top:1.2rem;color:var(--dim);font-size:.85rem;display:none}.queue-info.show{display:block}
+        .queue-info .pos{color:var(--text);font-weight:600;font-size:1.1rem}
+        #overlay{display:none;position:fixed;inset:0;background:#000;z-index:500}
+        #overlay.active{display:block}
+        #overlay video{width:100%;height:100%;object-fit:cover}
+        #overlay .overlay-status{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);color:rgba(255,255,255,0.5);font-size:.82rem;z-index:501;text-align:center;pointer-events:none}
+        #frame{display:none;position:fixed;inset:0;width:100%;height:100%;border:none;z-index:1;background:#000}
+        #frame.active{display:block}
+        #hud{display:none;position:fixed;top:.8rem;right:.8rem;z-index:400;gap:.5rem;align-items:center;opacity:.2;transition:opacity .3s}
+        #hud:hover{opacity:1}#hud.active{display:flex}
+        .hud-badge{background:rgba(10,10,10,0.85);border:1px solid var(--border);border-radius:10px;padding:.4rem .8rem;font-size:.72rem;color:var(--dim);backdrop-filter:blur(20px);display:flex;align-items:center;gap:.4rem}
+        .hud-dot{width:7px;height:7px;background:var(--green);border-radius:50%;animation:pulse 2s ease-in-out infinite}
+        @keyframes pulse{50%{opacity:.4}}
+        .hud-btn{background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.25);color:var(--red);padding:.4rem 1rem;border-radius:10px;font-family:'Poppins',sans-serif;font-size:.75rem;font-weight:500;cursor:pointer;backdrop-filter:blur(20px);transition:all .3s}
+        .hud-btn:hover{background:rgba(239,68,68,0.22);border-color:rgba(239,68,68,0.45)}
+        .back-link{position:fixed;top:1.2rem;left:1.5rem;color:var(--muted);text-decoration:none;font-size:.85rem;transition:color .3s;z-index:50}.back-link:hover{color:var(--dim)}
+        @media(max-width:480px){.card{padding:2rem 1.5rem}.card h1{font-size:1.3rem}.specs{gap:1rem;font-size:.65rem}}
+    </style>
+</head>
+<body>
+    <a href="/g.html" class="back-link" id="backLink">&larr; Back to Games</a>
+    <div id="landing">
+        <div class="card">
+            <div class="card-icon">
+                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            </div>
+            <h1>Cloud Gaming</h1>
+            <p>Play Roblox on a GPU-powered cloud desktop. Full quality, runs on dedicated GPU servers.</p>
+            <button class="btn" id="launchBtn"><span class="btn-text">Launch Session</span><div class="spinner"></div></button>
+            <div class="error-msg" id="errorMsg"></div>
+            <div class="queue-info" id="queueInfo">Position in queue: <span class="pos" id="queuePos">-</span></div>
+            <div class="specs"><span>GPU Accelerated</span><span>20 min sessions</span><span>Auto Queue</span></div>
+        </div>
+    </div>
+    <div id="overlay"><video src="/0312.mp4" autoplay loop muted playsinline></video><p class="overlay-status" id="overlayText">Starting session&hellip;</p></div>
+    <iframe id="frame" allow="autoplay; fullscreen; clipboard-write; clipboard-read; keyboard-map; pointer-lock; gamepad" tabindex="0"></iframe>
+    <div id="hud">
+        <div class="hud-badge"><div class="hud-dot"></div><span id="timer">20:00</span></div>
+        <button class="hud-btn" id="endBtn">End Session</button>
+    </div>
+
+    <script>
+        var API = location.origin + '/rblx-api';
+        var $ = function(id) { return document.getElementById(id); };
+        var userId = localStorage.getItem('rblx_uid');
+        if (!userId) { userId = Math.random().toString(36).slice(2) + Date.now().toString(36); localStorage.setItem('rblx_uid', userId); }
+
+        var sessionId = null, timerInt = null, pingInt = null, pollInt = null, remaining = 0;
+        var uvInitialized = false;
+
+        // Pre-register UV service worker on page load (same as g.html)
+        document.addEventListener('DOMContentLoaded', function() {
+            initUV().catch(function(e) { console.warn('UV pre-init failed:', e.message); });
+        });
+
+        async function initUV() {
+            if (uvInitialized) return;
+            try {
+                await Promise.race([
+                    (async function() {
+                        if (!navigator.serviceWorker) return;
+
+                        // Unregister any /~/px/ scope worker.js — it uses bare server headers
+                        // which conflicts with root sw.js's BareMux-based UV handling in iframes
+                        var regs = await navigator.serviceWorker.getRegistrations();
+                        for (var i = 0; i < regs.length; i++) {
+                            if (regs[i].scope.includes('/~/px/')) {
+                                await regs[i].unregister();
+                            }
+                        }
+
+                        // Set up BareMux transport — root sw.js handles /~/px/ via NPM UV
+                        if (typeof BareMux !== 'undefined') {
+                            var connection = new BareMux.BareMuxConnection("/~r/2/worker.js");
+                            var wispUrl = (location.protocol === "https:" ? "wss" : "ws") + "://" + location.host + "/~r/9/";
+                            await connection.setTransport("/~r/3/index.mjs", [{ wisp: wispUrl }]);
+                        }
+                        // Wait for root SW to be ready (registered by scramjet-preload.js)
+                        await navigator.serviceWorker.ready;
+                        uvInitialized = true;
+                    })(),
+                    new Promise(function(_, reject) { setTimeout(function() { reject(new Error('UV init timeout')); }, 10000); })
+                ]);
+            } catch(e) { throw e; }
+        }
+
+        function showError(m) { var e = $('errorMsg'); e.textContent = m; e.classList.add('show'); setTimeout(function() { e.classList.remove('show'); }, 6000); }
+
+        function updateTimer() {
+            remaining -= 1000;
+            if (remaining <= 0) { endSession(); return; }
+            var s = Math.floor(remaining / 1000);
+            $('timer').textContent = String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+        }
+
+        async function launch() {
+            var btn = $('launchBtn');
+            btn.classList.add('loading'); btn.disabled = true;
+            $('errorMsg').classList.remove('show');
+            $('queueInfo').classList.remove('show');
+
+            // Kick off UV init in parallel with the API call
+            initUV().catch(function(e) { console.warn('UV init on launch:', e.message); });
+
+            try {
+                var res = await fetch(API + '/join', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId: userId })
+                });
+                var rawText = await res.text();
+                var data;
+                try { data = JSON.parse(rawText); } catch(pe) {
+                    showError('Bad JSON: ' + rawText.slice(0, 120));
+                    btn.classList.remove('loading'); btn.disabled = false; return;
+                }
+
+                if (data.status === 'active') {
+                    // Already has active session — poll /status to get desktopUrl
+                    sessionId = data.sessionId;
+                    $('landing').style.display = 'none';
+                    $('backLink').style.display = 'none';
+                    $('overlay').classList.add('active');
+                    $('overlayText').textContent = 'Reconnecting\u2026';
+                    pollInt = setInterval(pollStatus, 3000);
+                    pollStatus();
+                    return;
+                } else if (data.status === 'creating' || (data.sessionId && data.status !== 'error')) {
+                    // GPU server is spinning up — show overlay and poll
+                    sessionId = data.sessionId;
+                    $('landing').style.display = 'none';
+                    $('backLink').style.display = 'none';
+                    $('overlay').classList.add('active');
+                    $('overlayText').textContent = data.progress || 'Starting GPU server\u2026';
+                    pollInt = setInterval(pollStatus, 3000);
+                } else if (data.status === 'queued') {
+                    $('queueInfo').classList.add('show');
+                    $('queuePos').textContent = data.position;
+                    btn.classList.remove('loading'); btn.disabled = true;
+                    btn.querySelector('.btn-text').textContent = 'In Queue';
+                    btn.classList.remove('loading');
+                    pollInt = setInterval(pollStatus, 3000);
+                } else {
+                    showError(data.error || 'Unexpected response: ' + data.status);
+                    btn.classList.remove('loading'); btn.disabled = false;
+                }
+            } catch (e) {
+                showError('Could not reach server');
+                btn.classList.remove('loading'); btn.disabled = false;
+            }
+        }
+
+        async function pollStatus() {
+            try {
+                var res = await fetch(API + '/status?userId=' + encodeURIComponent(userId));
+                var data = await res.json();
+
+                if (data.status === 'active') {
+                    clearInterval(pollInt); pollInt = null;
+                    $('queueInfo').classList.remove('show');
+                    startViewer(data.sessionId, data.remaining, data.desktopUrl);
+                } else if (data.status === 'creating') {
+                    // Still starting — update progress text
+                    $('overlayText').textContent = data.progress || 'Starting GPU server\u2026';
+                } else if (data.status === 'queued') {
+                    $('queuePos').textContent = data.position;
+                } else if (data.status === 'error') {
+                    clearInterval(pollInt); pollInt = null;
+                    showError(data.message || 'Failed to start session');
+                    resetToLanding();
+                } else {
+                    clearInterval(pollInt); pollInt = null;
+                    $('queueInfo').classList.remove('show');
+                    resetToLanding();
+                }
+            } catch {}
+        }
+
+        async function startViewer(sid, rem, desktopUrl) {
+            sessionId = sid;
+            remaining = rem || 20 * 60 * 1000;
+
+            $('landing').style.display = 'none';
+            $('backLink').style.display = 'none';
+            $('overlay').classList.add('active');
+            $('overlayText').textContent = 'Initializing proxy\u2026';
+
+            if (desktopUrl) {
+                $('overlayText').textContent = 'Launching Roblox\u2026';
+                $('frame').src = desktopUrl;
+                // Load iframe behind the overlay — wait for content to be ready
+                await new Promise(function(r) { setTimeout(r, 8000); });
+            } else {
+                $('overlayText').textContent = 'Desktop not ready \u2014 try again';
+                showError('Desktop viewer not available. Please try again.');
+                await new Promise(function(r) { setTimeout(r, 2000); });
+                resetToLanding();
+                return;
+            }
+
+            // Fade out overlay smoothly
+            $('overlay').style.transition = 'opacity 0.8s ease';
+            $('overlay').style.opacity = '0';
+            await new Promise(function(r) { setTimeout(r, 800); });
+            $('overlay').classList.remove('active');
+            $('overlay').style.opacity = '';
+            $('overlay').style.transition = '';
+            $('frame').classList.add('active');
+            $('hud').classList.add('active');
+
+            // Auto-focus iframe so keyboard works immediately
+            $('frame').focus();
+            $('frame').addEventListener('mouseenter', function() { this.focus(); });
+            // Click anywhere on the iframe area to ensure focus
+            document.addEventListener('click', function() { if ($('frame').classList.contains('active')) $('frame').focus(); });
+
+            // Hide Selkies/noVNC control bars — retry since iframe loads async
+            var hideAttempts = 0;
+            var hideInt = setInterval(function() {
+                hideAttempts++;
+                if (hideAttempts > 60) { clearInterval(hideInt); return; }
+                try {
+                    var fdoc = $('frame').contentDocument || $('frame').contentWindow.document;
+                    if (!fdoc) return;
+                    if (!fdoc.getElementById('void-hide-controls')) {
+                        var s = fdoc.createElement('style');
+                        s.id = 'void-hide-controls';
+                        // Hide noVNC controls
+                        s.textContent = '#noVNC_control_bar_anchor, #noVNC_control_bar, .control-bar, #noVNC_transition, #noVNC_status, #noVNC_settings, .toggle-handle, #noVNC_status_bar, .bottom-bar, #noVNC_mobile_buttons, #noVNC_extra_keys, .noVNC_panel, #noVNC_control_bar_handle { display: none !important; } '
+                        // Hide Selkies toolbar/header
+                        + '#toolbar, .toolbar, #header, .header, #status, .status-bar, #resize-container { display: none !important; } '
+                        // Fullscreen the video/canvas
+                        + '#noVNC_container, #noVNC_screen, #noVNC_canvas, video, #stream { left: 0 !important; width: 100vw !important; height: 100vh !important; position: fixed !important; top: 0 !important; object-fit: cover !important; }';
+                        (fdoc.head || fdoc.documentElement).appendChild(s);
+                        clearInterval(hideInt);
+                    }
+                } catch(e) {}
+            }, 500);
+
+            timerInt = setInterval(updateTimer, 1000);
+            pingInt = setInterval(function() {
+                if (sessionId) fetch(API + '/ping', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sessionId: sessionId })
+                }).catch(function() {});
+            }, 30000);
+        }
+
+        async function endSession() {
+            if (timerInt) { clearInterval(timerInt); timerInt = null; }
+            if (pingInt) { clearInterval(pingInt); pingInt = null; }
+
+            var sid = sessionId;
+            sessionId = null;
+            remaining = 0;
+            $('endBtn').disabled = true;
+            $('endBtn').textContent = 'Ending...';
+
+            if (sid) {
+                fetch(API + '/leave', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId: userId })
+                }).catch(function() {});
+            }
+
+            // No need to poll for cleanup — Vast instance is destroyed server-side
+            // Just reset to landing after a brief moment
+            setTimeout(resetToLanding, 1500);
+        }
+
+        function resetToLanding() {
+            $('frame').classList.remove('active');
+            $('frame').src = 'about:blank';
+            $('hud').classList.remove('active');
+            $('overlay').classList.remove('active');
+            $('landing').style.display = 'flex';
+            $('backLink').style.display = '';
+            var btn = $('launchBtn');
+            btn.disabled = false; btn.classList.remove('loading');
+            btn.querySelector('.btn-text').textContent = 'Launch Session';
+            $('endBtn').disabled = false;
+            $('endBtn').textContent = 'End Session';
+        }
+
+        $('launchBtn').addEventListener('click', launch);
+        $('endBtn').addEventListener('click', endSession);
+        window.addEventListener('beforeunload', function() {
+            if (sessionId) navigator.sendBeacon(API + '/leave', JSON.stringify({ userId: userId }));
+        });
+    </script>
+<script src="/assets/js/wilway-popup.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+
+    <script defer src="/s/script.js" data-website-id="b9510d8e-e1e5-4dff-ad86-297ebece5574"></script>
+    <noscript><img src="/t/p?payload=%7B%22website%22%3A%22b9510d8e-e1e5-4dff-ad86-297ebece5574%22%2C%22url%22%3A%22%2F%22%2C%22hostname%22%3A%22vng.lol%22%2C%22name%22%3A%22pageview%22%7D" style="display:none;"></noscript>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Lucky Spin - Void Games</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+:root{--s:1}
+html,body{height:100%;overflow:hidden;background:#000;color:#f5f5f5}
+body{display:flex;flex-direction:column;user-select:none}
+.header{display:flex;justify-content:space-between;align-items:center;padding:calc(8px * var(--s)) calc(12px * var(--s));background:rgba(0,0,0,0.95);border-bottom:1px solid rgba(255,255,255,0.1);flex-shrink:0}
+.header-left{display:flex;gap:calc(6px * var(--s));align-items:center}
+.btn{padding:calc(7px * var(--s)) calc(12px * var(--s));background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:calc(7px * var(--s));color:#f5f5f5;font-size:calc(12px * var(--s));cursor:pointer;text-decoration:none;transition:background 0.2s}
+.btn:hover{background:rgba(255,255,255,0.2)}
+.btn.spin-nav{background:rgba(76,175,80,0.25);border-color:rgba(76,175,80,0.5);font-weight:600}
+.btn.spin-nav:disabled{opacity:0.4;cursor:not-allowed}
+.header-stats{display:flex;gap:calc(12px * var(--s))}
+.stat{text-align:center}
+.stat-label{font-size:calc(9px * var(--s));color:rgba(255,255,255,0.5);text-transform:uppercase}
+.stat-value{font-size:calc(15px * var(--s));font-weight:700}
+.stat-value.pending{color:#ffeb3b}
+.stat-value.lost{color:#f44336}
+.stat-value.spins{color:#4caf50}
+.game-area{flex:1;display:flex;flex-direction:column;align-items:center;padding:calc(10px * var(--s));overflow:hidden;min-height:0;position:relative}
+.top-info{display:flex;flex-direction:column;align-items:center;gap:calc(4px * var(--s));margin-bottom:calc(10px * var(--s));flex-shrink:0}
+.title{font-size:calc(24px * var(--s));font-weight:800;color:#fff;text-shadow:0 0 20px rgba(255,255,255,0.3)}
+.risk-badge{font-size:calc(11px * var(--s));padding:calc(3px * var(--s)) calc(10px * var(--s));border-radius:calc(4px * var(--s));font-weight:600}
+.risk-badge.low{background:rgba(76,175,80,0.3);color:#4caf50}
+.risk-badge.medium{background:rgba(255,193,7,0.3);color:#ffc107}
+.risk-badge.high{background:rgba(255,152,0,0.3);color:#ff9800}
+.risk-badge.extreme{background:rgba(244,67,54,0.3);color:#f44336}
+.wheel-container{position:relative;width:calc(320px * var(--s));height:calc(320px * var(--s));display:flex;align-items:center;justify-content:center;margin:auto}
+#wheelCanvas{width:100%;height:100%;transform-origin:center}
+.wheel-pointer{position:absolute;top:calc(-5px * var(--s));left:50%;transform:translateX(-50%);width:calc(20px * var(--s));height:calc(25px * var(--s));z-index:10;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.5))}
+.wheel-pointer::after{content:'';position:absolute;top:0;left:0;border-left:calc(10px * var(--s)) solid transparent;border-right:calc(10px * var(--s)) solid transparent;border-top:calc(25px * var(--s)) solid #fff}
+.spin-btn-center{position:absolute;width:calc(60px * var(--s));height:calc(60px * var(--s));background:radial-gradient(circle, #fff, #e0e0e0);border-radius:50%;border:calc(4px * var(--s)) solid rgba(255,255,255,0.2);box-shadow:0 0 calc(20px * var(--s)) rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:5;transition:transform 0.1s}
+.spin-btn-center:active{transform:scale(0.95)}
+.spin-btn-center::before{content:'SPIN';font-weight:800;font-size:calc(14px * var(--s));color:#333}
+.setup-screen{position:fixed;inset:0;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:250;padding:calc(20px * var(--s));gap:calc(20px * var(--s))}
+.setup-screen.hidden{display:none}
+.setup-title{font-size:calc(32px * var(--s));font-weight:800;color:#fff}
+.setup-section{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:calc(12px * var(--s));padding:calc(16px * var(--s));width:100%;max-width:calc(400px * var(--s))}
+.setup-label{font-size:calc(12px * var(--s));color:rgba(255,255,255,0.6);margin-bottom:calc(8px * var(--s));text-transform:uppercase;letter-spacing:1px}
+.option-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:calc(8px * var(--s))}
+.option-grid.cols-4{grid-template-columns:repeat(4,1fr)}
+.option{padding:calc(12px * var(--s));background:rgba(255,255,255,0.05);border:2px solid rgba(255,255,255,0.1);border-radius:calc(8px * var(--s));cursor:pointer;text-align:center;transition:all 0.2s}
+.option:hover{background:rgba(255,255,255,0.1)}
+.option.low.selected{border-color:#4caf50;background:rgba(76,175,80,0.2)}
+.option.medium.selected{border-color:#ffeb3b;background:rgba(255,235,59,0.2)}
+.option.high.selected{border-color:#ff9800;background:rgba(255,152,0,0.2)}
+.option.extreme.selected{border-color:#f44336;background:rgba(244,67,54,0.2)}
+.option.selected:not(.low):not(.medium):not(.high):not(.extreme){border-color:#fff;background:rgba(255,255,255,0.2)}
+.option-main{font-size:calc(16px * var(--s));font-weight:700}
+.option-sub{font-size:calc(10px * var(--s));color:rgba(255,255,255,0.5);margin-top:calc(2px * var(--s))}
+.setup-summary{text-align:center;font-size:calc(14px * var(--s));color:rgba(255,255,255,0.7)}
+.setup-summary span{color:#ffeb3b;font-weight:700}
+.start-btn{padding:calc(14px * var(--s)) calc(40px * var(--s));background:linear-gradient(135deg,#4caf50,#388e3c);border:none;border-radius:calc(10px * var(--s));color:#fff;font-size:calc(16px * var(--s));font-weight:700;cursor:pointer;transition:transform 0.2s,box-shadow 0.2s}
+.start-btn:hover{transform:scale(1.05);box-shadow:0 0 20px rgba(76,175,80,0.4)}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.95);display:none;align-items:center;justify-content:center;flex-direction:column;gap:calc(12px * var(--s));z-index:200;padding:calc(20px * var(--s))}
+.overlay.active{display:flex}
+.overlay-title{font-size:calc(36px * var(--s));font-weight:800;color:#f5f5f5}
+.overlay-title.stopped{color:#ff9800}
+.overlay-title.win{color:#4caf50}
+.overlay-vng{font-size:calc(20px * var(--s))}
+.overlay-vng.positive{color:#4caf50}
+.overlay-vng.negative{color:#f44336}
+.overlay-details{font-size:calc(13px * var(--s));color:rgba(255,255,255,0.6)}
+.overlay-penalty{font-size:calc(14px * var(--s));color:#f44336}
+.vng-popup{position:fixed;pointer-events:none;font-weight:700;font-size:calc(15px * var(--s));z-index:150;animation:float 1.2s forwards;text-shadow:0 2px 4px rgba(0,0,0,0.8)}
+@keyframes float{0%{opacity:1;transform:translateY(0)}60%{opacity:1}100%{opacity:0;transform:translateY(calc(-40px * var(--s)))}}
+.vng-popup.positive{color:#4caf50}
+.vng-popup.negative{color:#f44336}
+.vng-popup.jackpot{color:#ffd700;font-size:calc(24px * var(--s));text-shadow:0 0 20px #ffd700}
+.loading{position:fixed;inset:0;background:#000;display:flex;align-items:center;justify-content:center;z-index:300;font-size:calc(16px * var(--s))}
+.loading.hidden{display:none}
+.auto-toggle-wrap{display:flex;align-items:center;gap:calc(6px * var(--s))}
+.auto-toggle{width:calc(40px * var(--s));height:calc(22px * var(--s));background:rgba(255,255,255,0.2);border-radius:calc(11px * var(--s));cursor:pointer;position:relative;transition:background 0.2s}
+.auto-toggle.active{background:rgba(76,175,80,0.5)}
+.auto-toggle::after{content:'';position:absolute;width:calc(18px * var(--s));height:calc(18px * var(--s));background:#fff;border-radius:50%;top:calc(2px * var(--s));left:calc(2px * var(--s));transition:left 0.2s}
+.auto-toggle.active::after{left:calc(20px * var(--s))}
+    </style>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-814Y2X3KSF"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-814Y2X3KSF');
+</script>
+</head>
+<body>
+    <div class="loading" id="loading"><span>Loading...</span></div>
+    <div class="setup-screen" id="setupScreen">
+        <div class="setup-title">Lucky Spin</div>
+        <div class="setup-section">
+            <div class="setup-label">Risk Level</div>
+            <div class="option-grid cols-4" id="riskOptions">
+                <div class="option low" data-risk="low"><div class="option-main">Low</div><div class="option-sub">Safe</div></div>
+                <div class="option medium selected" data-risk="medium"><div class="option-main">Med</div><div class="option-sub">Balanced</div></div>
+                <div class="option high" data-risk="high"><div class="option-main">High</div><div class="option-sub">Risky</div></div>
+                <div class="option extreme" data-risk="extreme"><div class="option-main">Max</div><div class="option-sub">Crazy</div></div>
+            </div>
+        </div>
+        <div class="setup-section">
+            <div class="setup-label">Number of Spins</div>
+            <div class="option-grid cols-4" id="spinOptions">
+                <div class="option" data-spins="5"><div class="option-main">5</div><div class="option-sub">Quick</div></div>
+                <div class="option selected" data-spins="10"><div class="option-main">10</div><div class="option-sub">Standard</div></div>
+                <div class="option" data-spins="25"><div class="option-main">25</div><div class="option-sub">Long</div></div>
+                <div class="option" data-spins="50"><div class="option-main">50</div><div class="option-sub">Marathon</div></div>
+            </div>
+        </div>
+        <div class="setup-summary">Cost: <span id="totalCost">100</span> VNG for <span id="totalSpins">10</span> spins</div>
+        <button class="start-btn" id="startBtn">Start Game</button>
+        <a href="/voidgames/voidgames.html" class="btn">Back to Games</a>
+    </div>
+    <div class="header">
+        <div class="header-left">
+            <a href="/voidgames/voidgames.html" class="btn">←</a>
+            <button class="btn spin-nav" id="spinBtn">Spin</button>
+            <div class="auto-toggle-wrap">
+                <div class="auto-toggle" id="autoToggle"></div>
+                <span style="font-size:calc(10px * var(--s))">Auto</span>
+            </div>
+        </div>
+        <div class="header-stats">
+            <div class="stat"><div class="stat-label">Spins</div><div class="stat-value spins" id="spinsDisplay">10</div></div>
+            <div class="stat"><div class="stat-label">Won</div><div class="stat-value pending" id="pendingDisplay">+0</div></div>
+            <div class="stat"><div class="stat-label">Spent</div><div class="stat-value lost" id="spentDisplay">-0</div></div>
+        </div>
+    </div>
+    <div class="game-area">
+        <div class="top-info">
+            <div class="title">Lucky Spin</div>
+            <div class="risk-badge medium" id="riskBadge">MEDIUM RISK</div>
+        </div>
+        <div class="wheel-container">
+            <div class="wheel-pointer"></div>
+            <canvas id="wheelCanvas"></canvas>
+            <div class="spin-btn-center" id="spinBtnCenter"></div>
+        </div>
+    </div>
+    <div class="overlay" id="overlay">
+        <div class="overlay-title" id="overlayTitle">GAME OVER</div>
+        <div class="overlay-vng" id="finalVng">+0 VNG</div>
+        <div class="overlay-details" id="detailsText"></div>
+        <div class="overlay-penalty" id="penaltyText"></div>
+        <button class="btn" id="playAgainBtn">Play Again</button>
+        <a href="/voidgames/voidgames.html" class="btn">Back to Games</a>
+    </div>
+    <script>
+const API='/api/vg',COST_PER_SPIN=10;
+const RISK_CONFIG={
+    low:{segments:[2,1,1,1,0,0,-1,-1],colors:['#4caf50','#8bc34a','#cddc39','#ffeb3b','#ffc107','#ff9800','#ff5722','#f44336']},
+    medium:{segments:[3,2,2,1,1,1,0,-1,-1,-2,-2,-3],colors:['#4caf50','#66bb6a','#8bc34a','#cddc39','#ffeb3b','#ffc107','#ffa726','#ff7043','#f44336','#e53935','#c62828','#b71c1c']},
+    high:{segments:[15,8,5,3,2,2,1,1,-1,-2,-3,-4,-5,-8,-10,-15],colors:['#ffd700','#4caf50','#66bb6a','#8bc34a','#cddc39','#ffeb3b','#ffc107','#ffa726','#ff7043','#f44336','#e53935','#d32f2f','#c62828','#b71c1c','#880e0e','#5d0000']},
+    extreme:{segments:[100,50,25,15,10,5,2,1,1,-1,-2,-5,-10,-15,-20,-25,-30,-40,-50,-60,-70,-80,-90,-100],colors:['#ffd700','#ffc107','#4caf50','#66bb6a','#8bc34a','#cddc39','#ffeb3b','#ffe082','#ffcc80','#ffab91','#ff8a65','#ff7043','#ff5722','#f44336','#e53935','#d32f2f','#c62828','#b71c1c','#a31515','#8b0000','#7b0000','#6b0000','#5b0000','#4b0000']}
+};
+
+let user,sessId,pending=0,spent=0,over=false,spinsLeft=0,isSpinning=false;
+let currentRotation=0,config={risk:'medium',spins:10},autoMode=false,audioCtx;
+
+function calcScale(){const vw=window.innerWidth,vh=window.innerHeight;const s=Math.min(vw/500,vh/650,1.4);document.documentElement.style.setProperty('--s',Math.max(0.5,s).toFixed(3))}
+calcScale();window.addEventListener('resize',calcScale);
+
+function auth(){const s=localStorage.getItem('vg_user');if(!s){location.href='/voidgames/voidgames.html';return false}user=JSON.parse(s);return true}
+
+async function startSess(){try{const r=await fetch(API+'/game/start',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId:user.userId,sessionToken:user.sessionToken,gameType:'luckyspin'})});const d=await r.json();if(d.success){sessId=d.gameSessionId;return true}return false}catch{return false}}
+async function configureGame(){try{const r=await fetch(API+'/game/configure',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId:user.userId,sessionToken:user.sessionToken,gameSessionId:sessId,config:{risk:config.risk,totalSpins:config.spins}})});const d=await r.json();return d.success}catch{return false}}
+async function deduct(a,r){if(a<=0)return;spent+=a;upd();try{await fetch(API+'/game/deduct',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId:user.userId,sessionToken:user.sessionToken,gameSessionId:sessId,amount:a,reason:r})})}catch{}}
+async function reportEvent(type,data){try{const r=await fetch(API+'/game/event',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId:user.userId,sessionToken:user.sessionToken,gameSessionId:sessId,eventType:type,eventData:data})});return r.json()}catch{return{success:false}}}
+async function endSess(pen,netAmount){try{const r=await fetch(API+'/game/end',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId:user.userId,sessionToken:user.sessionToken,gameSessionId:sessId,finalScore:0,netAmount:netAmount,penalty:pen})});sessId=null;return r.json()}catch{return{}}}
+
+function popup(v,jackpot=false){const d=Math.floor(v);if(d===0&&!jackpot)return;const p=document.createElement('div');p.className='vng-popup '+(v>=0?'positive':'negative')+(jackpot?' jackpot':'');p.textContent=(v>=0?'+':'')+d;p.style.left='50%';p.style.top='40%';p.style.transform='translateX(-50%)';document.body.appendChild(p);setTimeout(()=>p.remove(),1200)}
+function upd(){document.getElementById('pendingDisplay').textContent='+'+Math.floor(pending);document.getElementById('spentDisplay').textContent='-'+Math.floor(spent);document.getElementById('spinsDisplay').textContent=spinsLeft;document.getElementById('spinBtn').disabled=spinsLeft<=0||isSpinning||over}
+
+function initSetup(){
+    const u=()=>{document.getElementById('totalCost').textContent=config.spins*COST_PER_SPIN;document.getElementById('totalSpins').textContent=config.spins};
+    document.querySelectorAll('#riskOptions .option').forEach(o=>{o.onclick=()=>{document.querySelectorAll('#riskOptions .option').forEach(x=>x.classList.remove('selected'));o.classList.add('selected');config.risk=o.dataset.risk;u()}});
+    document.querySelectorAll('#spinOptions .option').forEach(o=>{o.onclick=()=>{document.querySelectorAll('#spinOptions .option').forEach(x=>x.classList.remove('selected'));o.classList.add('selected');config.spins=parseInt(o.dataset.spins);u()}});
+    document.getElementById('startBtn').onclick=startGame;u();
+}
+
+async function startGame(){
+    if(isSpinning)return;
+    const c=config.spins*COST_PER_SPIN;
+    spinsLeft=config.spins;pending=0;spent=0;over=false;currentRotation=0;
+    document.getElementById('setupScreen').classList.add('hidden');document.getElementById('loading').classList.remove('hidden');
+    if(!await startSess()){alert('Failed');document.getElementById('setupScreen').classList.remove('hidden');document.getElementById('loading').classList.add('hidden');return}
+    if(!await configureGame()){alert('Failed to configure');document.getElementById('setupScreen').classList.remove('hidden');document.getElementById('loading').classList.add('hidden');return}
+    await deduct(c,'spin_bundle');
+    const b=document.getElementById('riskBadge');
+    b.textContent=config.risk.toUpperCase()+' RISK';b.className='risk-badge '+config.risk;
+    drawWheel();upd();document.getElementById('loading').classList.add('hidden');
+    if(autoMode)triggerAuto();
+}
+
+function drawWheel(){
+    const c=document.getElementById('wheelCanvas'),ctx=c.getContext('2d'),d=c.offsetWidth;
+    c.width=d;c.height=d;
+    const cx=d/2,cy=d/2,r=d/2-5,D=RISK_CONFIG[config.risk],cnt=D.segments.length,arc=(Math.PI*2)/cnt;
+    ctx.save();ctx.translate(cx,cy);ctx.rotate(currentRotation*Math.PI/180);
+    for(let i=0;i<cnt;i++){
+        ctx.beginPath();ctx.moveTo(0,0);ctx.arc(0,0,r,i*arc,(i+1)*arc);
+        ctx.fillStyle=D.colors[i];ctx.fill();ctx.stroke();
+        ctx.save();ctx.rotate(i*arc+arc/2);ctx.textAlign="right";ctx.fillStyle="#fff";
+        ctx.font=`bold ${Math.max(10,d*0.045)}px Poppins`;
+        ctx.shadowColor="rgba(0,0,0,0.5)";ctx.shadowBlur=4;
+        ctx.fillText(D.segments[i]+"x",r-15,5);ctx.restore();
+    }
+    ctx.restore();
+}
+
+async function spin(){
+    if(over||isSpinning||spinsLeft<=0)return;
+    isSpinning=true;spinsLeft--;upd();playClick();
+    const res=await reportEvent('spin',{});
+    if(!res||!res.success||res.targetIndex===undefined){spinsLeft++;isSpinning=false;upd();return}
+    const tIdx=res.targetIndex,m=res.multiplier,vngChange=res.vngChange;
+    const D=RISK_CONFIG[config.risk],cnt=D.segments.length,arc=360/cnt,noise=(Math.random()-0.5)*(arc*0.8);
+    const tAng=(270-(tIdx*arc+arc/2))+(360*10)+noise;
+    const curM=currentRotation%360,dist=tAng-curM,end=currentRotation+dist;
+    animateSpin(currentRotation,end,3500,m,vngChange);
+}
+
+function animateSpin(s,e,d,m,vngChange){
+    const st=performance.now(),cnt=RISK_CONFIG[config.risk].segments.length,arc=360/cnt;
+    let lSeg=-1;
+    function step(n){
+        const el=n-st,p=Math.min(el/d,1),ea=1-Math.pow(1-p,3);
+        currentRotation=s+(e-s)*ea;
+        const deg=(360-((currentRotation%360)+90))%360,cSeg=Math.floor(((deg+360)%360)/arc);
+        if(cSeg!==lSeg){playTick();lSeg=cSeg}
+        drawWheel();
+        if(p<1)requestAnimationFrame(step);else finishSpin(m,vngChange);
+    }
+    requestAnimationFrame(step);
+}
+
+function finishSpin(m,vngChange){
+    isSpinning=false;
+    if(vngChange<0){deduct(Math.abs(vngChange),'spin_negative');popup(vngChange);playLose()}
+    else if(vngChange>0){pending+=vngChange;popup(vngChange,m>=10);playWin(m>=10)}
+    else{playLose()}
+    upd();
+    if(spinsLeft<=0)setTimeout(()=>end(false),1500);
+    else if(autoMode&&!over)setTimeout(spin,500);
+}
+
+function initAudio(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)()}
+function tone(f,d,t='sine',v=0.1){initAudio();if(audioCtx.state==='suspended')audioCtx.resume();const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.frequency.value=f;o.type=t;g.gain.setValueAtTime(v,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(0.01,audioCtx.currentTime+d);o.start();o.stop(audioCtx.currentTime+d)}
+function playClick(){tone(400,0.1,'triangle')}
+function playTick(){tone(800,0.03,'square',0.03)}
+function playWin(j){if(j){tone(523,0.1);setTimeout(()=>tone(659,0.1),100);setTimeout(()=>tone(784,0.1),200);setTimeout(()=>tone(1047,0.4),300)}else{tone(523,0.1);setTimeout(()=>tone(659,0.1),100)}}
+function playLose(){tone(150,0.3,'sawtooth')}
+
+async function end(st){
+    over=true;autoMode=false;document.getElementById('autoToggle').classList.remove('active');
+    const t=document.getElementById('overlayTitle'),v=document.getElementById('finalVng'),p=document.getElementById('penaltyText'),d=document.getElementById('detailsText');
+    let pen=0,net=pending-spent;
+    if(st){t.textContent='STOPPED';t.className='overlay-title stopped';pen=15;net-=15;p.textContent='Stop fee: -15 VNG'}
+    else{if(net>0){t.textContent='PROFIT!';t.className='overlay-title win'}else{t.textContent='GAME FINISHED';t.className='overlay-title'}p.textContent=''}
+    d.textContent='Won: +'+Math.floor(pending)+' | Spent: -'+Math.floor(spent);
+    v.textContent='Net: '+(net>=0?'+':'')+Math.floor(net)+' VNG';
+    v.className='overlay-vng '+(net>=0?'positive':'negative');
+    await endSess(pen,net);
+    document.getElementById('overlay').classList.add('active');
+}
+
+function triggerAuto(){if(autoMode&&!isSpinning&&!over&&spinsLeft>0)spin()}
+function toggleAuto(){autoMode=!autoMode;document.getElementById('autoToggle').classList.toggle('active',autoMode);triggerAuto()}
+function playAgain(){document.getElementById('overlay').classList.remove('active');document.getElementById('setupScreen').classList.remove('hidden');initSetup()}
+
+async function init(){if(!auth())return;calcScale();initSetup();document.getElementById('loading').classList.add('hidden');document.getElementById('spinBtn').onclick=()=>{initAudio();spin()};document.getElementById('spinBtnCenter').onclick=()=>{initAudio();spin()};document.getElementById('playAgainBtn').onclick=playAgain;document.getElementById('autoToggle').onclick=toggleAuto}
+init();
+    </script>
+</body>
+</html>

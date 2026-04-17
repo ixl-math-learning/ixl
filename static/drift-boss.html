@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Drift Boss</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 100%; height: 100%; overflow: hidden; background: #000; }
+iframe { width: 100%; height: 100%; border: none; }
+</style>
+</head>
+<body>
+<iframe 
+    id="game" 
+    src="https://www.hoodamath.com/mobile/games/drift-boss/game.html" 
+    sandbox="allow-scripts allow-same-origin"
+    allow="autoplay; fullscreen"
+></iframe>
+<script>
+const iframe = document.getElementById('game');
+
+// sandbox="allow-scripts allow-same-origin" already blocks:
+//   - top-level navigation (no allow-top-navigation)
+//   - popups (no allow-popups)
+//   - form submission to new pages (no allow-forms... but we keep scripts)
+
+iframe.addEventListener('load', () => {
+    try {
+        const win = iframe.contentWindow;
+        const doc = win.document;
+
+        // Kill overlay + ads
+        const kill = () => {
+            const nav = doc.getElementById('hooda-nav-tab');
+            if (nav) nav.remove();
+            doc.querySelectorAll('[id*="MobileAdInGamePreroll"]').forEach(el => el.remove());
+        };
+        kill();
+
+        // Block all link clicks that try to leave the game
+        doc.addEventListener('click', (e) => {
+            const link = e.target.closest('a');
+            if (link && link.href) {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+        }, true);
+
+        // Nuke window.open
+        win.open = () => null;
+
+        // Block form submissions
+        doc.addEventListener('submit', (e) => {
+            e.preventDefault();
+        }, true);
+
+        // Intercept location assignments
+        try {
+            const realLocation = win.location.href;
+            const handler = {
+                set(target, prop, value) {
+                    if (prop === 'href' || prop === 'pathname' || prop === 'search') {
+                        return true; // swallow it
+                    }
+                    return Reflect.set(target, prop, value);
+                }
+            };
+            // Override location.replace and location.assign
+            win.location.replace = () => {};
+            win.location.assign = () => {};
+        } catch(e) {}
+
+        // Watch for dynamic changes
+        new MutationObserver(() => {
+            kill();
+            doc.querySelectorAll('meta[http-equiv="refresh"]').forEach(el => el.remove());
+        }).observe(doc.documentElement, { childList: true, subtree: true });
+
+    } catch(e) {
+        console.log('CORS blocked, sandbox still prevents navigation');
+    }
+});
+</script>
+</body>
+</html>

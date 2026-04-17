@@ -1,0 +1,41 @@
+User-agent: *
+Allow: /
+Allow: /blog/
+
+# Block all proxy, utility, and game-embed pages
+Disallow: /view.html
+Disallow: /a.html
+Disallow: /c.html
+Disallow: /s.html
+Disallow: /vc.html
+Disallow: /vg.html
+Disallow: /vnprononauth.html
+Disallow: /vnpro
+Disallow: /voidmusic.html
+Disallow: /voidtube.html
+Disallow: /blooketbot.html
+Disallow: /emulator.html
+Disallow: /code-editor.html
+Disallow: /vm.html
+Disallow: /p.html
+Disallow: /pe.html
+Disallow: /pg.html
+Disallow: /cd.html
+Disallow: /blocked.html
+Disallow: /district.html
+Disallow: /transfer.html
+Disallow: /404.html
+Disallow: /dontlookhere.html
+Disallow: /test.html
+Disallow: /maintenance.html
+Disallow: /newyears.html
+Disallow: /game-editor.html
+
+# Block game assets and proxy paths
+Disallow: /local games/
+Disallow: /onlylocal/
+Disallow: /reading/
+Disallow: /~/
+Disallow: /~r/
+
+Sitemap: https://vng.lol/sitemap.xml

@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>File Transfer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #000;
+      color: #f5f5f5;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background:
+        radial-gradient(circle at 20% 30%, rgba(255,255,255,0.015) 0%, transparent 60%),
+        radial-gradient(circle at 80% 70%, rgba(255,255,255,0.01) 0%, transparent 55%);
+      pointer-events: none;
+      z-index: -1;
+    }
+    .container {
+      width: 100%;
+      max-width: 520px;
+      padding: 20px;
+    }
+    .card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 32px;
+    }
+    h1 {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .subtitle {
+      font-size: 13px;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 24px;
+    }
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 6px;
+    }
+    input[type="text"], input[type="password"], input[type="number"], textarea {
+      width: 100%;
+      padding: 10px 14px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      color: #f5f5f5;
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input:focus, textarea:focus {
+      border-color: rgba(255,255,255,0.3);
+    }
+    .field { margin-bottom: 16px; }
+    .btn {
+      width: 100%;
+      padding: 12px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 10px;
+      color: #f5f5f5;
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-bottom: 8px;
+    }
+    .btn:hover { background: rgba(255,255,255,0.15); }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-primary {
+      background: rgba(255,255,255,0.12);
+      border-color: rgba(255,255,255,0.2);
+    }
+    .error {
+      color: #ff6b6b;
+      font-size: 13px;
+      margin-top: 8px;
+    }
+    .success {
+      color: #51cf66;
+      font-size: 13px;
+      margin-top: 8px;
+    }
+    .hidden { display: none !important; }
+    .url-box {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 13px;
+      word-break: break-all;
+      color: rgba(255,255,255,0.8);
+      margin-bottom: 8px;
+    }
+    .url-label {
+      font-size: 11px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .divider {
+      border: none;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      margin: 24px 0;
+    }
+    .transfer-item {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 10px;
+      animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .transfer-item .type-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border-radius: 6px;
+      margin-bottom: 8px;
+    }
+    .type-badge.file { background: rgba(100,149,237,0.2); color: #6495ed; }
+    .type-badge.text { background: rgba(81,207,102,0.2); color: #51cf66; }
+    .transfer-item .meta {
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+    }
+    .transfer-item a {
+      color: #6495ed;
+      text-decoration: none;
+      font-size: 13px;
+    }
+    .transfer-item a:hover { text-decoration: underline; }
+    .transfer-text-content {
+      background: rgba(0,0,0,0.3);
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-top: 8px;
+      font-size: 13px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      max-height: 200px;
+      overflow-y: auto;
+      color: rgba(255,255,255,0.8);
+    }
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+    .file-drop {
+      border: 2px dashed rgba(255,255,255,0.12);
+      border-radius: 12px;
+      padding: 28px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      margin-bottom: 16px;
+    }
+    .file-drop:hover, .file-drop.dragover {
+      border-color: rgba(255,255,255,0.3);
+      background: rgba(255,255,255,0.03);
+    }
+    .file-drop .icon { font-size: 28px; margin-bottom: 8px; opacity: 0.4; }
+    .file-drop .label { font-size: 13px; color: rgba(255,255,255,0.5); }
+    .file-drop .filename {
+      font-size: 13px;
+      color: rgba(255,255,255,0.8);
+      margin-top: 6px;
+      font-weight: 500;
+    }
+    .file-input { display: none; }
+    .progress-bar {
+      width: 100%;
+      height: 4px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 2px;
+      margin-top: 12px;
+      overflow: hidden;
+    }
+    .progress-bar .fill {
+      height: 100%;
+      background: #6495ed;
+      border-radius: 2px;
+      transition: width 0.3s;
+      width: 0%;
+    }
+    .expiry-banner {
+      background: rgba(255,107,107,0.1);
+      border: 1px solid rgba(255,107,107,0.2);
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+    }
+    .expiry-banner h2 { color: #ff6b6b; font-size: 18px; margin-bottom: 8px; }
+    .expiry-banner .timer { font-size: 24px; font-weight: 600; color: #ff6b6b; }
+    .sse-status {
+      display: inline-block;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+    .sse-status.connected { background: #51cf66; }
+    .sse-status.disconnected { background: #ff6b6b; }
+    .empty-state {
+      text-align: center;
+      padding: 30px 0;
+      color: rgba(255,255,255,0.3);
+      font-size: 13px;
+    }
+    .or-divider {
+      text-align: center;
+      color: rgba(255,255,255,0.3);
+      font-size: 12px;
+      margin: 4px 0 16px;
+    }
+    .copy-btn {
+      display: inline-block;
+      padding: 4px 10px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 6px;
+      color: rgba(255,255,255,0.6);
+      font-size: 11px;
+      font-family: 'Poppins', sans-serif;
+      cursor: pointer;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+    .copy-btn:hover { background: rgba(255,255,255,0.12); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- ADMIN LOGIN -->
+    <div id="adminLogin" class="card hidden">
+      <h1>File Transfer</h1>
+      <p class="subtitle">Create a secure share link</p>
+      <div class="field">
+        <label>Admin Password</label>
+        <input type="password" id="adminPass" placeholder="Enter admin password">
+      </div>
+      <button class="btn btn-primary" id="adminLoginBtn">Continue</button>
+      <div id="adminError" class="error hidden"></div>
+    </div>
+
+    <!-- CREATE SHARE -->
+    <div id="createShare" class="card hidden">
+      <h1>Create Share Link</h1>
+      <p class="subtitle">Configure your file drop</p>
+      <div class="field">
+        <label>Expiration (minutes, leave empty for no expiry)</label>
+        <input type="number" id="expiryMinutes" placeholder="e.g. 60" min="1">
+      </div>
+      <div class="field">
+        <label>Share Password (optional)</label>
+        <input type="text" id="sharePassword" placeholder="Leave empty for no password">
+      </div>
+      <button class="btn btn-primary" id="createBtn">Create Share Link</button>
+      <div id="createError" class="error hidden"></div>
+    </div>
+
+    <!-- CREATED: show both links -->
+    <div id="createdView" class="card hidden">
+      <h1>Share Link Created</h1>
+      <p class="subtitle">Share the recipient link. Open the dashboard to receive transfers.</p>
+
+      <div class="url-label">Recipient Link (share this)</div>
+      <div class="url-box" id="shareUrlBox"></div>
+      <button class="btn" id="copyShareBtn">Copy Recipient Link</button>
+
+      <div style="margin-top:16px;">
+        <div class="url-label">Your Dashboard (bookmark this)</div>
+        <div class="url-box" id="dashUrlBox"></div>
+        <button class="btn" id="copyDashBtn">Copy Dashboard Link</button>
+      </div>
+
+      <div style="margin-top:16px;">
+        <button class="btn btn-primary" id="openDashBtn">Open Dashboard</button>
+      </div>
+    </div>
+
+    <!-- CREATOR DASHBOARD (separate page via ?c=...&key=...) -->
+    <div id="dashboard" class="card hidden">
+      <h1>Transfer Dashboard</h1>
+      <p class="subtitle"><span class="sse-status disconnected" id="sseIndicator"></span><span id="sseLabel">Connecting...</span></p>
+      <div class="url-label">Recipient Link</div>
+      <div class="url-box" id="dashShareUrl"></div>
+      <button class="btn" id="dashCopyShareBtn">Copy Recipient Link</button>
+      <hr class="divider">
+      <h2 style="font-size:16px;font-weight:500;margin-bottom:14px;">Received Transfers</h2>
+      <div id="transferList">
+        <div class="empty-state">Waiting for transfers...</div>
+      </div>
+    </div>
+
+    <!-- RECIPIENT: EXPIRED -->
+    <div id="expiredView" class="card hidden">
+      <div class="expiry-banner">
+        <h2>Link Expired</h2>
+        <p style="font-size:13px;color:rgba(255,255,255,0.5);">This share link is no longer available.</p>
+      </div>
+    </div>
+
+    <!-- RECIPIENT: EXPIRY COUNTDOWN (still active) -->
+    <div id="countdownView" class="card hidden" style="text-align:center;padding:24px 32px;">
+      <p style="font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:4px;">This link expires in</p>
+      <div class="expiry-banner" style="background:none;border:none;padding:8px;">
+        <div class="timer" id="countdownTimer">--:--:--</div>
+      </div>
+    </div>
+
+    <!-- RECIPIENT: PASSWORD -->
+    <div id="passwordView" class="card hidden">
+      <h1>Password Required</h1>
+      <p class="subtitle">Enter the password to access this drop</p>
+      <div class="field">
+        <label>Password</label>
+        <input type="password" id="recipientPass" placeholder="Enter password">
+      </div>
+      <button class="btn btn-primary" id="unlockBtn">Unlock</button>
+      <div id="unlockError" class="error hidden"></div>
+    </div>
+
+    <!-- RECIPIENT: UPLOAD / TEXT -->
+    <div id="uploadView" class="card hidden">
+      <h1>Send File or Text</h1>
+      <p class="subtitle">Your transfer will be delivered instantly</p>
+
+      <div class="file-drop" id="fileDrop">
+        <div class="icon">&#128206;</div>
+        <div class="label">Click or drag a file here (max 1 GB)</div>
+        <div class="filename hidden" id="fileLabel"></div>
+      </div>
+      <input type="file" class="file-input" id="fileInput">
+
+      <div class="or-divider">- or send text -</div>
+
+      <div class="field">
+        <textarea id="textInput" placeholder="Type or paste formatted text here..."></textarea>
+      </div>
+
+      <button class="btn btn-primary" id="sendBtn">Send</button>
+      <div class="progress-bar hidden" id="progressBar"><div class="fill" id="progressFill"></div></div>
+      <div id="sendStatus" class="hidden" style="margin-top:8px;font-size:13px;"></div>
+    </div>
+
+    <!-- NOT FOUND -->
+    <div id="notFoundView" class="card hidden">
+      <h1>Not Found</h1>
+      <p class="subtitle">This share link doesn't exist or has been removed.</p>
+    </div>
+  </div>
+
+<script>
+(function() {
+  const params = new URLSearchParams(location.search);
+  const shareId = params.get('s');       // recipient mode
+  const creatorShareId = params.get('c'); // creator dashboard mode
+  const creatorKeyParam = params.get('key');
+
+  // Helpers
+  function show(id) { document.getElementById(id).classList.remove('hidden'); }
+  function hide(id) { document.getElementById(id).classList.add('hidden'); }
+  const ALL_VIEWS = ['adminLogin','createShare','createdView','dashboard','expiredView','countdownView','passwordView','uploadView','notFoundView'];
+  function showOnly(id) { ALL_VIEWS.forEach(v => hide(v)); show(id); }
+
+  function formatSize(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+    if (bytes < 1073741824) return (bytes / 1048576).toFixed(1) + ' MB';
+    return (bytes / 1073741824).toFixed(2) + ' GB';
+  }
+
+  function formatTime(ms) {
+    if (ms <= 0) return '00:00:00';
+    const s = Math.floor(ms / 1000);
+    const h = Math.floor(s / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    const sec = s % 60;
+    return [h,m,sec].map(v => String(v).padStart(2,'0')).join(':');
+  }
+
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function copyText(text, btn) {
+    navigator.clipboard.writeText(text).then(() => {
+      const orig = btn.textContent;
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = orig, 2000);
+    });
+  }
+
+  function showError(id, msg) { const el = document.getElementById(id); el.textContent = msg; el.classList.remove('hidden'); }
+  function hideError(id) { document.getElementById(id).classList.add('hidden'); }
+  function showStatus(msg, isError) {
+    const el = document.getElementById('sendStatus');
+    el.textContent = msg;
+    el.className = isError ? 'error' : 'success';
+    el.classList.remove('hidden');
+    setTimeout(() => el.classList.add('hidden'), 4000);
+  }
+
+  function buildShareUrl(sid) {
+    return location.origin + '/transfer?s=' + sid;
+  }
+  function buildDashUrl(sid, key) {
+    return location.origin + '/transfer?c=' + sid + '&key=' + key;
+  }
+
+  // ============= SSE + Transfer List (must be before early returns) =============
+  let transferCount = 0;
+
+  function connectSSE(sid, key) {
+    const evtSource = new EventSource('/api/transfer/events/' + sid + '?key=' + encodeURIComponent(key));
+    const indicator = document.getElementById('sseIndicator');
+    const label = document.getElementById('sseLabel');
+
+    evtSource.onopen = () => {
+      indicator.className = 'sse-status connected';
+      label.textContent = 'Live';
+    };
+    evtSource.onerror = () => {
+      indicator.className = 'sse-status disconnected';
+      label.textContent = 'Reconnecting...';
+    };
+    evtSource.onmessage = (e) => {
+      const transfer = JSON.parse(e.data);
+      addTransferToList(transfer, key);
+    };
+  }
+
+  function addTransferToList(transfer, key) {
+    const list = document.getElementById('transferList');
+    if (transferCount === 0) list.innerHTML = '';
+    transferCount++;
+
+    const item = document.createElement('div');
+    item.className = 'transfer-item';
+    const time = new Date(transfer.timestamp).toLocaleTimeString();
+
+    if (transfer.type === 'file') {
+      const downloadUrl = transfer.downloadUrl + '?key=' + encodeURIComponent(key);
+      item.innerHTML =
+        '<span class="type-badge file">FILE</span>' +
+        '<div><a href="' + downloadUrl + '" target="_blank" rel="noopener">' + escapeHtml(transfer.filename) + '</a></div>' +
+        '<div class="meta">' + formatSize(transfer.size) + ' &middot; ' + time + '</div>';
+    } else if (transfer.type === 'text') {
+      item.innerHTML =
+        '<span class="type-badge text">TEXT</span>' +
+        '<div class="transfer-text-content">' + escapeHtml(transfer.content) + '</div>' +
+        '<div class="meta">' + time + '</div>';
+    }
+
+    list.prepend(item);
+  }
+
+  // ============= CREATOR DASHBOARD MODE (?c=...&key=...) =============
+  if (creatorShareId && creatorKeyParam) {
+    showOnly('dashboard');
+    document.getElementById('dashShareUrl').textContent = buildShareUrl(creatorShareId);
+    document.getElementById('dashCopyShareBtn').addEventListener('click', function() {
+      copyText(buildShareUrl(creatorShareId), this);
+    });
+    connectSSE(creatorShareId, creatorKeyParam);
+    return;
+  }
+
+  // ============= ADMIN FLOW (no params) =============
+  if (!shareId) {
+    showOnly('adminLogin');
+
+    document.getElementById('adminPass').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('adminLoginBtn').click(); });
+    document.getElementById('adminLoginBtn').addEventListener('click', () => {
+      const pw = document.getElementById('adminPass').value;
+      if (!pw) { showError('adminError', 'Enter the admin password'); return; }
+      showOnly('createShare');
+      // Store for create call
+      document.getElementById('createBtn').dataset.pw = pw;
+    });
+
+    document.getElementById('createBtn').addEventListener('click', async () => {
+      const btn = document.getElementById('createBtn');
+      btn.disabled = true;
+      hideError('createError');
+
+      const adminPassword = btn.dataset.pw;
+      const expiresInMinutes = document.getElementById('expiryMinutes').value || null;
+      const password = document.getElementById('sharePassword').value || null;
+
+      try {
+        const res = await fetch('/api/transfer/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ adminPassword, password, expiresInMinutes })
+        });
+        const data = await res.json();
+        if (!res.ok) { showError('createError', data.error || 'Failed'); btn.disabled = false; return; }
+
+        const shareUrl = buildShareUrl(data.shareId);
+        const dashUrl = buildDashUrl(data.shareId, data.creatorKey);
+
+        document.getElementById('shareUrlBox').textContent = shareUrl;
+        document.getElementById('dashUrlBox').textContent = dashUrl;
+
+        document.getElementById('copyShareBtn').addEventListener('click', function() { copyText(shareUrl, this); });
+        document.getElementById('copyDashBtn').addEventListener('click', function() { copyText(dashUrl, this); });
+        document.getElementById('openDashBtn').addEventListener('click', () => { window.open(dashUrl, '_blank'); });
+
+        showOnly('createdView');
+      } catch (err) {
+        showError('createError', 'Network error');
+        btn.disabled = false;
+      }
+    });
+
+    return;
+  }
+
+  // ============= RECIPIENT FLOW (?s=...) =============
+  showOnly('notFoundView');
+  let countdownInterval = null;
+
+  async function loadShareInfo() {
+    try {
+      const res = await fetch('/api/transfer/info/' + shareId);
+      if (!res.ok) { showOnly('notFoundView'); return; }
+      const info = await res.json();
+
+      if (!info.exists) { showOnly('notFoundView'); return; }
+      if (info.expired) { showOnly('expiredView'); return; }
+
+      if (info.expiresAt) {
+        show('countdownView');
+        startCountdown(info.expiresAt);
+      }
+
+      if (info.hasPassword) {
+        showOnly('passwordView');
+        if (info.expiresAt) show('countdownView');
+        setupPasswordFlow(info);
+      } else {
+        const unlockRes = await fetch('/api/transfer/unlock/' + shareId, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: '' })
+        });
+        const unlockData = await unlockRes.json();
+        if (unlockRes.ok) {
+          window._unlockKey = unlockData.unlockKey;
+          showOnly('uploadView');
+          if (info.expiresAt) show('countdownView');
+        } else {
+          showOnly('notFoundView');
+        }
+      }
+    } catch {
+      showOnly('notFoundView');
+    }
+  }
+
+  function startCountdown(expiresAt) {
+    const timer = document.getElementById('countdownTimer');
+    function tick() {
+      const remaining = expiresAt - Date.now();
+      if (remaining <= 0) { clearInterval(countdownInterval); showOnly('expiredView'); return; }
+      timer.textContent = formatTime(remaining);
+    }
+    tick();
+    countdownInterval = setInterval(tick, 1000);
+  }
+
+  function setupPasswordFlow(info) {
+    document.getElementById('recipientPass').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('unlockBtn').click(); });
+    document.getElementById('unlockBtn').addEventListener('click', async () => {
+      const pass = document.getElementById('recipientPass').value;
+      hideError('unlockError');
+      try {
+        const res = await fetch('/api/transfer/unlock/' + shareId, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: pass })
+        });
+        const data = await res.json();
+        if (!res.ok) { showError('unlockError', data.error || 'Wrong password'); return; }
+        window._unlockKey = data.unlockKey;
+        showOnly('uploadView');
+        if (info.expiresAt) show('countdownView');
+      } catch { showError('unlockError', 'Network error'); }
+    });
+  }
+
+  // File drop / select
+  const fileDrop = document.getElementById('fileDrop');
+  const fileInput = document.getElementById('fileInput');
+  const fileLabel = document.getElementById('fileLabel');
+  let selectedFile = null;
+
+  fileDrop.addEventListener('click', () => fileInput.click());
+  fileDrop.addEventListener('dragover', e => { e.preventDefault(); fileDrop.classList.add('dragover'); });
+  fileDrop.addEventListener('dragleave', () => fileDrop.classList.remove('dragover'));
+  fileDrop.addEventListener('drop', e => {
+    e.preventDefault();
+    fileDrop.classList.remove('dragover');
+    if (e.dataTransfer.files.length) pickFile(e.dataTransfer.files[0]);
+  });
+  fileInput.addEventListener('change', () => { if (fileInput.files.length) pickFile(fileInput.files[0]); });
+
+  function pickFile(file) {
+    if (file.size > 1024 * 1024 * 1024) { showStatus('File must be under 1 GB', true); return; }
+    selectedFile = file;
+    fileLabel.textContent = file.name + ' (' + formatSize(file.size) + ')';
+    fileLabel.classList.remove('hidden');
+  }
+
+  // Send
+  document.getElementById('sendBtn').addEventListener('click', async () => {
+    const text = document.getElementById('textInput').value.trim();
+    if (!selectedFile && !text) { showStatus('Select a file or enter text', true); return; }
+
+    const btn = document.getElementById('sendBtn');
+    btn.disabled = true;
+    const unlockKey = window._unlockKey;
+
+    try {
+      if (selectedFile) {
+        show('progressBar');
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/api/transfer/upload/' + shareId);
+        xhr.setRequestHeader('x-unlock-key', unlockKey);
+        xhr.setRequestHeader('x-filename', encodeURIComponent(selectedFile.name));
+        xhr.setRequestHeader('Content-Type', 'application/octet-stream');
+
+        xhr.upload.onprogress = (e) => {
+          if (e.lengthComputable) {
+            document.getElementById('progressFill').style.width = Math.round(e.loaded / e.total * 100) + '%';
+          }
+        };
+
+        await new Promise((resolve, reject) => {
+          xhr.onload = () => {
+            if (xhr.status >= 200 && xhr.status < 300) resolve();
+            else reject(new Error(xhr.responseText));
+          };
+          xhr.onerror = () => reject(new Error('Upload failed'));
+          xhr.send(selectedFile);
+        });
+      }
+
+      if (text) {
+        const res = await fetch('/api/transfer/text/' + shareId, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text, unlockKey })
+        });
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.error || 'Text send failed');
+        }
+      }
+
+      showStatus('Sent successfully!', false);
+      selectedFile = null;
+      fileLabel.classList.add('hidden');
+      document.getElementById('textInput').value = '';
+      fileInput.value = '';
+      hide('progressBar');
+      document.getElementById('progressFill').style.width = '0%';
+    } catch (err) {
+      showStatus('Failed to send: ' + err.message, true);
+    }
+    btn.disabled = false;
+  });
+
+  loadShareInfo();
+})();
+</script>
+<script src="/assets/js/wilway-popup.js" defer></script>
+</body>
+</html>

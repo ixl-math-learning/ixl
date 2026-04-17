@@ -1,0 +1,152 @@
+.game-info-section {
+    display: none;
+    max-width: 58.688vw;
+    margin-left: 4vw;
+    margin-top: 1.5vw;
+    padding-bottom: 4vw;
+}
+
+.gi-loading {
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 0.8vw;
+    padding: 1vw 0;
+}
+
+.gi-header {
+    margin-bottom: 1.2vw;
+}
+
+.gi-title-row {
+    display: flex;
+    align-items: center;
+    gap: 0.8vw;
+    margin-bottom: 0.6vw;
+}
+
+.gi-game-name {
+    font-size: 1.6vw;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+}
+
+.gi-category {
+    font-size: 0.7vw;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.85);
+    background: rgba(255, 0, 68, 0.15);
+    border: 0.052vw solid rgba(255, 0, 68, 0.3);
+    padding: 0.2vw 0.6vw;
+    border-radius: 0.3vw;
+    text-transform: uppercase;
+    letter-spacing: 0.03vw;
+}
+
+.gi-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4vw;
+}
+
+.gi-tag {
+    font-size: 0.65vw;
+    color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.05);
+    border: 0.052vw solid rgba(255, 255, 255, 0.08);
+    padding: 0.15vw 0.5vw;
+    border-radius: 0.25vw;
+}
+
+.gi-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1vw;
+}
+
+.gi-block {
+    background: rgba(255, 255, 255, 0.03);
+    border: 0.052vw solid rgba(255, 255, 255, 0.06);
+    border-radius: 0.5vw;
+    padding: 1.2vw;
+}
+
+.gi-block:first-child {
+    grid-column: 1 / -1;
+}
+
+.gi-block h3 {
+    font-size: 0.9vw;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0 0 0.5vw 0;
+}
+
+.gi-block p {
+    font-size: 0.78vw;
+    color: rgba(255, 255, 255, 0.5);
+    line-height: 1.6;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .game-info-section {
+        max-width: 100%;
+        margin-left: 0;
+        margin-top: 3vw;
+        padding: 0 3vw 6vw 3vw;
+    }
+
+    .gi-loading {
+        font-size: 3vw;
+        padding: 3vw 0;
+    }
+
+    .gi-game-name {
+        font-size: 5vw;
+    }
+
+    .gi-category {
+        font-size: 2.5vw;
+        padding: 0.8vw 2vw;
+        border-radius: 1vw;
+    }
+
+    .gi-tags {
+        gap: 1.5vw;
+    }
+
+    .gi-tag {
+        font-size: 2.5vw;
+        padding: 0.6vw 2vw;
+        border-radius: 1vw;
+    }
+
+    .gi-grid {
+        grid-template-columns: 1fr;
+        gap: 3vw;
+    }
+
+    .gi-block {
+        padding: 3vw;
+        border-radius: 2vw;
+    }
+
+    .gi-block h3 {
+        font-size: 3.5vw;
+        margin-bottom: 1.5vw;
+    }
+
+    .gi-block p {
+        font-size: 3vw;
+        line-height: 1.7;
+    }
+
+    .gi-header {
+        margin-bottom: 3vw;
+    }
+
+    .gi-title-row {
+        gap: 2vw;
+        margin-bottom: 2vw;
+    }
+}

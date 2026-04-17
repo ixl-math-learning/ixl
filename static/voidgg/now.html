@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+
+    <script defer src="/s/script.js" data-website-id="b9510d8e-e1e5-4dff-ad86-297ebece5574"></script>
+    <noscript><img src="/t/p?payload=%7B%22website%22%3A%22b9510d8e-e1e5-4dff-ad86-297ebece5574%22%2C%22url%22%3A%22%2F%22%2C%22hostname%22%3A%22vng.lol%22%2C%22name%22%3A%22pageview%22%7D" style="display:none;"></noscript>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Void.GG - Premium Gaming Platform</title>
+    <link rel="icon" href="/img/voidnetwork.png" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <script src="/~r/2/index.js" defer></script>
+    <script src="/~r/1/scramjet.all.js" defer></script>
+    <script src="/~r/7/bundle.js"></script>
+    <script src="/~r/7/config.js"></script>
+    <script src="/lib/register-sw.js"></script>
+    <script src="/assets/js/particles.js"></script>
+    <script src="/lib/pf.js" defer></script>
+    <script src="/assets/voidgg/voidgg.js"></script>
+    
+    <style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0a0a0b;
+    background-image: 
+        radial-gradient(circle at 20% 30%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(236, 72, 153, 0.06) 0%, transparent 50%),
+        radial-gradient(circle at 60% 20%, rgba(59, 130, 246, 0.04) 0%, transparent 40%);
+    color: #ffffff;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.ambient-lights {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.ambient-light {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.3;
+    animation: ambientFloat 20s ease-in-out infinite;
+}
+
+.ambient-light:nth-child(1) {
+    width: 400px;
+    height: 400px;
+    background: linear-gradient(45deg, #8b5cf6, #ec4899);
+    top: 10%;
+    left: 10%;
+    animation-delay: 0s;
+}
+
+.ambient-light:nth-child(2) {
+    width: 300px;
+    height: 300px;
+    background: linear-gradient(45deg, #3b82f6, #06b6d4);
+    bottom: 20%;
+    right: 15%;
+    animation-delay: 10s;
+}
+
+.ambient-light:nth-child(3) {
+    width: 250px;
+    height: 250px;
+    background: linear-gradient(45deg, #ec4899, #f59e0b);
+    top: 60%;
+    left: 70%;
+    animation-delay: 5s;
+}
+
+@keyframes ambientFloat {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    25% { transform: translate(30px, -30px) scale(1.1); }
+    50% { transform: translate(-20px, 20px) scale(0.9); }
+    75% { transform: translate(20px, 30px) scale(1.05); }
+}
+
+.particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.particle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 50%;
+    animation: particleDrift 30s linear infinite;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+@keyframes particleDrift {
+    from { 
+        transform: translateY(100vh) translateX(0) scale(0); 
+        opacity: 0; 
+    }
+    10% { opacity: 1; transform: translateY(90vh) translateX(10px) scale(1); }
+    90% { opacity: 1; }
+    to { 
+        transform: translateY(-10vh) translateX(100px) scale(0); 
+        opacity: 0; 
+    }
+}
+
+.container {
+    position: relative;
+    z-index: 3;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 32px;
+}
+
+.header {
+    text-align: center;
+    padding: 100px 0 80px;
+    position: relative;
+}
+
+.logo {
+    font-size: clamp(4rem, 10vw, 8rem);
+    font-weight: 800;
+    background: linear-gradient(135deg, #ffffff 0%, #8b5cf6 30%, #ec4899 60%, #ffffff 100%);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: logoShimmer 4s ease-in-out infinite;
+    margin-bottom: 24px;
+    letter-spacing: -0.04em;
+    line-height: 0.85;
+    position: relative;
+    filter: drop-shadow(0 0 30px rgba(139, 92, 246, 0.3));
+}
+
+@keyframes logoShimmer {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+.logo::after {
+    content: '';
+    position: absolute;
+    bottom: -16px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #8b5cf6, #ec4899, transparent);
+    border-radius: 2px;
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+}
+
+.subtitle {
+    font-size: 20px;
+    color: #a1a1aa;
+    font-weight: 500;
+    line-height: 1.5;
+    max-width: 700px;
+    margin: 0 auto;
+    opacity: 0.9;
+}
+
+.games-section {
+    padding-bottom: 120px;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.section-title {
+    font-size: 48px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 16px;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #ffffff, #d4d4d8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.section-subtitle {
+    font-size: 18px;
+    color: #71717a;
+    font-weight: 400;
+}
+
+.games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+    gap: 40px;
+    padding: 0 8px;
+}
+
+.game-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    backdrop-filter: blur(40px) saturate(150%);
+    -webkit-backdrop-filter: blur(40px) saturate(150%);
+    position: relative;
+    box-shadow: 
+        0 8px 40px rgba(0, 0, 0, 0.15),
+        0 2px 16px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transform-style: preserve-3d;
+}
+
+.game-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, 
+        rgba(139, 92, 246, 0.05) 0%, 
+        rgba(236, 72, 153, 0.03) 50%, 
+        rgba(59, 130, 246, 0.05) 100%);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    border-radius: 24px;
+    z-index: 1;
+}
+
+.game-card::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(135deg, 
+        rgba(139, 92, 246, 0.2), 
+        rgba(236, 72, 153, 0.2), 
+        rgba(59, 130, 246, 0.2));
+    border-radius: 26px;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    z-index: -1;
+    filter: blur(8px);
+}
+
+.game-card:hover {
+    transform: translateY(-12px) rotateX(2deg) rotateY(2deg);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 
+        0 32px 80px rgba(0, 0, 0, 0.3),
+        0 16px 40px rgba(139, 92, 246, 0.15),
+        0 8px 24px rgba(236, 72, 153, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.game-card:hover::before {
+    opacity: 1;
+}
+
+.game-card:hover::after {
+    opacity: 1;
+}
+
+.game-image-container {
+    position: relative;
+    aspect-ratio: 16/9;
+    overflow: hidden;
+    background: linear-gradient(135deg, #1e1e1e, #2a2a2a);
+}
+
+.game-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: all 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+    filter: contrast(1.1) saturate(1.2) brightness(1.1);
+}
+
+.game-card:hover .game-image {
+    transform: scale(1.08);
+    filter: contrast(1.2) saturate(1.4) brightness(1.2);
+}
+
+.game-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        135deg,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(0, 0, 0, 0.1) 50%,
+        rgba(0, 0, 0, 0.4) 100%
+    );
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.game-card:hover .game-overlay {
+    opacity: 1;
+}
+
+.play-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.2),
+        0 4px 16px rgba(255, 255, 255, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    z-index: 2;
+}
+
+.game-card:hover .play-button {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.play-icon {
+    width: 32px;
+    height: 32px;
+    margin-left: 4px;
+    fill: #000;
+    transition: transform 0.3s ease;
+}
+
+.play-button:hover .play-icon {
+    transform: scale(1.1);
+}
+
+.game-info {
+    padding: 32px;
+    position: relative;
+    z-index: 2;
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.02), 
+        rgba(255, 255, 255, 0.01));
+}
+
+.game-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 16px;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+}
+
+.game-meta {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 16px;
+}
+
+.game-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #a1a1aa;
+    font-weight: 500;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background: #22c55e;
+    border-radius: 50%;
+    box-shadow: 0 0 12px rgba(34, 197, 94, 0.6);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.1); }
+}
+
+.game-rating {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: #fbbf24;
+    font-weight: 600;
+}
+
+.star {
+    width: 16px;
+    height: 16px;
+    fill: #fbbf24;
+}
+
+.game-description {
+    font-size: 15px;
+    color: #71717a;
+    line-height: 1.6;
+}
+
+.footer {
+    background: rgba(0, 0, 0, 0.4);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 40px 0;
+    position: relative;
+    z-index: 3;
+}
+
+.footer-content {
+    text-align: center;
+}
+
+.footer-text {
+    font-size: 15px;
+    color: #a1a1aa;
+    margin-bottom: 12px;
+    line-height: 1.6;
+}
+
+.footer-credits {
+    font-size: 14px;
+    color: #71717a;
+}
+
+.discord-hint {
+    color: #8b5cf6;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.discord-hint::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #8b5cf6, #ec4899);
+    transition: width 0.3s ease;
+}
+
+.discord-hint:hover {
+    color: #ec4899;
+    text-shadow: 0 0 10px rgba(236, 72, 153, 0.3);
+}
+
+.discord-hint:hover::after {
+    width: 100%;
+}
+
+.loading {
+    text-align: center;
+    padding: 100px 20px;
+    color: #a1a1aa;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(20px);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.loading-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.loading-content {
+    text-align: center;
+}
+
+.loading-spinner {
+    width: 60px;
+    height: 60px;
+    border: 4px solid rgba(139, 92, 246, 0.2);
+    border-top-color: #8b5cf6;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 24px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.loading-text {
+    font-size: 18px;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 0 20px;
+    }
+    
+    .header {
+        padding: 60px 0 40px;
+    }
+    
+    .games-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+        padding: 0;
+    }
+    
+    .game-card {
+        border-radius: 20px;
+    }
+    
+    .game-info {
+        padding: 24px;
+    }
+    
+    .section-title {
+        font-size: 36px;
+    }
+}
+
+@media (max-width: 480px) {
+    .subtitle {
+        font-size: 18px;
+    }
+    
+    .section-title {
+        font-size: 32px;
+    }
+    
+    .game-title {
+        font-size: 20px;
+    }
+}
+    </style>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-814Y2X3KSF"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-814Y2X3KSF');
+</script>
+</head>
+<body>
+    <div class="ambient-lights">
+        <div class="ambient-light"></div>
+        <div class="ambient-light"></div>
+        <div class="ambient-light"></div>
+    </div>
+    <div class="particles" id="particles"></div>
+
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Loading Hyperbeam VM...</div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="header">
+            <h1 class="logo">Void.GG</h1>
+            <p class="subtitle">This is a copy of the popular service now.gg used for school!</p>
+        </div>
+        
+        <div class="games-section">
+            <div class="section-header">
+                <h2 class="section-title">Premium Games</h2>
+                <p class="section-subtitle">Stream high-quality games instantly in your browser</p>
+            </div>
+            <div class="games-grid" id="gamesGrid">
+                <div class="loading">Loading your premium gaming experience...</div>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p class="footer-text">Created by Void Network (<a href="#" class="discord-hint" title="Discord: void.network.official">void.network.official</a>) and Boredom Arcade (<a href="#" class="discord-hint" title="Discord: zshark216">zshark216</a>)</p>
+                <p class="footer-credits">Connect with our creators on Discord for support and updates</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+let scramjet = null;
+
+async function initializeScramjet() {
+    if (window.scramjetInitialized) return;
+    window.scramjetInitialized = true;
+
+    try {
+        if (typeof window.$scramjetLoadController !== "function") {
+            await new Promise((resolve, reject) => {
+                const s = document.createElement("script");
+                s.src = "/~r/1/scramjet.loader.js";
+                s.onload = resolve;
+                s.onerror = () => reject(new Error("Failed to load Scramjet loader"));
+                document.head.appendChild(s);
+            });
+        }
+
+        const connection = new BareMux.BareMuxConnection("/~r/2/worker.js");
+        const wispUrl =
+            (location.protocol === "https:" ? "wss" : "ws") +
+            "://" +
+            location.host +
+            "/~r/9/";
+
+        await connection.setTransport("/~r/3/index.mjs", [{ wisp: wispUrl }]);
+
+        const { ScramjetController } = window.$scramjetLoadController();
+
+        scramjet = new ScramjetController({
+            prefix: "/~r/p/",
+            files: {
+                wasm: "/~r/1/scramjet.wasm.wasm",
+                all: "/~r/1/scramjet.all.js",
+                sync: "/~r/1/scramjet.sync.js",
+            },
+        });
+
+        if (navigator.serviceWorker) {
+            await scramjet.init();
+            await navigator.serviceWorker.register("/sw.js");
+        }
+    } catch (e) {
+        console.error("Failed to initialize Scramjet:", e);
+    }
+}
+
+async function initializeUV() {
+    if (typeof registerSW === 'function') {
+        await registerSW();
+    }
+}
+
+function createParticles() {
+    const particlesContainer = document.getElementById('particles');
+    const particleCount = 50;
+    
+    for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * 15 + 's';
+        particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
+        
+        const size = Math.random() * 3 + 1;
+        particle.style.width = size + 'px';
+        particle.style.height = size + 'px';
+        
+        if (Math.random() > 0.7) {
+            particle.style.background = 'rgba(139, 92, 246, 0.6)';
+            particle.style.boxShadow = '0 0 10px rgba(139, 92, 246, 0.4)';
+        } else if (Math.random() > 0.5) {
+            particle.style.background = 'rgba(236, 72, 153, 0.6)';
+            particle.style.boxShadow = '0 0 10px rgba(236, 72, 153, 0.4)';
+        }
+        
+        particlesContainer.appendChild(particle);
+    }
+}
+
+async function createHyperbeamSession(gameUrl, gameTitle) {
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    loadingOverlay.classList.add('active');
+
+    try {
+        const response = await fetch('/api/now', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                gameUrl: gameUrl
+            })
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.error || 'Failed to create session');
+        }
+
+        const data = await response.json();
+        
+        let proxiedUrl = data.embedUrl;
+        if (scramjet && scramjet.encodeUrl) {
+            proxiedUrl = scramjet.encodeUrl(data.embedUrl);
+        }
+        
+        const viewerHTML = `
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>${gameTitle} - Void.GG Player</title>
+                <style>
+                    * { margin: 0; padding: 0; box-sizing: border-box; }
+                    body { 
+                        background: #000; 
+                        font-family: 'Poppins', sans-serif;
+                        overflow: hidden;
+                    }
+                    iframe { 
+                        width: 100vw; 
+                        height: 100vh; 
+                        border: none; 
+                        display: block;
+                    }
+                    .game-header {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        right: 0;
+                        height: 70px;
+                        background: rgba(0, 0, 0, 0.95);
+                        backdrop-filter: blur(20px);
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        padding: 0 32px;
+                        z-index: 1000;
+                        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+                    }
+                    .game-info {
+                        display: flex;
+                        align-items: center;
+                        gap: 16px;
+                    }
+                    .game-logo {
+                        font-size: 20px;
+                        font-weight: 700;
+                        background: linear-gradient(135deg, #8b5cf6, #ec4899);
+                        -webkit-background-clip: text;
+                        -webkit-text-fill-color: transparent;
+                    }
+                    .game-title {
+                        color: #fff;
+                        font-size: 16px;
+                        font-weight: 600;
+                    }
+                    .close-btn {
+                        background: linear-gradient(135deg, #ef4444, #dc2626);
+                        color: white;
+                        border: none;
+                        padding: 12px 24px;
+                        border-radius: 12px;
+                        cursor: pointer;
+                        font-weight: 600;
+                        font-size: 14px;
+                        transition: all 0.3s ease;
+                        box-shadow: 0 4px 16px rgba(239, 68, 68, 0.3);
+                    }
+                    .close-btn:hover {
+                        transform: scale(1.05);
+                        box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+                    }
+                    .game-frame {
+                        margin-top: 70px;
+                        height: calc(100vh - 70px);
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="game-header">
+                    <div class="game-info">
+                        <div class="game-logo">Void.GG</div>
+                        <div class="game-title">Playing: ${gameTitle}</div>
+                    </div>
+                    <button class="close-btn" onclick="closeSession()">✕ Close Game</button>
+                </div>
+                <iframe src="${proxiedUrl}" class="game-frame" allowfullscreen allow="autoplay; camera; microphone; display-capture"></iframe>
+                <script>
+                    const SESSION_ID = '${data.sessionId}';
+                    let lastActivity = Date.now();
+                    const AFK_TIMEOUT = 180000;
+
+                    function cleanupSession() {
+                        const origin = '${window.location.origin}';
+                        fetch(origin + '/api/now', {
+                            method: 'DELETE',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ sessionId: SESSION_ID })
+                        }).catch(err => console.error('Cleanup error:', err));
+                    }
+
+                    function closeSession() {
+                        cleanupSession();
+                        window.close();
+                    }
+
+                    ['mousemove', 'keydown', 'click', 'scroll'].forEach(event => {
+                        document.addEventListener(event, () => {
+                            lastActivity = Date.now();
+                        });
+                    });
+
+                    setInterval(() => {
+                        if (Date.now() - lastActivity > AFK_TIMEOUT) {
+                            alert('Session closed due to inactivity');
+                            closeSession();
+                        }
+                    }, 10000);
+
+                    window.addEventListener('beforeunload', cleanupSession);
+                    window.addEventListener('unload', cleanupSession);
+                <\/script>
+            </body>
+            </html>
+        `;
+        
+        const newWindow = window.open('', '_blank', 'fullscreen=yes');
+        if (!newWindow) {
+            throw new Error('Popup blocked. Please allow popups for this site.');
+        }
+        newWindow.document.write(viewerHTML);
+        newWindow.document.close();
+        
+        loadingOverlay.classList.remove('active');
+    } catch (error) {
+        loadingOverlay.classList.remove('active');
+        console.error('Session creation error:', error);
+        alert(error.message || 'Failed to start game. Please try again.');
+    }
+}
+
+function loadGames() {
+    const gamesGrid = document.getElementById('gamesGrid');
+    
+    if (typeof window.voidGGGames === 'undefined') {
+        gamesGrid.innerHTML = '<div class="loading">Unable to load premium gaming library</div>';
+        return;
+    }
+    
+    gamesGrid.innerHTML = '';
+    
+    const gameDescriptions = [
+        "Battle royale with building mechanics",
+        "Creative sandbox with endless possibilities", 
+        "Block-building survival adventure",
+        "Social deduction multiplayer game",
+        "Chaotic physics-based battle royale",
+        "High-octane car soccer action",
+        "Battle royale with unique legends",
+        "Tactical 5v5 shooter experience"
+    ];
+    
+    window.voidGGGames.forEach((game, index) => {
+        const gameCard = document.createElement('div');
+        gameCard.className = 'game-card';
+        gameCard.innerHTML = `
+            <div class="game-image-container">
+                <img src="${game.imgSrc}" alt="${game.title}" class="game-image" 
+                     onerror="this.src='data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"400\" height=\"225\" viewBox=\"0 0 400 225\"><defs><linearGradient id=\"bg\" x1=\"0%\" y1=\"0%\" x2=\"100%\" y2=\"100%\"><stop offset=\"0%\" style=\"stop-color:%238b5cf6;stop-opacity:0.1\"/><stop offset=\"100%\" style=\"stop-color:%23ec4899;stop-opacity:0.1\"/></linearGradient></defs><rect width=\"400\" height=\"225\" fill=\"url(%23bg)\"/><text x=\"200\" y=\"112\" font-family=\"Poppins, sans-serif\" font-size=\"18\" font-weight=\"600\" fill=\"%23ffffff\" text-anchor=\"middle\">${game.title}</text></svg>'">
+                <div class="game-overlay"></div>
+                <div class="play-button">
+                    <svg class="play-icon" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="game-info">
+                <h3 class="game-title">${game.title}</h3>
+                <div class="game-meta">
+                    <div class="game-status">
+                        <div class="status-dot"></div>
+                        <span>Online</span>
+                    </div>
+                    <div class="game-rating">
+                        <svg class="star" viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                        <span>4.${Math.floor(Math.random() * 3) + 7}</span>
+                    </div>
+                </div>
+                <p class="game-description">${gameDescriptions[index] || 'Premium gaming experience'}</p>
+            </div>
+        `;
+        
+        gameCard.addEventListener('click', () => {
+            createHyperbeamSession(game.link, game.title);
+        });
+        
+        gamesGrid.appendChild(gameCard);
+    });
+}
+
+window.addEventListener('load', async () => {
+    try {
+        await initializeUV();
+        await initializeScramjet();
+    } catch (e) {
+        console.error('Failed to initialize:', e);
+    }
+    createParticles();
+    loadGames();
+});
+    </script>
+</body>
+</html>

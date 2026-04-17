@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cloud Desktop</title>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; overflow: hidden; background: #000; }
+    #screen { width: 100vw; height: 100vh; }
+    #status { position: fixed; bottom: 1rem; left: 50%; transform: translateX(-50%);
+              color: rgba(255,255,255,0.5); font: 13px sans-serif; z-index: 10;
+              pointer-events: none; text-align: center; }
+    #status.hidden { display: none; }
+</style>
+</head>
+<body>
+<div id="screen"></div>
+<div id="status">Connecting...</div>
+
+<script type="module">
+import RFB from '/lib/novnc/core/rfb.js';
+
+const params = new URLSearchParams(window.location.search);
+const wsProxy = params.get('wsProxy');
+const host = params.get('host');
+const port = params.get('port');
+const path = params.get('path') || 'websockify';
+const statusEl = document.getElementById('status');
+
+let url;
+if (wsProxy) {
+    // Use server-side WebSocket proxy (avoids mixed content issues)
+    const proto = location.protocol === 'https:' ? 'wss' : 'ws';
+    url = proto + '://' + location.host + wsProxy;
+} else if (host) {
+    const isIP = host.match(/^\d+\.\d+\.\d+\.\d+$/);
+    const proto = (isIP || (port && port !== '443')) ? 'ws' : 'wss';
+    const hostPort = port ? host + ':' + port : host;
+    url = proto + '://' + hostPort + '/' + path;
+}
+
+if (!url) {
+    statusEl.textContent = 'No connection specified';
+} else {
+    function connect() {
+        statusEl.textContent = 'Connecting...';
+        statusEl.classList.remove('hidden');
+
+        try {
+            const rfb = new RFB(document.getElementById('screen'), url, {
+                wsProtocols: ['binary']
+            });
+
+            rfb.scaleViewport = true;
+            rfb.resizeSession = true;
+            rfb.clipViewport = false;
+            rfb.qualityLevel = 6;
+            rfb.compressionLevel = 2;
+
+            rfb.addEventListener('connect', function() {
+                statusEl.classList.add('hidden');
+                rfb.focus();
+            });
+
+            rfb.addEventListener('disconnect', function(e) {
+                statusEl.classList.remove('hidden');
+                statusEl.textContent = 'Reconnecting...';
+                const screen = document.getElementById('screen');
+                while (screen.childNodes.length > 0) screen.removeChild(screen.lastChild);
+                setTimeout(connect, 2000);
+            });
+
+            rfb.addEventListener('credentialsrequired', function() {
+                // VNC may require OPEN_BUTTON_TOKEN as password — try empty first
+                rfb.sendCredentials({ password: params.get('vncPass') || '' });
+            });
+        } catch(e) {
+            statusEl.textContent = 'Reconnecting...';
+            setTimeout(connect, 3000);
+        }
+    }
+
+    connect();
+}
+</script>
+<script src="/assets/js/wilway-popup.js" defer></script>
+</body>
+</html>

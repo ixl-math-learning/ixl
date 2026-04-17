@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html><head>
+<meta charset="UTF-8">
+<title>WARP Proxy Test</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0a;color:#e0e0e0;font-family:system-ui,sans-serif;padding:20px}
+h2{margin-bottom:16px;color:#fff}
+.log{background:#111;border:1px solid #333;border-radius:8px;padding:12px;margin:12px 0;font-family:monospace;font-size:13px;max-height:250px;overflow-y:auto;white-space:pre-wrap}
+.ok{color:#4caf50} .err{color:#f44336} .warn{color:#ff9800} .info{color:#64b5f6}
+button{background:#1a73e8;color:#fff;border:none;padding:10px 20px;border-radius:6px;cursor:pointer;font-size:14px;margin:6px 4px 6px 0}
+button:hover{background:#1565c0}
+button:disabled{opacity:0.5;cursor:not-allowed}
+.search-bar{display:flex;gap:8px;margin:12px 0}
+.search-bar input{flex:1;background:#111;border:1px solid #333;border-radius:6px;padding:10px 14px;color:#fff;font-size:14px;outline:none}
+.search-bar input:focus{border-color:#1a73e8}
+.search-bar button{flex-shrink:0}
+iframe{width:100%;height:60vh;border:1px solid #333;border-radius:8px;margin-top:12px;background:#000}
+</style>
+</head><body>
+<h2>WARP Proxy Test</h2>
+
+<button onclick="testServer()">Test Server WARP</button>
+<button onclick="initProxy()" id="initBtn">Init UV + Transport</button>
+<button onclick="clearLog()">Clear Log</button>
+
+<div class="search-bar">
+    <input type="text" id="urlInput" placeholder="Enter URL (e.g. https://music.youtube.com)" value="https://music.youtube.com"
+           onkeydown="if(event.key==='Enter')loadUrl()">
+    <button onclick="loadUrl()" id="goBtn" disabled>Go</button>
+</div>
+
+<div class="log" id="log"></div>
+<iframe id="frame" src="about:blank"></iframe>
+
+<script>
+const logEl = document.getElementById('log');
+let proxyReady = false;
+
+function log(msg, cls='info') {
+    const t = new Date().toLocaleTimeString();
+    logEl.innerHTML += `<span class="${cls}">[${t}] ${msg}</span>\n`;
+    logEl.scrollTop = logEl.scrollHeight;
+}
+function clearLog() { logEl.innerHTML = ''; }
+
+// Test server-side WARP connectivity
+async function testServer() {
+    log('Testing server-side WARP SOCKS5...');
+    try {
+        const r = await fetch('/api/warp-test');
+        const data = await r.json();
+        if (data.warp) {
+            log('WARP SOCKS5: ' + (data.warp.ok ? 'OK (' + data.warp.status + ')' : 'FAILED: ' + data.warp.error), data.warp.ok ? 'ok' : 'err');
+        }
+        if (data.direct) {
+            log('Direct: ' + (data.direct.ok ? 'OK (' + data.direct.status + ')' : 'FAILED: ' + data.direct.error), data.direct.ok ? 'ok' : 'err');
+        }
+        if (data.warpStatus) log('WARP service: ' + data.warpStatus, 'info');
+    } catch (e) {
+        log('Server test failed: ' + e.message, 'err');
+    }
+}
+
+// Initialize transport + UV service worker
+async function initProxy() {
+    const btn = document.getElementById('initBtn');
+    btn.disabled = true;
+    btn.textContent = 'Initializing...';
+
+    try {
+        // Load BareMux
+        log('Loading BareMux...');
+        if (typeof BareMux === 'undefined') {
+            await new Promise((resolve, reject) => {
+                const s = document.createElement('script');
+                s.src = '/~r/2/index.js';
+                s.onload = resolve;
+                s.onerror = () => reject(new Error('Failed to load BareMux'));
+                document.head.appendChild(s);
+            });
+        }
+        log('BareMux loaded', 'ok');
+
+        // Set transport
+        const conn = new BareMux.BareMuxConnection('/~r/2/worker.js');
+        const wispUrl = (location.protocol === 'https:' ? 'wss' : 'ws') + '://' + location.host + '/~r/9/';
+        log('Setting transport → epoxy → WISP at ' + wispUrl);
+        await conn.setTransport('/~r/3/index.mjs', [{ wisp: wispUrl }]);
+        log('Transport set!', 'ok');
+
+        // Register UV SW
+        log('Registering UV service worker...');
+        const reg = await navigator.serviceWorker.register('/worker.js', { scope: '/~/px/', updateViaCache: 'none' });
+        if (reg.installing) {
+            await new Promise((resolve, reject) => {
+                reg.installing.addEventListener('statechange', e => {
+                    if (e.target.state === 'activated') resolve();
+                    else if (e.target.state === 'redundant') reject(new Error('SW redundant'));
+                });
+                setTimeout(() => reject(new Error('SW activation timeout')), 10000);
+            });
+        }
+        await navigator.serviceWorker.ready;
+        log('UV service worker active', 'ok');
+
+        // Load UV config
+        if (!self.__uv$config) {
+            await new Promise((resolve, reject) => {
+                const s1 = document.createElement('script'); s1.src = '/~r/7/bundle.js';
+                s1.onload = () => {
+                    const s2 = document.createElement('script'); s2.src = '/~r/7/config.js';
+                    s2.onload = resolve; s2.onerror = reject; document.head.appendChild(s2);
+                };
+                s1.onerror = reject; document.head.appendChild(s1);
+            });
+        }
+        log('UV config loaded', 'ok');
+
+        proxyReady = true;
+        document.getElementById('goBtn').disabled = false;
+        btn.textContent = 'Ready!';
+        btn.style.background = '#4caf50';
+        log('Proxy ready — enter a URL and click Go', 'ok');
+    } catch (e) {
+        log('Init failed: ' + e.message, 'err');
+        btn.textContent = 'Init Failed (retry)';
+        btn.disabled = false;
+    }
+}
+
+// Load any URL through UV proxy
+function loadUrl() {
+    if (!proxyReady) {
+        log('Proxy not ready — click "Init UV + Transport" first', 'warn');
+        return;
+    }
+    let url = document.getElementById('urlInput').value.trim();
+    if (!url) return;
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+        url = 'https://' + url;
+    }
+
+    const encoded = __uv$config.prefix + __uv$config.encodeUrl(url);
+    log('Loading: ' + url);
+    log('Encoded: ' + encoded);
+    const frame = document.getElementById('frame');
+    frame.src = encoded;
+    frame.onload = () => log('Iframe loaded!', 'ok');
+    frame.onerror = (e) => log('Iframe error: ' + e, 'err');
+}
+</script>
+</body></html>

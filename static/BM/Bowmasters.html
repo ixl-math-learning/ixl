@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Bowmasters</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="mobile-web-app-capable" content="yes"/>
+    <meta name="apple-touch-fullscreen" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+    <meta name="msapplication-tap-highlight" content="no"/>
+    <meta name="MobileOptimized" content="960"/>
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1.0, user-scalable=no, minimal-ui"/>
+    <meta charset="utf-8"/>
+
+    <style>
+        html, body {
+            padding: 0;
+            margin: 0;
+            background: #000000;
+            overflow: hidden;
+        }
+    </style>
+
+    <script src="assets/ytgame.js"></script>
+    <script>
+    // Patch for file:// protocol - browsers block ALL network requests (XHR, fetch) on file://
+    if (window.location.protocol === 'file:') {
+        // Load the JSON data cache (bundled into a <script> so it bypasses CORS)
+        document.write('<script src="assets/data-cache.js"><\/script>');
+    }
+    </script>
+    <script>
+    if (window.location.protocol === 'file:') {
+        var _cache = window.__localDataCache || {};
+        var _imgCache = window.__localImageCache || {};
+
+        // Prevent crossOrigin attribute on elements
+        var _origSetAttr = Element.prototype.setAttribute;
+        Element.prototype.setAttribute = function(name, value) {
+            if (name === 'crossorigin' || name === 'crossOrigin') return;
+            return _origSetAttr.call(this, name, value);
+        };
+        Object.defineProperty(HTMLImageElement.prototype, 'crossOrigin', {
+            set: function() {}, get: function() { return null; }, configurable: true
+        });
+        Object.defineProperty(HTMLMediaElement.prototype, 'crossOrigin', {
+            set: function() {}, get: function() { return null; }, configurable: true
+        });
+
+        // Redirect image src to base64 data URIs from cache to avoid WebGL taint
+        var _origImgSrcDesc = Object.getOwnPropertyDescriptor(HTMLImageElement.prototype, 'src');
+        Object.defineProperty(HTMLImageElement.prototype, 'src', {
+            set: function(url) {
+                if (typeof url === 'string' && url.indexOf('data:') !== 0 && url.indexOf('blob:') !== 0) {
+                    // Normalize the URL to a relative path for cache lookup
+                    var key = url;
+                    if (url.indexOf('file:///') === 0) {
+                        // Extract relative path from absolute file URL
+                        var base = window.location.href.replace(/[^/]*$/, '');
+                        if (url.indexOf(base) === 0) key = url.substring(base.length);
+                    }
+                    var cached = _imgCache[key];
+                    if (cached) {
+                        _origImgSrcDesc.set.call(this, cached);
+                        return;
+                    }
+                }
+                _origImgSrcDesc.set.call(this, url);
+            },
+            get: _origImgSrcDesc.get,
+            configurable: true
+        });
+
+        // Patch XHR to serve JSON from the inline cache
+        var _origOpen = XMLHttpRequest.prototype.open;
+        var _origSend = XMLHttpRequest.prototype.send;
+        XMLHttpRequest.prototype.open = function(method, url) {
+            this._cacheUrl = url;
+            this._cacheHit = false;
+            var data = _cache[url];
+            if (data !== undefined) {
+                this._cacheHit = true;
+                this._cacheData = data;
+            }
+            if (!this._cacheHit) return _origOpen.apply(this, arguments);
+        };
+        XMLHttpRequest.prototype.send = function() {
+            if (this._cacheHit) {
+                var self = this;
+                Object.defineProperty(self, 'readyState', { get: function() { return 4; }, configurable: true });
+                Object.defineProperty(self, 'status', { get: function() { return 200; }, configurable: true });
+                Object.defineProperty(self, 'responseText', { get: function() { return self._cacheData; }, configurable: true });
+                Object.defineProperty(self, 'response', { get: function() { return self._cacheData; }, configurable: true });
+                setTimeout(function() {
+                    if (self.onreadystatechange) self.onreadystatechange();
+                    if (self.onload) self.onload();
+                    self.dispatchEvent(new Event('load'));
+                }, 0);
+                return;
+            }
+            return _origSend.apply(this, arguments);
+        };
+
+        // Patch fetch() to serve from cache
+        var _origFetch = window.fetch;
+        window.fetch = function(url) {
+            if (typeof url === 'string') {
+                var data = _cache[url];
+                if (data !== undefined) {
+                    return Promise.resolve({
+                        ok: true, status: 200,
+                        text: function() { return Promise.resolve(data); },
+                        json: function() { return Promise.resolve(JSON.parse(data)); },
+                        arrayBuffer: function() {
+                            var enc = new TextEncoder();
+                            return Promise.resolve(enc.encode(data).buffer);
+                        }
+                    });
+                }
+            }
+            return _origFetch.apply(this, arguments);
+        };
+    }
+    </script>
+    <script>
+    // Force Howler.js to use HTML5 Audio (not XHR+WebAudio) on file://
+    // because XHR is blocked on file:// protocol
+    if (window.location.protocol === 'file:') {
+        Object.defineProperty(window, 'AudioContext', { get: function() { return undefined; } });
+        Object.defineProperty(window, 'webkitAudioContext', { get: function() { return undefined; } });
+    }
+    </script>
+    <script src="assets/game.js"></script>
+    <script>
+    // Restore AudioContext after game.js loads (Howler detected html5 mode during init)
+    if (window.location.protocol === 'file:') {
+        delete window.AudioContext;
+        delete window.webkitAudioContext;
+    }
+    </script>
+    <script>window.addEventListener("load", function() { window.runGame(); });</script>
+</head>
+
+<body>
+    <div id="game"></div>
+</body>
+</html>

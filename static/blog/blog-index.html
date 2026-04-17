@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+
+    <script defer src="/s/script.js" data-website-id="b9510d8e-e1e5-4dff-ad86-297ebece5574"></script>
+    <noscript><img src="/t/p?payload=%7B%22website%22%3A%22b9510d8e-e1e5-4dff-ad86-297ebece5574%22%2C%22url%22%3A%22%2F%22%2C%22hostname%22%3A%22vng.lol%22%2C%22name%22%3A%22pageview%22%7D" style="display:none;"></noscript>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Void Network Blog — gaming guides, performance tips, browser gaming history, and roundups of the best free browser games to play online.">
+    <title>Blog | Void Network</title>
+    <link rel="icon" href="/assets/img/void.png" type="image/x-icon">
+    <link rel="stylesheet" href="/assets/css/matte-theme.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="/assets/footer/footer.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: var(--matte-bg-base); color: var(--matte-text-primary); min-height: 100vh; line-height: 1.7; }
+        body::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 20% 30%, rgba(255,255,255,0.015) 0%, transparent 60%); pointer-events: none; z-index: -1; }
+        
+        .blog-container { max-width: 1000px; margin: 0 auto; padding: 3rem 1.5rem; padding-bottom: 120px; }
+        
+        .blog-header { text-align: center; margin-bottom: 3rem; }
+        .blog-title { font-size: 3rem; font-weight: 800; margin-bottom: 1rem; background: linear-gradient(180deg, #ffffff 0%, #a0a0a0 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .blog-subtitle { color: var(--matte-text-secondary); font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+        
+        .blog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        
+        .blog-card { background: var(--matte-bg-card); border: 1px solid var(--matte-border-default); border-radius: var(--matte-radius-lg); padding: 1.5rem; transition: all 0.3s ease; text-decoration: none; display: flex; flex-direction: column; }
+        .blog-card:hover { border-color: var(--matte-border-hover); transform: translateY(-4px); box-shadow: var(--matte-shadow-lg); }
+        
+        .card-category { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.35rem 0.75rem; border-radius: 100px; margin-bottom: 1rem; width: fit-content; }
+        .category-guide { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+        .category-roundup { background: rgba(168, 85, 247, 0.15); color: #c084fc; }
+        .category-tips { background: rgba(34, 197, 94, 0.15); color: #4ade80; }
+        .category-history { background: rgba(249, 115, 22, 0.15); color: #fb923c; }
+        .category-educational { background: rgba(236, 72, 153, 0.15); color: #f472b6; }
+        
+        .card-title { font-size: 1.2rem; font-weight: 600; color: var(--matte-text-primary); margin-bottom: 0.75rem; line-height: 1.4; }
+        .card-description { color: var(--matte-text-secondary); font-size: 0.9rem; line-height: 1.6; flex-grow: 1; margin-bottom: 1rem; }
+        .card-meta { display: flex; justify-content: space-between; align-items: center; color: var(--matte-text-muted); font-size: 0.8rem; padding-top: 1rem; border-top: 1px solid var(--matte-border-subtle); }
+        .card-meta span { display: flex; align-items: center; gap: 0.4rem; }
+        .card-meta i { width: 14px; height: 14px; }
+        
+        .featured-section { margin-bottom: 3rem; }
+        .section-label { font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--matte-text-muted); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+        .section-label i { width: 16px; height: 16px; }
+        
+        .featured-card { background: linear-gradient(135deg, var(--matte-bg-card) 0%, var(--matte-bg-elevated) 100%); border: 1px solid var(--matte-border-default); border-radius: var(--matte-radius-xl); padding: 2rem; text-decoration: none; display: block; transition: all 0.3s ease; }
+        .featured-card:hover { border-color: var(--matte-border-hover); transform: translateY(-4px); box-shadow: var(--matte-shadow-lg); }
+        .featured-card .card-category { margin-bottom: 1.25rem; }
+        .featured-card .card-title { font-size: 1.75rem; margin-bottom: 1rem; }
+        .featured-card .card-description { font-size: 1rem; margin-bottom: 1.5rem; }
+        
+        .all-articles-section { margin-top: 2rem; }
+        
+        @media (max-width: 768px) {
+            .blog-title { font-size: 2rem; }
+            .blog-grid { grid-template-columns: 1fr; }
+            .featured-card .card-title { font-size: 1.4rem; }
+            .blog-container { padding: 2rem 1rem; padding-bottom: 120px; }
+        }
+    </style>
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-814Y2X3KSF"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-814Y2X3KSF');
+</script>
+</head>
+<body>
+    <div class="blog-container">
+        <header class="blog-header">
+            <h1 class="blog-title">Void Network Blog</h1>
+            <p class="blog-subtitle">Tips, guides, and gaming insights to level up your browser gaming experience</p>
+        </header>
+
+        <section class="featured-section">
+            <div class="section-label"><i data-lucide="sparkles"></i> Featured Article</div>
+            <a href="/blog/top-10-multiplayer-browser-games.html" class="featured-card">
+                <span class="card-category category-roundup">Roundup</span>
+                <h2 class="card-title">Top 10 Multiplayer Browser Games to Play with Friends</h2>
+                <p class="card-description">Looking for something fun to play with your friends without downloading anything? From competitive shooters to hilarious party games, discover the best multiplayer experiences you can jump into instantly.</p>
+                <div class="card-meta">
+                    <span><i data-lucide="user"></i> Void Network Team</span>
+                    <span><i data-lucide="calendar"></i> Jan 15, 2025</span>
+                    <span><i data-lucide="clock"></i> 6 min read</span>
+                </div>
+            </a>
+        </section>
+
+        <section class="all-articles-section">
+            <div class="section-label"><i data-lucide="layout-grid"></i> All Articles</div>
+            <div class="blog-grid">
+                
+                <a href="/blog/improve-browser-game-performance.html" class="blog-card">
+                    <span class="card-category category-tips">Tips</span>
+                    <h3 class="card-title">5 Ways to Improve Browser Game Performance</h3>
+                    <p class="card-description">Stuttering frames and input lag ruining your gaming? These optimization strategies will help you squeeze every bit of performance out of your setup.</p>
+                    <div class="card-meta">
+                        <span><i data-lucide="calendar"></i> Jan 12, 2025</span>
+                        <span><i data-lucide="clock"></i> 5 min</span>
+                    </div>
+                </a>
+
+                <a href="/blog/history-of-flash-games.html" class="blog-card">
+                    <span class="card-category category-history">History</span>
+                    <h3 class="card-title">The History of Flash Games and Their HTML5 Revival</h3>
+                    <p class="card-description">Flash games defined online entertainment for a generation. Discover how preservation efforts and modern technology keep these classics alive.</p>
+                    <div class="card-meta">
+                        <span><i data-lucide="calendar"></i> Jan 10, 2025</span>
+                        <span><i data-lucide="clock"></i> 7 min</span>
+                    </div>
+                </a>
+
+                <a href="/blog/best-io-games.html" class="blog-card">
+                    <span class="card-category category-roundup">Roundup</span>
+                    <h3 class="card-title">Best .io Games From Slither to Modern Hits</h3>
+                    <p class="card-description">The .io domain became synonymous with instant multiplayer browser games. Explore the classics and discover modern hits in this comprehensive roundup.</p>
+                    <div class="card-meta">
+                        <span><i data-lucide="calendar"></i> Jan 8, 2025</span>
+                        <span><i data-lucide="clock"></i> 6 min</span>
+                    </div>
+                </a>
+
+                <a href="/blog/retro-arcade-classics.html" class="blog-card">
+                    <span class="card-category category-guide">Guide</span>
+                    <h3 class="card-title">Play Retro Arcade Classics in Your Browser</h3>
+                    <p class="card-description">Before home consoles dominated, arcades ruled gaming culture. Experience Pac-Man, Space Invaders, and more directly in your browser.</p>
+                    <div class="card-meta">
+                        <span><i data-lucide="calendar"></i> Jan 6, 2025</span>
+                        <span><i data-lucide="clock"></i> 6 min</span>
+                    </div>
+                </a>
+
+                <a href="/blog/minecraft-classic-guide.html" class="blog-card">
+                    <span class="card-category category-guide">Guide</span>
+                    <h3 class="card-title">Minecraft Classic Complete Browser Guide</h3>
+                    <p class="card-description">Experience where Minecraft began with this free browser version. Learn controls, building techniques, and creative project ideas.</p>
+                    <div class="card-meta">
+                        <span><i data-lucide="calendar"></i> Jan 4, 2025</span>
+                        <span><i data-lucide="clock"></i> 6 min</span>
+                    </div>
+                </a>
+
+                <a href="/blog/fix-lag-browser-games.html" class="blog-card">
+                    <span class="card-category category-tips">Tips</span>
+                    <h3 class="card-title">How to Fix Lag in Browser Games</h3>
+                    <p class="card-description">Diagnose and fix FPS lag, network lag, and input lag with this comprehensive troubleshooting guide for smoother gameplay.</p>
+                    <div class="card-meta">
+                        <span><i data-lucide="calendar"></i> Jan 2, 2025</span>
+                        <span><i data-lucide="clock"></i> 7 min</span>
+                    </div>
+                </a>
+
+                <a href="/blog/puzzle-games-train-brain.html" class="blog-card">
+                    <span class="card-category category-roundup">Roundup</span>
+                    <h3 class="card-title">Best Puzzle Games to Train Your Brain Online</h3>
+                    <p class="card-description">Exercise your brain while having fun. From Sudoku to 2048, discover puzzle games that sharpen your thinking skills.</p>
+                    <div class="card-meta">
+                        <span><i data-lucide="calendar"></i> Dec 30, 2024</span>
+                        <span><i data-lucide="clock"></i> 6 min</span>
+                    </div>
+                </a>
+
+                <a href="/blog/racing-games-no-download.html" class="blog-card">
+                    <span class="card-category category-roundup">Roundup</span>
+                    <h3 class="card-title">Racing Games You Can Play Without Downloading</h3>
+                    <p class="card-description">From arcade drifting to stunt driving, experience the thrill of racing directly in your browser with these top picks.</p>
+                    <div class="card-meta">
+                        <span><i data-lucide="calendar"></i> Dec 28, 2024</span>
+                        <span><i data-lucide="clock"></i> 6 min</span>
+                    </div>
+                </a>
+
+                <a href="/blog/html5-gaming-evolution.html" class="blog-card">
+                    <span class="card-category category-educational">Educational</span>
+                    <h3 class="card-title">The Evolution of HTML5 Gaming Technology</h3>
+                    <p class="card-description">How did browsers become powerful gaming platforms? Explore the technologies from Canvas to WebAssembly that make it possible.</p>
+                    <div class="card-meta">
+                        <span><i data-lucide="calendar"></i> Dec 26, 2024</span>
+                        <span><i data-lucide="clock"></i> 7 min</span>
+                    </div>
+                </a>
+
+                <a href="/blog/browser-horror-games.html" class="blog-card">
+                    <span class="card-category category-roundup">Roundup</span>
+                    <h3 class="card-title">Best Horror Games to Play in Your Browser</h3>
+                    <p class="card-description">Dim the lights and prepare for browser-based terror. These games prove atmosphere and clever design trump graphics budgets.</p>
+                    <div class="card-meta">
+                        <span><i data-lucide="calendar"></i> Dec 24, 2024</span>
+                        <span><i data-lucide="clock"></i> 6 min</span>
+                    </div>
+                </a>
+
+                <a href="/blog/keyboard-shortcuts-gamers.html" class="blog-card">
+                    <span class="card-category category-tips">Tips</span>
+                    <h3 class="card-title">Keyboard Shortcuts Every Browser Gamer Needs</h3>
+                    <p class="card-description">Master these shortcuts to manage your browser efficiently while gaming. From fullscreen toggles to emergency recovery.</p>
+                    <div class="card-meta">
+                        <span><i data-lucide="calendar"></i> Dec 22, 2024</span>
+                        <span><i data-lucide="clock"></i> 5 min</span>
+                    </div>
+                </a>
+
+                <a href="/blog/free-browser-alternatives.html" class="blog-card">
+                    <span class="card-category category-roundup">Roundup</span>
+                    <h3 class="card-title">Free Browser Alternatives to Popular Paid Games</h3>
+                    <p class="card-description">Can't afford the latest releases? These free browser games capture the essence of popular paid titles without the price tag.</p>
+                    <div class="card-meta">
+                        <span><i data-lucide="calendar"></i> Dec 20, 2024</span>
+                        <span><i data-lucide="clock"></i> 6 min</span>
+                    </div>
+                </a>
+
+                <a href="/blog/how-browser-games-made.html" class="blog-card">
+                    <span class="card-category category-educational">Educational</span>
+                    <h3 class="card-title">How Browser Games Are Made: A Beginner's Guide</h3>
+                    <p class="card-description">Ever wondered what goes into creating browser games? Learn about the tools, process, and skills needed to make your own.</p>
+                    <div class="card-meta">
+                        <span><i data-lucide="calendar"></i> Dec 18, 2024</span>
+                        <span><i data-lucide="clock"></i> 7 min</span>
+                    </div>
+                </a>
+
+                <a href="/blog/chromebook-games.html" class="blog-card">
+                    <span class="card-category category-guide">Guide</span>
+                    <h3 class="card-title">Best Games to Play on a School Chromebook</h3>
+                    <p class="card-description">Limited hardware and network restrictions? These games run smoothly on Chromebooks and provide entertainment during free periods.</p>
+                    <div class="card-meta">
+                        <span><i data-lucide="calendar"></i> Dec 16, 2024</span>
+                        <span><i data-lucide="clock"></i> 6 min</span>
+                    </div>
+                </a>
+
+            </div>
+        </section>
+    </div>
+    <script>lucide.createIcons();</script>
+<script src="/assets/js/wilway-popup.js" defer></script>
+</body>
+</html>

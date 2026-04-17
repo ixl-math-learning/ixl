@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<link rel="stylesheet" href="/assets/css/matte-theme.css">
+<head>
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+    <script defer src="/s/script.js" data-website-id="b9510d8e-e1e5-4dff-ad86-297ebece5574"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Emulator - Void Network V5</title>
+<meta name="description" content="Void Network - The premier educational gaming platform for children. Explore hundreds of interactive learning games, STEM challenges, curriculum-aligned activities, and safe educational experiences designed to develop critical thinking, problem-solving, and creativity in kids of all ages.">
+    <meta name="keywords" content="educational games, learning games for kids, children education, STEM games, interactive learning, educational platform, kids learning games, safe games for children, curriculum aligned games, brain training games, Void Network, educational activities, kids STEM, math games, science games, reading games, spelling games, geography games, typing games, logic puzzles, memory games, children development, early childhood education, K-12 learning, classroom games">
+    <meta name="author" content="Void Network">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="language" content="English">
+    <meta name="revisit-after" content="7 days">
+    <meta name="rating" content="General">
+    <meta name="distribution" content="Global">
+    <meta name="category" content="Education">
+    <meta name="classification" content="Educational Games for Children">
+    <meta name="target-audience" content="children, parents, educators, teachers, schools">
+    <meta name="subject" content="Education, Learning Games, Children Development, STEM, Interactive Learning">
+    <meta name="content-rating" content="kids-safe">
+    <meta name="child-safe" content="true">
+    <meta name="educational-content" content="true">
+    <meta name="audience" content="K-12 Students, Parents, Educators, Teachers">
+    <meta name="topic" content="Educational Games, Learning Activities, STEM Education, Curriculum-Aligned Content">
+    <meta name="coverage" content="Worldwide">
+    <meta name="age-range" content="5-18">
+    <meta name="dc.title" content="Void Network - Educational Games for Children">
+    <meta name="dc.creator" content="Void Network">
+    <meta name="dc.subject" content="Educational Games, Learning, STEM, Children Development, Interactive Education">
+    <meta name="dc.description" content="Interactive educational games and learning activities for children. Curriculum-aligned STEM content, math games, reading exercises, and cognitive development tools.">
+    <meta name="dc.publisher" content="Void Network">
+    <meta name="dc.type" content="Interactive Resource">
+    <meta name="dc.format" content="text/html">
+    <meta name="dc.language" content="en">
+    <meta property="og:title" content="Void Network - Educational Games & Interactive Learning for Children">
+    <meta property="og:description" content="The ultimate educational gaming platform designed to expand children's knowledge through fun, interactive learning games. Hundreds of safe, engaging, and curriculum-aligned activities for kids of all ages. STEM, math, reading, science, and more.">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Void Network - Educational Gaming Platform">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:image" content="https://vng.lol/img/vnbannerv5.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="2560">
+    <meta property="og:image:height" content="1440">
+    <meta property="og:image:alt" content="Void Network - Educational Games for Children">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Void Network - Educational Games & Learning Platform for Children">
+    <meta name="twitter:description" content="Discover hundreds of fun educational games designed to help children learn, grow, and develop critical thinking skills. Safe, curriculum-aligned, and educator-approved content for kids of all ages.">
+    <meta name="twitter:image" content="https://vng.lol/img/vnbannerv5.png">
+    <meta name="twitter:image:alt" content="Void Network - Educational Games for Children">
+    <meta name="twitter:site" content="@VoidNetwork">
+    <meta name="twitter:creator" content="@VoidNetwork">
+    <script src="/assets/js/safari-compat.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="/assets/js/particles.js"></script>
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-814Y2X3KSF"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-814Y2X3KSF');
+    </script>
+    <script type="module" src="/popup-listener.js"></script>
+    <style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #000000;
+    color: #f5f5f5;
+    min-height: 100vh;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+    position: relative;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(ellipse at center, rgba(20, 20, 20, 0.3) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: -1;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem;
+    margin-bottom: 100px;
+    position: relative;
+    z-index: 1;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    padding-top: 1rem;
+}
+
+.page-title {
+    font-size: 3rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    background: linear-gradient(180deg, #4a4a4a 0%, #ffffff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.1));
+    animation: gentleGlow 4s ease-in-out infinite;
+    margin-bottom: 0.5rem;
+}
+
+.page-subtitle {
+    color: rgba(255, 255, 255, 0.45);
+    font-size: 0.95rem;
+    font-weight: 400;
+}
+
+@keyframes gentleGlow {
+    0%, 100% { filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.1)); }
+    50% { filter: drop-shadow(0 0 40px rgba(255, 255, 255, 0.15)); }
+}
+
+
+.setup-card {
+    background: rgba(15, 15, 15, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 20px;
+    padding: 2rem 2.5rem;
+    backdrop-filter: blur(20px);
+    margin-bottom: 1.5rem;
+}
+
+.setup-card h2 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 1rem;
+}
+
+.section-label {
+    display: block;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.4);
+    margin-bottom: 0.6rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+
+.dropzone {
+    border: 2px dashed rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.dropzone:hover, .dropzone.dragover {
+    border-color: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.dropzone.has-file {
+    border-color: rgba(99, 102, 241, 0.4);
+    background: rgba(99, 102, 241, 0.05);
+}
+
+.dropzone-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.6rem;
+    opacity: 0.4;
+}
+
+.dropzone-text {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.9rem;
+}
+
+.dropzone-text strong {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.file-info {
+    margin-top: 0.8rem;
+}
+
+.file-name {
+    color: #818cf8;
+    font-size: 0.85rem;
+    word-break: break-all;
+    font-weight: 500;
+}
+
+.auto-detected {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.75rem;
+    margin-top: 0.3rem;
+}
+
+.auto-detected strong {
+    color: #22c55e;
+}
+
+
+.systems-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.system-chip {
+    padding: 0.6rem 0.4rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--matte-radius-sm, 10px);
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.5);
+    user-select: none;
+}
+
+.system-chip:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.12);
+    color: #fff;
+}
+
+.system-chip.selected {
+    background: rgba(99, 102, 241, 0.2);
+    border-color: rgba(99, 102, 241, 0.45);
+    color: #fff;
+}
+
+.system-chip.auto-match {
+    border-color: rgba(34, 197, 94, 0.4);
+    background: rgba(34, 197, 94, 0.1);
+}
+
+.system-chip-icon {
+    font-size: 1.2rem;
+    display: block;
+    margin-bottom: 0.15rem;
+}
+
+
+.launch-btn {
+    width: 100%;
+    padding: 0.9rem;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    cursor: not-allowed;
+    transition: all 0.3s ease;
+}
+
+.launch-btn.ready {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    border-color: transparent;
+    color: #fff;
+    cursor: pointer;
+}
+
+.launch-btn.ready:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+}
+
+.launch-btn.ready:active {
+    transform: scale(0.98);
+}
+
+.note {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.25);
+    text-align: center;
+    margin-top: 1rem;
+}
+
+
+.emulator-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #000;
+    z-index: 9999;
+}
+
+.emulator-overlay.active {
+    display: flex;
+    flex-direction: column;
+}
+
+.emu-toolbar {
+    height: 44px;
+    min-height: 44px;
+    background: rgba(10, 10, 10, 0.95);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    gap: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.emu-toolbar button {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.8);
+    padding: 0.3rem 0.8rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.2s;
+}
+
+.emu-toolbar button:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+}
+
+.emu-toolbar .game-title {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.8rem;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.emu-frame {
+    flex: 1;
+    border: none;
+    width: 100%;
+    height: 100%;
+}
+
+
+@media (max-width: 768px) {
+    .container { padding: 1.2rem; }
+    .page-title { font-size: 2.2rem; }
+    .setup-card { padding: 1.5rem; }
+    .systems-grid { grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); }
+}
+
+@media (max-width: 480px) {
+    .page-title { font-size: 1.8rem; }
+    .setup-card { padding: 1.2rem; border-radius: 16px; }
+    .systems-grid { grid-template-columns: repeat(3, 1fr); }
+    .dropzone { padding: 1.8rem 1rem; }
+}
+    </style>
+</head>
+<body>
+
+<div class="container" id="setupView">
+    <div class="header">
+        <h1 class="page-title">Emulator</h1>
+        <p class="page-subtitle">Play retro games in your browser</p>
+    </div>
+
+    <div class="setup-card">
+        <h2>1. Load a ROM</h2>
+        <div class="dropzone" id="dropzone">
+            <div class="dropzone-icon">&#128190;</div>
+            <div class="dropzone-text">
+                <strong>Drop ROM file here</strong> or click to browse
+            </div>
+            <div class="file-info" id="fileInfo" style="display:none">
+                <div class="file-name" id="fileName"></div>
+                <div class="auto-detected" id="autoDetected"></div>
+            </div>
+        </div>
+        <input type="file" id="romInput" hidden>
+    </div>
+
+    <div class="setup-card">
+        <h2>2. Select System <span style="font-weight:400;font-size:0.8rem;color:rgba(255,255,255,0.3)">(auto-detected from file)</span></h2>
+        <div class="systems-grid" id="systemsGrid"></div>
+    </div>
+
+    <button class="launch-btn" id="launchBtn">Select a ROM to start</button>
+    <div class="note">Cores load on-demand from CDN. First launch per system may take a moment.</div>
+</div>
+
+<div class="emulator-overlay" id="emulatorOverlay">
+    <div class="emu-toolbar">
+        <button id="backToSetup">&#8592; Back</button>
+        <span class="game-title" id="gameTitle"></span>
+        <button id="fullscreenBtn">Fullscreen</button>
+    </div>
+    <iframe class="emu-frame" id="emuFrame" allow="autoplay; gamepad; fullscreen"></iframe>
+</div>
+
+<script src="/assets/footer/footer.js" defer></script>
+<script src="/assets/js/settings.js" defer></script>
+<script src="/assets/js/blank.js" defer></script>
+<script>
+
+const SYSTEMS = [
+    { id: 'nes',       name: 'NES',           icon: '\u{1F3AE}', detect: ['nes'] },
+    { id: 'snes',      name: 'SNES',          icon: '\u{1F3AE}', detect: ['smc','sfc'] },
+    { id: 'gb',        name: 'Game Boy',       icon: '\u{1F3AE}', detect: ['gb'] },
+    { id: 'gba',       name: 'GBA',            icon: '\u{1F3AE}', detect: ['gba'] },
+    { id: 'nds',       name: 'DS',             icon: '\u{1F3AE}', detect: ['nds'] },
+    { id: 'n64',       name: 'N64',            icon: '\u{1F3AE}', detect: ['n64','z64','v64'] },
+    { id: 'psx',       name: 'PS1',            icon: '\u{1F4BF}', detect: ['pbp','cue','chd'] },
+    { id: 'psp',       name: 'PSP',            icon: '\u{1F3AE}', detect: ['cso'] },
+    { id: 'segaMD',    name: 'Genesis',        icon: '\u{1F47E}', detect: ['md','gen','smd'] },
+    { id: 'segaMS',    name: 'Master Sys',     icon: '\u{1F47E}', detect: ['sms'] },
+    { id: 'segaGG',    name: 'Game Gear',      icon: '\u{1F47E}', detect: ['gg'] },
+    { id: 'segaSaturn',name: 'Saturn',         icon: '\u{1F4BF}', detect: [] },
+    { id: 'segaCD',    name: 'Sega CD',        icon: '\u{1F4BF}', detect: [] },
+    { id: 'sega32x',   name: '32X',            icon: '\u{1F47E}', detect: ['32x'] },
+    { id: 'atari2600', name: 'Atari 2600',     icon: '\u{1F579}', detect: ['a26'] },
+    { id: 'atari7800', name: 'Atari 7800',     icon: '\u{1F579}', detect: ['a78'] },
+    { id: 'lynx',      name: 'Atari Lynx',     icon: '\u{1F579}', detect: ['lnx'] },
+    { id: 'jaguar',    name: 'Jaguar',         icon: '\u{1F579}', detect: ['j64','jag'] },
+    { id: 'vb',        name: 'Virtual Boy',    icon: '\u{1F453}', detect: ['vb','vboy'] },
+    { id: '3do',       name: '3DO',            icon: '\u{1F4BF}', detect: [] },
+    { id: 'arcade',    name: 'Arcade',         icon: '\u{1F3B0}', detect: [] },
+    { id: 'mame2003',  name: 'MAME',           icon: '\u{1F3B0}', detect: [] },
+    { id: 'coleco',    name: 'ColecoVision',   icon: '\u{1F3AE}', detect: ['col'] },
+];
+
+
+const EXT_MAP = {};
+SYSTEMS.forEach(sys => {
+    sys.detect.forEach(ext => { EXT_MAP[ext] = sys; });
+});
+
+let selectedSystem = null;
+let romFile = null;
+
+const grid = document.getElementById('systemsGrid');
+const dropzone = document.getElementById('dropzone');
+const romInput = document.getElementById('romInput');
+const fileInfo = document.getElementById('fileInfo');
+const fileNameEl = document.getElementById('fileName');
+const autoDetectedEl = document.getElementById('autoDetected');
+const launchBtn = document.getElementById('launchBtn');
+const setupView = document.getElementById('setupView');
+const emulatorOverlay = document.getElementById('emulatorOverlay');
+const gameTitle = document.getElementById('gameTitle');
+const emuFrame = document.getElementById('emuFrame');
+
+
+const chipMap = {};
+SYSTEMS.forEach(sys => {
+    const chip = document.createElement('div');
+    chip.className = 'system-chip';
+    chip.textContent = sys.name;
+    chip.addEventListener('click', () => selectSystem(sys));
+    grid.appendChild(chip);
+    chipMap[sys.id] = chip;
+});
+
+function selectSystem(sys) {
+    Object.values(chipMap).forEach(c => {
+        c.classList.remove('selected');
+        c.classList.remove('auto-match');
+    });
+    chipMap[sys.id].classList.add('selected');
+    selectedSystem = sys;
+    checkReady();
+}
+
+function autoDetectSystem(filename) {
+    const ext = filename.split('.').pop().toLowerCase();
+    return EXT_MAP[ext] || null;
+}
+
+function checkReady() {
+    if (selectedSystem && romFile) {
+        launchBtn.textContent = 'Launch ' + selectedSystem.name + ' Emulator';
+        launchBtn.classList.add('ready');
+    } else if (romFile) {
+        launchBtn.textContent = 'Select a system above';
+        launchBtn.classList.remove('ready');
+    } else {
+        launchBtn.textContent = 'Select a ROM to start';
+        launchBtn.classList.remove('ready');
+    }
+}
+
+
+dropzone.addEventListener('click', () => romInput.click());
+dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('dragover'); });
+dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
+dropzone.addEventListener('drop', e => {
+    e.preventDefault();
+    dropzone.classList.remove('dragover');
+    if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+});
+romInput.addEventListener('change', () => {
+    if (romInput.files.length) handleFile(romInput.files[0]);
+});
+
+function handleFile(file) {
+    romFile = file;
+    fileNameEl.textContent = file.name;
+    fileInfo.style.display = '';
+    dropzone.classList.add('has-file');
+
+
+    const detected = autoDetectSystem(file.name);
+    if (detected) {
+        autoDetectedEl.innerHTML = 'Auto-detected: <strong>' + detected.name + '</strong>';
+        selectSystem(detected);
+        chipMap[detected.id].classList.add('auto-match');
+    } else {
+        autoDetectedEl.textContent = 'Could not auto-detect system. Please select one below.';
+        checkReady();
+    }
+}
+
+
+launchBtn.addEventListener('click', () => {
+    if (!selectedSystem || !romFile) return;
+    launchEmulator();
+});
+
+function launchEmulator() {
+    const blobUrl = URL.createObjectURL(romFile);
+    const gameName = romFile.name.replace(/\.[^.]+$/, '');
+    const gameId = gameName.replace(/[^a-zA-Z0-9]/g, '_').substring(0, 50);
+    gameTitle.textContent = gameName + ' \u2014 ' + selectedSystem.name;
+
+
+    const html = `<!DOCTYPE html>
+<html><head>
+<meta charset="UTF-8">
+<style>
+  html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #000; }
+  #game { width: 100%; height: 100%; }
+</style>
+</head><body>
+<div id="game"></div>
+<script>
+  window.EJS_player = '#game';
+  window.EJS_core = '${selectedSystem.id}';
+  window.EJS_gameUrl = '${blobUrl}';
+  window.EJS_gameName = '${gameName.replace(/'/g, "\\'")}';
+  window.EJS_gameID = '${gameId}';
+  window.EJS_pathtodata = 'https://cdn.emulatorjs.org/stable/data/';
+  window.EJS_color = '#6366f1';
+  window.EJS_startOnLoaded = true;
+  window.EJS_backgroundBlur = true;
+<\/script>
+<script src="/assets/emulator/loader.js"><\/script>
+</body></html>`;
+
+    emuFrame.srcdoc = html;
+
+
+    setupView.style.display = 'none';
+    emulatorOverlay.classList.add('active');
+}
+
+
+document.getElementById('backToSetup').addEventListener('click', () => {
+    emuFrame.srcdoc = '';
+    emulatorOverlay.classList.remove('active');
+    setupView.style.display = '';
+});
+
+
+document.getElementById('fullscreenBtn').addEventListener('click', () => {
+    if (emuFrame.requestFullscreen) emuFrame.requestFullscreen();
+    else if (emuFrame.webkitRequestFullscreen) emuFrame.webkitRequestFullscreen();
+});
+</script>
+<script src="/assets/js/wilway-popup.js" defer></script>
+</body>
+</html>

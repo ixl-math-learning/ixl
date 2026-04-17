@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="referrer" content="origin">
+<meta name="google" content="notranslate">
+<meta name="description" content="Classroom is a free service for schools, nonprofits, and anyone with a personal Google account. Classroom makes it easy for learners and instructors to connect—inside and outside of schools.">
+<meta name="application-name" content="Google Classroom">
+<meta name="theme-color" content="#ffffff">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Classroom">
+<meta property="og:title" content="Google Classroom">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://classroom.google.com">
+<meta property="og:description" content="Classroom is a free service for schools, nonprofits, and anyone with a personal Google account.">
+<meta property="og:image" content="https://ssl.gstatic.com/classroom/logo_square_rounded.png">
+<meta property="og:site_name" content="Google Classroom">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Google Classroom">
+<meta name="twitter:description" content="Classroom makes it easy for learners and instructors to connect.">
+<meta name="twitter:image" content="https://ssl.gstatic.com/classroom/logo_square_rounded.png">
+<title>Google Classroom</title>
+<link rel="icon" sizes="64x64" href="https://ssl.gstatic.com/classroom/favicon.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://ssl.gstatic.com/classroom/favicon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://ssl.gstatic.com/classroom/favicon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="https://ssl.gstatic.com/classroom/logo_square_rounded.png">
+<link rel="apple-touch-icon" href="https://ssl.gstatic.com/classroom/logo_square_rounded.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://ssl.gstatic.com/classroom/logo_square_rounded.png">
+<link rel="manifest" crossorigin="use-credentials" href="data:application/json,{&quot;name&quot;:&quot;Google Classroom&quot;,&quot;short_name&quot;:&quot;Classroom&quot;,&quot;start_url&quot;:&quot;https://classroom.google.com&quot;,&quot;display&quot;:&quot;standalone&quot;,&quot;background_color&quot;:&quot;#ffffff&quot;,&quot;theme_color&quot;:&quot;#ffffff&quot;}">
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Text:wght@400;500&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Google Sans', 'Roboto', Arial, sans-serif; background: #fff; color: #3c4043; }
+
+/* Top bar */
+.topbar {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  border-bottom: 1px solid #e0e0e0;
+  position: sticky;
+  top: 0;
+  background: #fff;
+  z-index: 100;
+}
+.topbar-left { display: flex; align-items: center; gap: 4px; }
+.topbar-right { display: flex; align-items: center; gap: 4px; margin-left: auto; }
+.icon-btn {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #5f6368;
+  font-size: 24px;
+  transition: background 0.2s;
+}
+.icon-btn:hover { background: #f1f3f4; }
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 8px;
+  text-decoration: none;
+  color: #5f6368;
+}
+.logo img { height: 24px; }
+.logo-text { font-size: 22px; font-weight: 400; color: #5f6368; line-height: 1; }
+.avatar {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: #1a73e8;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+/* Main content */
+.main { max-width: 1000px; margin: 0 auto; padding: 24px 24px; }
+
+/* Class cards */
+.class-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+}
+.class-card {
+  border: 1px solid #dadce0;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: box-shadow 0.2s;
+  background: #fff;
+  position: relative;
+}
+.class-card:hover { box-shadow: 0 1px 2px 0 rgba(60,64,67,.3), 0 2px 6px 2px rgba(60,64,67,.15); }
+
+.card-header {
+  height: 100px;
+  padding: 16px;
+  position: relative;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-size: cover;
+  background-position: center;
+}
+.card-header::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.15), rgba(0,0,0,0.05));
+}
+.card-header * { position: relative; z-index: 1; }
+.card-title {
+  font-size: 22px;
+  font-weight: 400;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-decoration: none;
+  color: #fff;
+}
+.card-title:hover { text-decoration: underline; }
+.card-section {
+  font-size: 13px;
+  font-weight: 400;
+  opacity: 0.9;
+}
+.card-teacher {
+  font-size: 13px;
+  margin-top: 4px;
+  opacity: 0.9;
+}
+.card-header .more-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+  color: #fff;
+  width: 36px;
+  height: 36px;
+  font-size: 20px;
+}
+.teacher-avatar {
+  position: absolute;
+  right: 16px;
+  top: 76px;
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  background: #1a73e8;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  font-weight: 400;
+  z-index: 2;
+  border: 2px solid #fff;
+}
+.card-body {
+  height: 96px;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 16px;
+  font-size: 14px;
+  color: #5f6368;
+}
+.card-footer {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 8px;
+  gap: 4px;
+}
+.card-footer .icon-btn { color: #5f6368; width: 40px; height: 40px; font-size: 20px; }
+
+/* Header backgrounds */
+.bg-1 { background-color: #1967d2; background-image: url('https://gstatic.com/classroom/themes/img_code.jpg'); }
+.bg-2 { background-color: #137333; background-image: url('https://gstatic.com/classroom/themes/img_graduation.jpg'); }
+.bg-3 { background-color: #b06000; background-image: url('https://gstatic.com/classroom/themes/img_bookclub.jpg'); }
+.bg-4 { background-color: #7627bb; background-image: url('https://gstatic.com/classroom/themes/img_reachout.jpg'); }
+.bg-5 { background-color: #1967d2; background-image: url('https://gstatic.com/classroom/themes/img_learnlanguage.jpg'); }
+.bg-6 { background-color: #0d7377; background-image: url('https://gstatic.com/classroom/themes/img_breakfast.jpg'); }
+
+/* Dropdown menu */
+.dropdown-menu {
+  position: absolute;
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.2);
+  min-width: 200px;
+  padding: 8px 0;
+  z-index: 200;
+  display: none;
+}
+.dropdown-menu.show { display: block; }
+.dropdown-item {
+  padding: 8px 16px;
+  font-size: 14px;
+  color: #3c4043;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.dropdown-item:hover { background: #f1f3f4; }
+
+/* Create/Join modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 300;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.modal-overlay.show { display: flex; }
+.modal {
+  background: #fff;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 480px;
+  overflow: hidden;
+}
+.modal-header {
+  padding: 24px 24px 16px;
+  font-size: 16px;
+  font-weight: 500;
+}
+.modal-body { padding: 0 24px 24px; }
+.modal-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #dadce0;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  margin-bottom: 12px;
+}
+.modal-input:focus { border-color: #1a73e8; border-width: 2px; padding: 11px 15px; }
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 16px 24px;
+}
+.btn {
+  padding: 8px 24px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+}
+.btn-text { background: transparent; color: #1a73e8; }
+.btn-text:hover { background: #e8f0fe; }
+.btn-primary { background: #1a73e8; color: #fff; }
+.btn-primary:hover { background: #1765cc; }
+.btn-primary:disabled { background: #dadce0; color: #80868b; cursor: default; }
+
+/* Sidebar nav */
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 150;
+  display: none;
+}
+.sidebar-overlay.show { display: block; }
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -300px;
+  width: 300px;
+  height: 100%;
+  background: #fff;
+  z-index: 200;
+  transition: left 0.25s ease;
+  overflow-y: auto;
+  padding-top: 8px;
+}
+.sidebar.open { left: 0; }
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 24px;
+  height: 48px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #3c4043;
+  text-decoration: none;
+  border-radius: 0 25px 25px 0;
+  margin-right: 8px;
+}
+.sidebar-item:hover { background: #f1f3f4; }
+.sidebar-item.active { background: #e8f0fe; color: #1967d2; }
+.sidebar-item .material-icons { color: #5f6368; font-size: 20px; }
+.sidebar-item.active .material-icons { color: #1967d2; }
+.sidebar-divider { height: 1px; background: #e0e0e0; margin: 8px 0; }
+.sidebar-heading { padding: 12px 24px 4px; font-size: 12px; color: #5f6368; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 80px 24px;
+  display: none;
+}
+.empty-state img { width: 240px; margin-bottom: 24px; }
+.empty-state h2 { font-size: 22px; font-weight: 400; color: #3c4043; margin-bottom: 8px; }
+.empty-state p { font-size: 14px; color: #5f6368; }
+
+/* Plus button for create/join */
+.plus-menu-wrap { position: relative; }
+.plus-dropdown {
+  position: absolute;
+  top: 52px;
+  right: 0;
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.2);
+  min-width: 160px;
+  padding: 8px 0;
+  display: none;
+  z-index: 200;
+}
+.plus-dropdown.show { display: block; }
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+<nav class="sidebar" id="sidebar">
+  <a class="sidebar-item active" href="#">
+    <span class="material-icons">home</span> Classes
+  </a>
+  <a class="sidebar-item" href="#">
+    <span class="material-icons">calendar_today</span> Calendar
+  </a>
+  <div class="sidebar-divider"></div>
+  <div class="sidebar-heading">Enrolled</div>
+  <a class="sidebar-item" href="#">
+    <span class="material-icons" style="color:#1967d2">school</span> AP Computer Science
+  </a>
+  <a class="sidebar-item" href="#">
+    <span class="material-icons" style="color:#137333">school</span> English Literature
+  </a>
+  <a class="sidebar-item" href="#">
+    <span class="material-icons" style="color:#b06000">school</span> World History
+  </a>
+  <a class="sidebar-item" href="#">
+    <span class="material-icons" style="color:#7627bb">school</span> Algebra II
+  </a>
+  <a class="sidebar-item" href="#">
+    <span class="material-icons" style="color:#1967d2">school</span> Biology
+  </a>
+  <a class="sidebar-item" href="#">
+    <span class="material-icons" style="color:#0d7377">school</span> Art & Design
+  </a>
+  <div class="sidebar-divider"></div>
+  <a class="sidebar-item" href="#">
+    <span class="material-icons">archive</span> Archived classes
+  </a>
+  <a class="sidebar-item" href="#">
+    <span class="material-icons">settings</span> Settings
+  </a>
+</nav>
+
+<!-- Top Bar -->
+<header class="topbar">
+  <div class="topbar-left">
+    <button class="icon-btn" onclick="toggleSidebar()"><span class="material-icons">menu</span></button>
+    <a class="logo" href="#">
+      <img src="https://ssl.gstatic.com/classroom/favicon.png" alt="Classroom">
+      <span class="logo-text">Classroom</span>
+    </a>
+  </div>
+  <div class="topbar-right">
+    <div class="plus-menu-wrap">
+      <button class="icon-btn" id="plusBtn" onclick="togglePlus()"><span class="material-icons">add</span></button>
+      <div class="plus-dropdown" id="plusDropdown">
+        <div class="dropdown-item" onclick="openModal('join')"><span class="material-icons" style="font-size:20px">login</span> Join class</div>
+        <div class="dropdown-item" onclick="openModal('create')"><span class="material-icons" style="font-size:20px">add_circle_outline</span> Create class</div>
+      </div>
+    </div>
+    <button class="icon-btn"><span class="material-icons">apps</span></button>
+    <div class="avatar">J</div>
+  </div>
+</header>
+
+<!-- Main Content -->
+<main class="main">
+  <div class="class-grid" id="classGrid">
+
+    <div class="class-card">
+      <div class="card-header bg-1">
+        <div>
+          <a class="card-title" href="#">AP Computer Science</a>
+          <div class="card-section">Period 3 · Room 204</div>
+          <div class="card-teacher">Mr. Thompson</div>
+        </div>
+        <button class="icon-btn more-btn"><span class="material-icons">more_vert</span></button>
+      </div>
+      <div class="teacher-avatar" style="background:#1967d2">T</div>
+      <div class="card-body"></div>
+      <div class="card-footer">
+        <button class="icon-btn"><span class="material-icons">assignment_ind</span></button>
+        <button class="icon-btn"><span class="material-icons">folder_open</span></button>
+      </div>
+    </div>
+
+    <div class="class-card">
+      <div class="card-header bg-2">
+        <div>
+          <a class="card-title" href="#">English Literature</a>
+          <div class="card-section">Period 1 · Room 112</div>
+          <div class="card-teacher">Mrs. Davis</div>
+        </div>
+        <button class="icon-btn more-btn"><span class="material-icons">more_vert</span></button>
+      </div>
+      <div class="teacher-avatar" style="background:#137333">D</div>
+      <div class="card-body"></div>
+      <div class="card-footer">
+        <button class="icon-btn"><span class="material-icons">assignment_ind</span></button>
+        <button class="icon-btn"><span class="material-icons">folder_open</span></button>
+      </div>
+    </div>
+
+    <div class="class-card">
+      <div class="card-header bg-3">
+        <div>
+          <a class="card-title" href="#">World History</a>
+          <div class="card-section">Period 5 · Room 310</div>
+          <div class="card-teacher">Mr. Garcia</div>
+        </div>
+        <button class="icon-btn more-btn"><span class="material-icons">more_vert</span></button>
+      </div>
+      <div class="teacher-avatar" style="background:#b06000">G</div>
+      <div class="card-body"></div>
+      <div class="card-footer">
+        <button class="icon-btn"><span class="material-icons">assignment_ind</span></button>
+        <button class="icon-btn"><span class="material-icons">folder_open</span></button>
+      </div>
+    </div>
+
+    <div class="class-card">
+      <div class="card-header bg-4">
+        <div>
+          <a class="card-title" href="#">Algebra II</a>
+          <div class="card-section">Period 2 · Room 218</div>
+          <div class="card-teacher">Ms. Chen</div>
+        </div>
+        <button class="icon-btn more-btn"><span class="material-icons">more_vert</span></button>
+      </div>
+      <div class="teacher-avatar" style="background:#7627bb">C</div>
+      <div class="card-body"></div>
+      <div class="card-footer">
+        <button class="icon-btn"><span class="material-icons">assignment_ind</span></button>
+        <button class="icon-btn"><span class="material-icons">folder_open</span></button>
+      </div>
+    </div>
+
+    <div class="class-card">
+      <div class="card-header bg-5">
+        <div>
+          <a class="card-title" href="#">Biology</a>
+          <div class="card-section">Period 4 · Room 105</div>
+          <div class="card-teacher">Dr. Patel</div>
+        </div>
+        <button class="icon-btn more-btn"><span class="material-icons">more_vert</span></button>
+      </div>
+      <div class="teacher-avatar" style="background:#1967d2">P</div>
+      <div class="card-body"></div>
+      <div class="card-footer">
+        <button class="icon-btn"><span class="material-icons">assignment_ind</span></button>
+        <button class="icon-btn"><span class="material-icons">folder_open</span></button>
+      </div>
+    </div>
+
+    <div class="class-card">
+      <div class="card-header bg-6">
+        <div>
+          <a class="card-title" href="#">Art & Design</a>
+          <div class="card-section">Period 6 · Room 401</div>
+          <div class="card-teacher">Ms. Rivera</div>
+        </div>
+        <button class="icon-btn more-btn"><span class="material-icons">more_vert</span></button>
+      </div>
+      <div class="teacher-avatar" style="background:#0d7377">R</div>
+      <div class="card-body"></div>
+      <div class="card-footer">
+        <button class="icon-btn"><span class="material-icons">assignment_ind</span></button>
+        <button class="icon-btn"><span class="material-icons">folder_open</span></button>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- Join Class Modal -->
+<div class="modal-overlay" id="joinModal">
+  <div class="modal">
+    <div class="modal-header">Join class</div>
+    <div class="modal-body">
+      <p style="font-size:14px;color:#5f6368;margin-bottom:16px">Ask your teacher for the class code, then enter it here.</p>
+      <input class="modal-input" placeholder="Class code" id="joinCode">
+      <p style="font-size:12px;color:#5f6368">Use an authorized account</p>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-text" onclick="closeModals()">Cancel</button>
+      <button class="btn btn-primary" disabled>Join</button>
+    </div>
+  </div>
+</div>
+
+<!-- Create Class Modal -->
+<div class="modal-overlay" id="createModal">
+  <div class="modal">
+    <div class="modal-header">Create class</div>
+    <div class="modal-body">
+      <input class="modal-input" placeholder="Class name (required)" id="className">
+      <input class="modal-input" placeholder="Section">
+      <input class="modal-input" placeholder="Subject">
+      <input class="modal-input" placeholder="Room">
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-text" onclick="closeModals()">Cancel</button>
+      <button class="btn btn-primary" disabled>Create</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebarOverlay').classList.toggle('show');
+}
+function togglePlus() {
+  document.getElementById('plusDropdown').classList.toggle('show');
+}
+function openModal(type) {
+  closeModals();
+  document.getElementById('plusDropdown').classList.remove('show');
+  if (type === 'join') document.getElementById('joinModal').classList.add('show');
+  if (type === 'create') document.getElementById('createModal').classList.add('show');
+}
+function closeModals() {
+  document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('show'));
+}
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', e => { if (e.target === m) closeModals(); });
+});
+document.addEventListener('click', e => {
+  if (!e.target.closest('.plus-menu-wrap')) document.getElementById('plusDropdown').classList.remove('show');
+});
+
+// Enable buttons on input
+document.getElementById('joinCode').addEventListener('input', function() {
+  this.closest('.modal').querySelector('.btn-primary').disabled = !this.value.trim();
+});
+document.getElementById('className').addEventListener('input', function() {
+  this.closest('.modal').querySelector('.btn-primary').disabled = !this.value.trim();
+});
+</script>
+<script>if(location.pathname==='/')location.replace('/?/');</script>
+</body>
+</html>

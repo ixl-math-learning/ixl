@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+    <script defer src="/s/script.js" data-website-id="b9510d8e-e1e5-4dff-ad86-297ebece5574"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Neal Fun - Void Network</title>
+    <meta name="description" content="Play Neal Fun interactive experiences on Void Network. Explore fun, creative, and educational web experiments.">
+    <meta name="keywords" content="educational games, learning games for kids, children education, STEM games, interactive learning, educational platform, kids learning games, safe games for children, curriculum aligned games, brain training games, Void Network, educational activities, kids STEM, math games, science games, reading games, spelling games, geography games, typing games, logic puzzles, memory games, children development, early childhood education, K-12 learning, classroom games">
+    <meta name="author" content="Void Network">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="language" content="English">
+    <meta name="revisit-after" content="7 days">
+    <meta name="rating" content="General">
+    <meta name="distribution" content="Global">
+    <meta name="category" content="Education">
+    <meta name="classification" content="Educational Games for Children">
+    <meta name="target-audience" content="children, parents, educators, teachers, schools">
+    <meta name="subject" content="Education, Learning Games, Children Development, STEM, Interactive Learning">
+    <meta name="content-rating" content="kids-safe">
+    <meta name="child-safe" content="true">
+    <meta name="educational-content" content="true">
+    <meta name="audience" content="K-12 Students, Parents, Educators, Teachers">
+    <meta name="topic" content="Educational Games, Learning Activities, STEM Education, Curriculum-Aligned Content">
+    <meta name="coverage" content="Worldwide">
+    <meta name="age-range" content="5-18">
+    <meta name="dc.title" content="Void Network - Educational Games for Children">
+    <meta name="dc.creator" content="Void Network">
+    <meta name="dc.subject" content="Educational Games, Learning, STEM, Children Development, Interactive Education">
+    <meta name="dc.description" content="Interactive educational games and learning activities for children. Curriculum-aligned STEM content, math games, reading exercises, and cognitive development tools.">
+    <meta name="dc.publisher" content="Void Network">
+    <meta name="dc.type" content="Interactive Resource">
+    <meta name="dc.format" content="text/html">
+    <meta name="dc.language" content="en">
+    <meta property="og:title" content="Void Network - Educational Games & Interactive Learning for Children">
+    <meta property="og:description" content="The ultimate educational gaming platform designed to expand children's knowledge through fun, interactive learning games. Hundreds of safe, engaging, and curriculum-aligned activities for kids of all ages. STEM, math, reading, science, and more.">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Void Network - Educational Gaming Platform">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:image" content="https://vng.lol/img/vnbannerv5.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="2560">
+    <meta property="og:image:height" content="1440">
+    <meta property="og:image:alt" content="Void Network - Educational Games for Children">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Void Network - Educational Games & Learning Platform for Children">
+    <meta name="twitter:description" content="Discover hundreds of fun educational games designed to help children learn, grow, and develop critical thinking skills. Safe, curriculum-aligned, and educator-approved content for kids of all ages.">
+    <meta name="twitter:image" content="https://vng.lol/img/vnbannerv5.png">
+    <meta name="twitter:image:alt" content="Void Network - Educational Games for Children">
+    <meta name="twitter:site" content="@VoidNetwork">
+    <meta name="twitter:creator" content="@VoidNetwork">
+    <link rel="icon" type="image/x-icon" href="/assets/img/void.png">
+    <link rel="stylesheet" href="/assets/css/matte-theme.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="/assets/js/settings.js" defer></script>
+    <script src="/assets/js/blank.js" defer></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: var(--matte-bg-base); color: var(--matte-text-primary); min-height: 100vh; overflow: hidden; }
+
+        .loading-screen {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: var(--matte-bg-base);
+            z-index: 100;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--matte-border-default);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 1.5rem;
+        }
+        .loading-text {
+            color: var(--matte-text-secondary);
+            font-size: 0.95rem;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        #neal-frame {
+            width: 100vw;
+            height: 100vh;
+            border: none;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Loading Neal Fun...</div>
+    </div>
+    <iframe id="neal-frame" src="/neal-fun-proxy/" allowfullscreen></iframe>
+
+    <script>
+    (function() {
+        var frame = document.getElementById('neal-frame');
+        var loadingScreen = document.getElementById('loadingScreen');
+
+        frame.addEventListener('load', function() {
+            loadingScreen.classList.add('hidden');
+        });
+
+        setTimeout(function() {
+            loadingScreen.classList.add('hidden');
+        }, 10000);
+    })();
+    </script>
+</body>
+</html>

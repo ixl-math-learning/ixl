@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+
+    <script defer src="/s/script.js" data-website-id="b9510d8e-e1e5-4dff-ad86-297ebece5574"></script>
+    <noscript><img src="/t/p?payload=%7B%22website%22%3A%22b9510d8e-e1e5-4dff-ad86-297ebece5574%22%2C%22url%22%3A%22%2F%22%2C%22hostname%22%3A%22vng.lol%22%2C%22name%22%3A%22pageview%22%7D" style="display:none;"></noscript>
+    <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Void Network - New Year 2026</title>
+<meta name="description" content="Void Network - The premier educational gaming platform for children. Explore hundreds of interactive learning games, STEM challenges, curriculum-aligned activities, and safe educational experiences designed to develop critical thinking, problem-solving, and creativity in kids of all ages.">
+    <meta name="keywords" content="educational games, learning games for kids, children education, STEM games, interactive learning, educational platform, kids learning games, safe games for children, curriculum aligned games, brain training games, Void Network, educational activities, kids STEM, math games, science games, reading games, spelling games, geography games, typing games, logic puzzles, memory games, children development, early childhood education, K-12 learning, classroom games">
+    <meta name="author" content="Void Network">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="language" content="English">
+    <meta name="revisit-after" content="7 days">
+    <meta name="rating" content="General">
+    <meta name="distribution" content="Global">
+    <meta name="category" content="Education">
+    <meta name="classification" content="Educational Games for Children">
+    <meta name="target-audience" content="children, parents, educators, teachers, schools">
+    <meta name="subject" content="Education, Learning Games, Children Development, STEM, Interactive Learning">
+    <meta name="content-rating" content="kids-safe">
+    <meta name="child-safe" content="true">
+    <meta name="educational-content" content="true">
+    <meta name="audience" content="K-12 Students, Parents, Educators, Teachers">
+    <meta name="topic" content="Educational Games, Learning Activities, STEM Education, Curriculum-Aligned Content">
+    <meta name="coverage" content="Worldwide">
+    <meta name="age-range" content="5-18">
+    <meta name="dc.title" content="Void Network - Educational Games for Children">
+    <meta name="dc.creator" content="Void Network">
+    <meta name="dc.subject" content="Educational Games, Learning, STEM, Children Development, Interactive Education">
+    <meta name="dc.description" content="Interactive educational games and learning activities for children. Curriculum-aligned STEM content, math games, reading exercises, and cognitive development tools.">
+    <meta name="dc.publisher" content="Void Network">
+    <meta name="dc.type" content="Interactive Resource">
+    <meta name="dc.format" content="text/html">
+    <meta name="dc.language" content="en">
+    <meta property="og:title" content="Void Network - Educational Games & Interactive Learning for Children">
+    <meta property="og:description" content="The ultimate educational gaming platform designed to expand children's knowledge through fun, interactive learning games. Hundreds of safe, engaging, and curriculum-aligned activities for kids of all ages. STEM, math, reading, science, and more.">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Void Network - Educational Gaming Platform">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:image" content="https://vng.lol/img/vnbannerv5.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="2560">
+    <meta property="og:image:height" content="1440">
+    <meta property="og:image:alt" content="Void Network - Educational Games for Children">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Void Network - Educational Games & Learning Platform for Children">
+    <meta name="twitter:description" content="Discover hundreds of fun educational games designed to help children learn, grow, and develop critical thinking skills. Safe, curriculum-aligned, and educator-approved content for kids of all ages.">
+    <meta name="twitter:image" content="https://vng.lol/img/vnbannerv5.png">
+    <meta name="twitter:image:alt" content="Void Network - Educational Games for Children">
+    <meta name="twitter:site" content="@VoidNetwork">
+    <meta name="twitter:creator" content="@VoidNetwork">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: #000000;
+      color: #f5f5f5;
+      overflow: hidden;
+    }
+
+    #canvas-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    .content {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .text-container {
+      text-align: center;
+      padding: 20px;
+      transition: all 2.5s cubic-bezier(0.4, 0, 0.2, 1);
+      opacity: 1;
+      transform: scale(1) translateY(0);
+      filter: blur(0px);
+    }
+
+    .text-container.fade-out {
+      opacity: 0;
+      transform: scale(0.7) translateY(-80px);
+      filter: blur(30px);
+    }
+
+    .text-container.hidden {
+      display: none;
+    }
+
+    h1 {
+      font-size: 5rem;
+      font-weight: 800;
+      letter-spacing: 6px;
+      background: linear-gradient(
+        135deg,
+        #ffffff 0%,
+        #f8f8f8 10%,
+        #e0e0e0 20%,
+        #ffffff 30%,
+        #f0f0f0 40%,
+        #ffffff 50%,
+        #e8e8e8 60%,
+        #ffffff 70%,
+        #f5f5f5 80%,
+        #ffffff 90%,
+        #eeeeee 100%
+      );
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: holographic 6s ease-in-out infinite;
+      filter: drop-shadow(0 0 60px rgba(255, 255, 255, 0.4)) drop-shadow(0 0 120px rgba(255, 255, 255, 0.2));
+      margin-bottom: 2rem;
+    }
+
+    @keyframes holographic {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    p {
+      font-size: 1.4rem;
+      line-height: 2;
+      color: rgba(245, 245, 245, 0.8);
+      font-weight: 300;
+      max-width: 650px;
+      text-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+    }
+
+    .countdown-container {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: 15;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+      pointer-events: none;
+    }
+
+    .countdown-container.visible {
+      opacity: 1;
+    }
+
+    .countdown {
+      font-size: 16rem;
+      font-weight: 900;
+      background: linear-gradient(180deg, #ffffff 0%, #ffd700 35%, #ff8c00 65%, #ff4500 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 120px rgba(255, 215, 0, 1)) drop-shadow(0 0 80px rgba(255, 140, 0, 0.9)) drop-shadow(0 0 40px rgba(255, 69, 0, 0.7));
+      line-height: 1;
+      animation: countdownPulse 1s ease-in-out infinite;
+      transition: transform 0.1s ease;
+    }
+
+    @keyframes countdownPulse {
+      0%, 100% {
+        filter: drop-shadow(0 0 120px rgba(255, 215, 0, 1)) drop-shadow(0 0 80px rgba(255, 140, 0, 0.9));
+      }
+      50% {
+        filter: drop-shadow(0 0 150px rgba(255, 215, 0, 1)) drop-shadow(0 0 100px rgba(255, 140, 0, 1));
+      }
+    }
+
+    .countdown-label {
+      font-size: 2.2rem;
+      color: rgba(255, 255, 255, 0.9);
+      margin-top: 30px;
+      letter-spacing: 14px;
+      text-transform: uppercase;
+      text-shadow: 0 0 50px rgba(255, 215, 0, 0.7), 0 0 100px rgba(255, 140, 0, 0.5);
+      font-weight: 300;
+    }
+
+    .happy-new-year {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      text-align: center;
+      z-index: 20;
+      opacity: 0;
+      transition: all 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      pointer-events: none;
+    }
+
+    .happy-new-year.visible {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .happy-new-year h1 {
+      font-size: 5rem;
+      margin-bottom: 1rem;
+      animation: happyGlow 3s ease-in-out infinite;
+      letter-spacing: 10px;
+    }
+
+    @keyframes happyGlow {
+      0%, 100% { filter: drop-shadow(0 0 50px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 100px rgba(255, 215, 0, 0.6)); }
+      33% { filter: drop-shadow(0 0 60px rgba(255, 100, 100, 0.9)) drop-shadow(0 0 120px rgba(255, 50, 50, 0.6)); }
+      66% { filter: drop-shadow(0 0 60px rgba(100, 255, 100, 0.9)) drop-shadow(0 0 120px rgba(50, 255, 50, 0.6)); }
+    }
+
+    .happy-new-year .year {
+      font-size: 16rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, #ffd700 0%, #ffec8b 20%, #ffa500 40%, #ffd700 60%, #ffec8b 80%, #ffd700 100%);
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: goldShimmer 3s ease-in-out infinite;
+      filter: drop-shadow(0 0 120px rgba(255, 215, 0, 1)) drop-shadow(0 0 180px rgba(255, 165, 0, 0.9)) drop-shadow(0 0 240px rgba(255, 140, 0, 0.7));
+      line-height: 1;
+    }
+
+    @keyframes goldShimmer {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .flash {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(255,215,0,0.9) 100%);
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .flash.active {
+      animation: flashOut 1s ease-out forwards;
+    }
+
+    @keyframes flashOut {
+      0% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
+    .time-display {
+      position: fixed;
+      top: 30px;
+      right: 30px;
+      background: linear-gradient(135deg, rgba(20, 20, 30, 0.9) 0%, rgba(10, 10, 20, 0.95) 100%);
+      backdrop-filter: blur(40px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: 25px 35px;
+      z-index: 50;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      transition: all 0.5s ease;
+    }
+
+    .time-display.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-30px) scale(0.9);
+    }
+
+    .time-display .time {
+      font-size: 3rem;
+      font-weight: 700;
+      background: linear-gradient(180deg, #ffffff 0%, #cccccc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.2));
+    }
+
+    .time-display .date {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.4);
+      margin-top: 8px;
+      letter-spacing: 1px;
+    }
+
+    .progress-container {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      z-index: 50;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+
+    .progress-container.visible {
+      opacity: 1;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #ff4500, #ff8c00, #ffd700, #ffec8b, #ffd700, #ff8c00, #ff4500);
+      background-size: 400% 100%;
+      animation: progressShimmer 2s linear infinite;
+      width: 0%;
+      box-shadow: 0 0 50px rgba(255, 215, 0, 1), 0 0 100px rgba(255, 140, 0, 0.9), 0 -8px 40px rgba(255, 69, 0, 0.6);
+      border-radius: 0 5px 5px 0;
+    }
+
+    @keyframes progressShimmer {
+      0% { background-position: 400% 0; }
+      100% { background-position: 0% 0; }
+    }
+
+    .ground-glow {
+      position: fixed;
+      bottom: -50%;
+      left: -10%;
+      width: 120%;
+      height: 60%;
+      background: radial-gradient(ellipse at 50% 100%, rgba(255, 215, 0, 0.2) 0%, rgba(255, 140, 0, 0.1) 30%, transparent 70%);
+      z-index: 3;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+
+    .ground-glow.visible {
+      opacity: 1;
+      animation: groundPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes groundPulse {
+      0%, 100% { transform: scaleY(1); opacity: 1; }
+      50% { transform: scaleY(1.15); opacity: 0.85; }
+    }
+
+    @media (max-width: 768px) {
+      h1 { font-size: 2.8rem; letter-spacing: 3px; }
+      p { font-size: 1.1rem; padding: 0 25px; }
+      .countdown { font-size: 8rem; }
+      .countdown-label { font-size: 1.2rem; letter-spacing: 6px; }
+      .happy-new-year h1 { font-size: 2.8rem; }
+      .happy-new-year .year { font-size: 8rem; }
+      .time-display { padding: 18px 25px; }
+      .time-display .time { font-size: 2rem; }
+    }
+  </style>
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-814Y2X3KSF"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-814Y2X3KSF');
+</script>
+</head>
+<body>
+  <div id="canvas-container"></div>
+  <div class="ground-glow" id="groundGlow"></div>
+  <div class="flash" id="flash"></div>
+
+  <div class="content">
+    <div class="text-container" id="textContainer">
+      <h1>VOID NETWORK</h1>
+      <p>We're currently undergoing major backend updates and reforms. Stay tuned, the ball drops here at midnight EST to ring in the New Year.</p>
+    </div>
+  </div>
+
+  <div class="countdown-container" id="countdownContainer">
+    <div class="countdown" id="countdown">60</div>
+    <div class="countdown-label">Seconds to 2026</div>
+  </div>
+
+  <div class="happy-new-year" id="happyNewYear">
+    <h1>HAPPY NEW YEAR</h1>
+    <div class="year">2026</div>
+  </div>
+
+  <div class="time-display" id="timeDisplay">
+    <div class="time" id="currentTime">--:--:--</div>
+    <div class="date" id="currentDate">Syncing...</div>
+  </div>
+
+  <div class="progress-container" id="progressContainer">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <script>
+    let scene, camera, renderer;
+    let blobMesh, blobGeometry, originalPositions;
+    let magmaDroplets = [];
+    let fireworkParticles = [];
+    let confetti = [];
+    let lightBeams = [];
+    let sparkles = [];
+    let glowMeshes = [];
+
+    let ballDropping = false;
+    let ballDropComplete = false;
+    let blobTime = 0;
+    let celebrationStarted = false;
+
+    let serverTimeOffset = 0;
+    let synced = false;
+
+    const DROP_DURATION = 60000;
+    const BALL_START_Y = 14;
+    const BALL_END_Y = -3.5;
+    const TARGET_TIME = new Date('2026-01-01T00:00:00-05:00').getTime();
+    const DROP_START_TIME = TARGET_TIME - DROP_DURATION;
+
+    async function syncServerTime() {
+      try {
+        const t0 = Date.now();
+        const response = await fetch('/api/newyear/time');
+        const t1 = Date.now();
+
+        if (!response.ok) throw new Error('Sync failed');
+
+        const data = await response.json();
+        const rtt = t1 - t0;
+        const serverTime = data.serverTime + (rtt / 2);
+        serverTimeOffset = serverTime - Date.now();
+        synced = true;
+
+        checkInitialState();
+      } catch (e) {
+        setTimeout(syncServerTime, 2000);
+      }
+    }
+
+    function getSyncedTime() {
+      return Date.now() + serverTimeOffset;
+    }
+
+    function checkInitialState() {
+      const now = getSyncedTime();
+      const timeUntilTarget = TARGET_TIME - now;
+
+      if (timeUntilTarget <= 0) {
+        document.getElementById('textContainer').classList.add('hidden');
+        document.getElementById('timeDisplay').classList.add('hidden');
+        ballDropping = true;
+        ballDropComplete = true;
+        blobMesh.visible = false;
+        lightBeams.forEach(beam => {
+          beam.visible = true;
+          beam.children.forEach(child => {
+            child.material.opacity *= 2.5;
+          });
+        });
+        document.getElementById('groundGlow').classList.add('visible');
+        document.getElementById('happyNewYear').classList.add('visible');
+        startCelebration(true);
+      } else if (timeUntilTarget <= DROP_DURATION) {
+        startBallDrop(true);
+      }
+    }
+
+    function noise3D(x, y, z) {
+      const X = Math.floor(x) & 255;
+      const Y = Math.floor(y) & 255;
+      const Z = Math.floor(z) & 255;
+      x -= Math.floor(x);
+      y -= Math.floor(y);
+      z -= Math.floor(z);
+      const u = x * x * (3 - 2 * x);
+      const v = y * y * (3 - 2 * y);
+      const w = z * z * (3 - 2 * z);
+      const a = (Math.sin(X * 12.9898 + Y * 78.233 + Z * 37.719) * 43758.5453) % 1;
+      const b = (Math.sin((X+1) * 12.9898 + Y * 78.233 + Z * 37.719) * 43758.5453) % 1;
+      const c = (Math.sin(X * 12.9898 + (Y+1) * 78.233 + Z * 37.719) * 43758.5453) % 1;
+      const d = (Math.sin((X+1) * 12.9898 + (Y+1) * 78.233 + Z * 37.719) * 43758.5453) % 1;
+      const e = (Math.sin(X * 12.9898 + Y * 78.233 + (Z+1) * 37.719) * 43758.5453) % 1;
+      const f = (Math.sin((X+1) * 12.9898 + Y * 78.233 + (Z+1) * 37.719) * 43758.5453) % 1;
+      const g = (Math.sin(X * 12.9898 + (Y+1) * 78.233 + (Z+1) * 37.719) * 43758.5453) % 1;
+      const h = (Math.sin((X+1) * 12.9898 + (Y+1) * 78.233 + (Z+1) * 37.719) * 43758.5453) % 1;
+      return a + u*(b-a) + v*(c-a) + w*(e-a) + u*v*(a-b-c+d) + v*w*(a-c-e+g) + u*w*(a-b-e+f) + u*v*w*(-a+b+c-d+e-f-g+h);
+    }
+
+    function init() {
+      scene = new THREE.Scene();
+
+      camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 1000);
+      camera.position.z = 18;
+      camera.position.y = 0;
+
+      renderer = new THREE.WebGLRenderer({
+        antialias: true,
+        alpha: true,
+        powerPreference: "high-performance"
+      });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.8;
+      renderer.outputEncoding = THREE.sRGBEncoding;
+      document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+      const ambientLight = new THREE.AmbientLight(0x0a0a15, 0.6);
+      scene.add(ambientLight);
+
+      const mainLight = new THREE.PointLight(0xffffff, 2.5, 120);
+      mainLight.position.set(0, 30, 20);
+      scene.add(mainLight);
+
+      const goldLight = new THREE.PointLight(0xffd700, 2.5, 80);
+      goldLight.position.set(-20, 15, 15);
+      scene.add(goldLight);
+
+      const blueLight = new THREE.PointLight(0x4488ff, 2, 70);
+      blueLight.position.set(20, -8, 15);
+      scene.add(blueLight);
+
+      const purpleLight = new THREE.PointLight(0xaa44ff, 1.5, 60);
+      purpleLight.position.set(0, -15, 10);
+      scene.add(purpleLight);
+
+      createBlob();
+      createLightBeams();
+
+      window.addEventListener('resize', onWindowResize);
+
+      syncServerTime();
+      setInterval(syncServerTime, 30000);
+
+      animate();
+      updateClock();
+      setInterval(updateClock, 100);
+    }
+
+    function createBlob() {
+      blobGeometry = new THREE.IcosahedronGeometry(2.5, 6);
+      originalPositions = blobGeometry.attributes.position.array.slice();
+
+      const blobMaterial = new THREE.MeshPhysicalMaterial({
+        color: 0xffd700,
+        metalness: 0.3,
+        roughness: 0.1,
+        clearcoat: 1.0,
+        clearcoatRoughness: 0.1,
+        transmission: 0.2,
+        thickness: 1.5,
+        envMapIntensity: 2,
+        emissive: 0xff8c00,
+        emissiveIntensity: 0.3
+      });
+
+      blobMesh = new THREE.Mesh(blobGeometry, blobMaterial);
+      blobMesh.position.y = BALL_START_Y;
+      blobMesh.visible = false;
+      scene.add(blobMesh);
+
+      const glowLayers = [
+        { size: 3.0, color: 0xffd700, opacity: 0.2 },
+        { size: 3.8, color: 0xff8c00, opacity: 0.12 },
+        { size: 4.8, color: 0xff6600, opacity: 0.06 },
+        { size: 6.0, color: 0xff4400, opacity: 0.03 }
+      ];
+
+      glowLayers.forEach(layer => {
+        const geo = new THREE.IcosahedronGeometry(layer.size, 4);
+        const mat = new THREE.MeshBasicMaterial({
+          color: layer.color,
+          transparent: true,
+          opacity: layer.opacity,
+          side: THREE.BackSide
+        });
+        const mesh = new THREE.Mesh(geo, mat);
+        blobMesh.add(mesh);
+        glowMeshes.push({ mesh, baseOpacity: layer.opacity, geo });
+      });
+
+      const coreGeo = new THREE.IcosahedronGeometry(1.8, 4);
+      const coreMat = new THREE.MeshBasicMaterial({
+        color: 0xffffff,
+        transparent: true,
+        opacity: 0.6
+      });
+      const core = new THREE.Mesh(coreGeo, coreMat);
+      blobMesh.add(core);
+      glowMeshes.push({ mesh: core, baseOpacity: 0.6, isCore: true });
+    }
+
+    function updateBlob(time) {
+      if (!blobMesh || !blobMesh.visible) return;
+
+      const positions = blobGeometry.attributes.position.array;
+      const speed = 1.5;
+      const intensity = 0.4;
+
+      for (let i = 0; i < positions.length; i += 3) {
+        const ox = originalPositions[i];
+        const oy = originalPositions[i + 1];
+        const oz = originalPositions[i + 2];
+
+        const noiseVal = noise3D(
+          ox * 0.8 + time * speed,
+          oy * 0.8 + time * speed * 0.7,
+          oz * 0.8 + time * speed * 0.5
+        );
+
+        const noiseVal2 = noise3D(
+          ox * 1.5 + time * speed * 1.3,
+          oy * 1.5 + time * speed * 0.9,
+          oz * 1.5 + time * speed * 1.1
+        );
+
+        const displacement = (noiseVal * 0.6 + noiseVal2 * 0.4) * intensity;
+
+        const len = Math.sqrt(ox * ox + oy * oy + oz * oz);
+        const nx = ox / len;
+        const ny = oy / len;
+        const nz = oz / len;
+
+        positions[i] = ox + nx * displacement;
+        positions[i + 1] = oy + ny * displacement;
+        positions[i + 2] = oz + nz * displacement;
+      }
+
+      blobGeometry.attributes.position.needsUpdate = true;
+      blobGeometry.computeVertexNormals();
+
+      const pulse = Math.sin(time * 3) * 0.1 + 1;
+      const colorPulse = Math.sin(time * 2) * 0.5 + 0.5;
+
+      blobMesh.material.emissiveIntensity = 0.2 + colorPulse * 0.3;
+
+      glowMeshes.forEach((item, index) => {
+        if (item.isCore) {
+          item.mesh.material.opacity = item.baseOpacity * (0.8 + Math.sin(time * 5) * 0.2);
+        } else {
+          item.mesh.material.opacity = item.baseOpacity * (0.7 + Math.sin(time * 3 + index) * 0.3);
+          item.mesh.scale.setScalar(pulse + index * 0.02);
+        }
+      });
+    }
+
+    function createLightBeams() {
+      for (let i = 0; i < 16; i++) {
+        const beamGroup = new THREE.Group();
+
+        const height = 50 + Math.random() * 30;
+        const geometry = new THREE.ConeGeometry(1.2, height, 32, 1, true);
+
+        const beamColors = [0xffd700, 0xff8c00, 0xffffff, 0xffec8b, 0xffa500];
+        const material = new THREE.MeshBasicMaterial({
+          color: beamColors[Math.floor(Math.random() * beamColors.length)],
+          transparent: true,
+          opacity: 0.025 + Math.random() * 0.035,
+          side: THREE.DoubleSide,
+          blending: THREE.AdditiveBlending
+        });
+
+        const beam = new THREE.Mesh(geometry, material);
+        beam.position.y = height / 2;
+        beamGroup.add(beam);
+
+        const coreGeometry = new THREE.ConeGeometry(0.3, height, 16, 1, true);
+        const coreMaterial = new THREE.MeshBasicMaterial({
+          color: 0xffffff,
+          transparent: true,
+          opacity: 0.06 + Math.random() * 0.04,
+          side: THREE.DoubleSide,
+          blending: THREE.AdditiveBlending
+        });
+        const core = new THREE.Mesh(coreGeometry, coreMaterial);
+        core.position.y = height / 2;
+        beamGroup.add(core);
+
+        beamGroup.position.y = -30;
+        beamGroup.position.x = (Math.random() - 0.5) * 60;
+        beamGroup.position.z = (Math.random() - 0.5) * 20 - 8;
+
+        const angle = (Math.random() - 0.5) * 0.5;
+        beamGroup.rotation.z = angle;
+        beamGroup.rotation.x = (Math.random() - 0.5) * 0.25;
+
+        beamGroup.visible = false;
+        beamGroup.userData = {
+          swaySpeed: Math.random() * 0.4 + 0.2,
+          swayOffset: Math.random() * Math.PI * 2,
+          baseRotationZ: angle,
+          pulseSpeed: Math.random() * 1.5 + 0.8,
+          pulseOffset: Math.random() * Math.PI * 2,
+          baseOpacity: material.opacity,
+          coreBaseOpacity: coreMaterial.opacity
+        };
+
+        lightBeams.push(beamGroup);
+        scene.add(beamGroup);
+      }
+    }
+
+    function createMagmaExplosion() {
+      if (!blobMesh) return;
+
+      const blobPos = blobMesh.position.clone();
+      blobMesh.visible = false;
+
+      const dropletCount = 150;
+      const colors = [0xffffff, 0xfff8f0, 0xffe4d0, 0xffd700, 0xff8c00, 0xff6600, 0xff4500];
+
+      for (let i = 0; i < dropletCount; i++) {
+        const size = 0.15 + Math.random() * 0.35;
+        const geometry = new THREE.SphereGeometry(size, 12, 12);
+
+        const colorIndex = Math.floor(Math.random() * colors.length);
+        const material = new THREE.MeshPhysicalMaterial({
+          color: colors[colorIndex],
+          metalness: 0.8,
+          roughness: 0.2,
+          emissive: colorIndex < 3 ? 0xffffff : colors[colorIndex],
+          emissiveIntensity: colorIndex < 3 ? 0.8 : 0.4,
+          clearcoat: 1.0
+        });
+
+        const droplet = new THREE.Mesh(geometry, material);
+        droplet.position.copy(blobPos);
+
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.random() * Math.PI;
+        const speed = 0.15 + Math.random() * 0.25;
+
+        droplet.velocity = new THREE.Vector3(
+          speed * Math.sin(phi) * Math.cos(theta),
+          speed * Math.sin(phi) * Math.sin(theta) * 0.5 + 0.1,
+          speed * Math.cos(phi)
+        );
+
+        droplet.gravity = 0.008 + Math.random() * 0.004;
+        droplet.drag = 0.98;
+
+        const glowGeo = new THREE.SphereGeometry(size * 1.5, 8, 8);
+        const glowMat = new THREE.MeshBasicMaterial({
+          color: colors[colorIndex],
+          transparent: true,
+          opacity: 0.4,
+          side: THREE.BackSide
+        });
+        const glow = new THREE.Mesh(glowGeo, glowMat);
+        droplet.add(glow);
+        droplet.glow = glow;
+
+        magmaDroplets.push(droplet);
+        scene.add(droplet);
+      }
+    }
+
+    function updateMagmaDroplets() {
+      for (let i = magmaDroplets.length - 1; i >= 0; i--) {
+        const d = magmaDroplets[i];
+
+        d.velocity.y -= d.gravity;
+        d.velocity.multiplyScalar(d.drag);
+        d.position.add(d.velocity);
+
+        d.rotation.x += 0.05;
+        d.rotation.y += 0.03;
+
+        if (d.glow) {
+          d.glow.material.opacity *= 0.995;
+        }
+
+        if (d.position.y < -20) {
+          scene.remove(d);
+          magmaDroplets.splice(i, 1);
+        }
+      }
+    }
+
+    function createSparkle(x, y, z) {
+      const geometry = new THREE.SphereGeometry(0.06, 6, 6);
+      const material = new THREE.MeshBasicMaterial({
+        color: 0xffffff,
+        transparent: true,
+        opacity: 1
+      });
+      const sparkle = new THREE.Mesh(geometry, material);
+      sparkle.position.set(x, y, z);
+      sparkle.life = 1;
+      sparkle.decay = 0.04;
+      sparkles.push(sparkle);
+      scene.add(sparkle);
+    }
+
+    function createFirework(x, y, z) {
+      const colors = [0xffd700, 0xff0000, 0x00ff00, 0x0066ff, 0xff00ff, 0x00ffff, 0xffffff, 0xff8c00, 0xffec8b, 0xff4500, 0xaa44ff, 0x44ffaa];
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      const particleCount = 120 + Math.floor(Math.random() * 80);
+
+      for (let i = 0; i < 12; i++) {
+        createSparkle(x + (Math.random() - 0.5) * 3, y + (Math.random() - 0.5) * 3, z + (Math.random() - 0.5) * 3);
+      }
+
+      for (let i = 0; i < particleCount; i++) {
+        const size = 0.05 + Math.random() * 0.1;
+        const geometry = new THREE.SphereGeometry(size, 8, 8);
+        const material = new THREE.MeshBasicMaterial({
+          color: i % 5 === 0 ? 0xffffff : color,
+          transparent: true,
+          opacity: 1
+        });
+        const particle = new THREE.Mesh(geometry, material);
+
+        particle.position.set(x, y, z);
+
+        const speed = 0.15 + Math.random() * 0.35;
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.acos(2 * Math.random() - 1);
+
+        particle.velocity = new THREE.Vector3(
+          speed * Math.sin(phi) * Math.cos(theta),
+          speed * Math.sin(phi) * Math.sin(theta),
+          speed * Math.cos(phi)
+        );
+
+        particle.life = 1;
+        particle.decay = 0.005 + Math.random() * 0.007;
+        particle.gravity = 0.0012;
+        particle.hasTrail = Math.random() > 0.6;
+        fireworkParticles.push(particle);
+        scene.add(particle);
+      }
+    }
+
+    function createConfetti() {
+      const colors = [0xffd700, 0xff0000, 0x00ff00, 0x0066ff, 0xff00ff, 0x00ffff, 0xffffff, 0xff8c00];
+
+      for (let i = 0; i < 2; i++) {
+        const geometry = new THREE.PlaneGeometry(0.15 + Math.random() * 0.12, 0.25 + Math.random() * 0.18);
+        const material = new THREE.MeshBasicMaterial({
+          color: colors[Math.floor(Math.random() * colors.length)],
+          transparent: true,
+          opacity: 0.95,
+          side: THREE.DoubleSide
+        });
+        const piece = new THREE.Mesh(geometry, material);
+
+        piece.position.set(
+          (Math.random() - 0.5) * 50,
+          25 + Math.random() * 20,
+          (Math.random() - 0.5) * 25
+        );
+
+        piece.rotation.set(
+          Math.random() * Math.PI,
+          Math.random() * Math.PI,
+          Math.random() * Math.PI
+        );
+
+        piece.velocity = new THREE.Vector3(
+          (Math.random() - 0.5) * 0.1,
+          -0.04 - Math.random() * 0.1,
+          (Math.random() - 0.5) * 0.1
+        );
+
+        piece.rotationSpeed = new THREE.Vector3(
+          (Math.random() - 0.5) * 0.18,
+          (Math.random() - 0.5) * 0.18,
+          (Math.random() - 0.5) * 0.18
+        );
+
+        confetti.push(piece);
+        scene.add(piece);
+      }
+    }
+
+    function updateParticles() {
+      for (let i = fireworkParticles.length - 1; i >= 0; i--) {
+        const p = fireworkParticles[i];
+        p.position.add(p.velocity);
+        p.velocity.y -= p.gravity;
+        p.velocity.multiplyScalar(0.982);
+        p.life -= p.decay;
+        p.material.opacity = Math.pow(p.life, 0.6);
+        p.scale.setScalar(0.4 + p.life * 0.6);
+
+        if (p.hasTrail && Math.random() > 0.75) {
+          createSparkle(p.position.x, p.position.y, p.position.z);
+        }
+
+        if (p.life <= 0) {
+          scene.remove(p);
+          fireworkParticles.splice(i, 1);
+        }
+      }
+
+      for (let i = sparkles.length - 1; i >= 0; i--) {
+        const s = sparkles[i];
+        s.life -= s.decay;
+        s.material.opacity = s.life;
+        s.scale.setScalar(s.life * 2.5);
+
+        if (s.life <= 0) {
+          scene.remove(s);
+          sparkles.splice(i, 1);
+        }
+      }
+
+      for (let i = confetti.length - 1; i >= 0; i--) {
+        const c = confetti[i];
+        c.position.add(c.velocity);
+        c.rotation.x += c.rotationSpeed.x;
+        c.rotation.y += c.rotationSpeed.y;
+        c.rotation.z += c.rotationSpeed.z;
+        c.velocity.y -= 0.0006;
+        c.velocity.x += (Math.random() - 0.5) * 0.006;
+        c.velocity.x *= 0.995;
+
+        if (c.position.y < -25) {
+          c.position.y = 25;
+          c.position.x = (Math.random() - 0.5) * 50;
+          c.velocity.y = -0.04 - Math.random() * 0.1;
+        }
+      }
+    }
+
+    function updateClock() {
+      if (!synced) return;
+
+      const now = getSyncedTime();
+      const estDate = new Date(now);
+      const estStr = estDate.toLocaleString("en-US", { timeZone: "America/New_York" });
+      const est = new Date(estStr);
+
+      const timeStr = est.toLocaleTimeString('en-US', { hour12: true });
+      const dateStr = est.toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+
+      document.getElementById('currentTime').textContent = timeStr;
+      document.getElementById('currentDate').textContent = dateStr + ' (EST)';
+
+      checkBallDrop();
+    }
+
+    function checkBallDrop() {
+      if (!synced) return;
+
+      const now = getSyncedTime();
+      const timeUntilTarget = TARGET_TIME - now;
+
+      if (timeUntilTarget <= DROP_DURATION && timeUntilTarget > 0 && !ballDropping && !ballDropComplete) {
+        startBallDrop(false);
+      }
+
+      if (ballDropping && !ballDropComplete) {
+        updateBallAndUI(timeUntilTarget);
+      }
+    }
+
+    function updateBallAndUI(remaining) {
+      const clampedRemaining = Math.max(0, Math.min(DROP_DURATION, remaining));
+      const progress = 1 - (clampedRemaining / DROP_DURATION);
+
+      document.getElementById('progressBar').style.width = (progress * 100) + '%';
+
+      const secondsLeft = Math.max(0, Math.ceil(clampedRemaining / 1000));
+      const countdownEl = document.getElementById('countdown');
+      countdownEl.textContent = secondsLeft;
+
+      if (secondsLeft <= 10 && secondsLeft > 0) {
+        countdownEl.style.transform = `scale(${1 + (10 - secondsLeft) * 0.1})`;
+      }
+
+      blobMesh.position.y = BALL_START_Y + (BALL_END_Y - BALL_START_Y) * progress;
+
+      if (clampedRemaining <= 0 && !ballDropComplete) {
+        blobMesh.position.y = BALL_END_Y;
+        completeBallDrop();
+      }
+    }
+
+    function startBallDrop(isLateJoin) {
+      ballDropping = true;
+      blobMesh.visible = true;
+
+      if (isLateJoin) {
+        const now = getSyncedTime();
+        const elapsed = now - DROP_START_TIME;
+        const progress = Math.min(1, elapsed / DROP_DURATION);
+        blobMesh.position.y = BALL_START_Y + (BALL_END_Y - BALL_START_Y) * progress;
+        document.getElementById('textContainer').classList.add('hidden');
+        document.getElementById('countdownContainer').classList.add('visible');
+      } else {
+        blobMesh.position.y = BALL_START_Y;
+        document.getElementById('textContainer').classList.add('fade-out');
+        setTimeout(() => {
+          document.getElementById('countdownContainer').classList.add('visible');
+        }, 1800);
+      }
+
+      lightBeams.forEach(beam => beam.visible = true);
+      document.getElementById('progressContainer').classList.add('visible');
+      document.getElementById('groundGlow').classList.add('visible');
+    }
+
+    function completeBallDrop() {
+      ballDropComplete = true;
+
+      document.getElementById('flash').classList.add('active');
+      document.getElementById('countdownContainer').classList.remove('visible');
+      document.getElementById('timeDisplay').classList.add('hidden');
+
+      createMagmaExplosion();
+
+      setTimeout(() => {
+        document.getElementById('happyNewYear').classList.add('visible');
+      }, 800);
+
+      setTimeout(() => {
+        startCelebration(false);
+      }, 1500);
+
+      lightBeams.forEach(beam => {
+        beam.children.forEach(child => {
+          child.material.opacity *= 2.5;
+        });
+      });
+    }
+
+    function startCelebration(skipInitialBurst) {
+      if (celebrationStarted) return;
+      celebrationStarted = true;
+
+      createConfetti();
+
+      if (!skipInitialBurst) {
+        for (let i = 0; i < 20; i++) {
+          setTimeout(() => {
+            const x = (Math.random() - 0.5) * 40;
+            const y = Math.random() * 15 - 5;
+            const z = (Math.random() - 0.5) * 20;
+            createFirework(x, y, z);
+          }, i * 120);
+        }
+      }
+
+      setInterval(() => {
+        if (Math.random() > 0.4) {
+          const x = (Math.random() - 0.5) * 40;
+          const y = Math.random() * 15 - 5;
+          const z = (Math.random() - 0.5) * 20;
+          createFirework(x, y, z);
+        }
+      }, 300);
+    }
+
+    function onWindowResize() {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      const time = Date.now() * 0.001;
+      blobTime += 0.016;
+
+      updateBlob(blobTime);
+      updateMagmaDroplets();
+
+      if (blobMesh && blobMesh.visible) {
+        blobMesh.rotation.y += 0.008;
+        blobMesh.rotation.x = Math.sin(time * 0.2) * 0.1;
+      }
+
+      updateParticles();
+
+      lightBeams.forEach((beam) => {
+        if (beam.visible) {
+          const data = beam.userData;
+          beam.rotation.z = data.baseRotationZ + Math.sin(time * data.swaySpeed + data.swayOffset) * 0.12;
+
+          const pulse = 0.8 + Math.sin(time * data.pulseSpeed + data.pulseOffset) * 0.2;
+          beam.children[0].material.opacity = data.baseOpacity * pulse;
+          beam.children[1].material.opacity = data.coreBaseOpacity * pulse;
+        }
+      });
+
+      if (ballDropComplete) {
+        camera.position.x = Math.sin(time * 0.35) * 1;
+        camera.position.y = Math.cos(time * 0.2) * 0.6;
+        camera.lookAt(0, 0, 0);
+      }
+
+      renderer.render(scene, camera);
+    }
+
+    init();
+  </script>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+
+    <script defer src="/s/script.js" data-website-id="b9510d8e-e1e5-4dff-ad86-297ebece5574"></script>
+    <noscript><img src="/t/p?payload=%7B%22website%22%3A%22b9510d8e-e1e5-4dff-ad86-297ebece5574%22%2C%22url%22%3A%22%2F%22%2C%22hostname%22%3A%22vng.lol%22%2C%22name%22%3A%22pageview%22%7D" style="display:none;"></noscript>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Learn how browser games are made with this beginner's guide. Understand the tools, technologies, and process behind creating HTML5 and JavaScript games.">
+    <title>How Browser Games Are Made: A Beginner's Guide | Void Network</title>
+    <link rel="icon" href="/assets/img/void.png" type="image/x-icon">
+    <link rel="stylesheet" href="/assets/css/matte-theme.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="/assets/footer/footer.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: var(--matte-bg-base); color: var(--matte-text-primary); min-height: 100vh; line-height: 1.7; }
+        body::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 20% 30%, rgba(255,255,255,0.015) 0%, transparent 60%); pointer-events: none; z-index: -1; }
+        .article-container { max-width: 800px; margin: 0 auto; padding: 3rem 1.5rem; padding-bottom: 120px; }
+        .back-link { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--matte-text-muted); text-decoration: none; font-size: 0.9rem; margin-bottom: 2rem; transition: color 0.2s; }
+        .back-link:hover { color: var(--matte-text-primary); }
+        .article-header { margin-bottom: 2.5rem; }
+        .article-title { font-size: 2.5rem; font-weight: 700; line-height: 1.2; margin-bottom: 1rem; background: linear-gradient(180deg, #ffffff 0%, #a0a0a0 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .article-meta { display: flex; gap: 1.5rem; color: var(--matte-text-muted); font-size: 0.9rem; flex-wrap: wrap; }
+        .article-content h2 { font-size: 1.5rem; font-weight: 600; margin: 2.5rem 0 1rem; color: var(--matte-text-primary); }
+        .article-content h3 { font-size: 1.2rem; font-weight: 600; margin: 1.5rem 0 0.75rem; color: var(--matte-text-primary); }
+        .article-content p { color: var(--matte-text-secondary); margin-bottom: 1.25rem; }
+        .tip-box { background: var(--matte-bg-card); border: 1px solid var(--matte-border-default); border-radius: var(--matte-radius-md); padding: 1.25rem; margin: 1.5rem 0; }
+        .tip-box strong { color: var(--matte-text-primary); }
+        @media (max-width: 768px) { .article-title { font-size: 1.75rem; } .article-container { padding: 2rem 1rem; padding-bottom: 120px; } }
+    </style>
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-814Y2X3KSF"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-814Y2X3KSF');
+</script>
+</head>
+<body>
+    <div class="article-container">
+        <a href="/blog" class="back-link"><i data-lucide="arrow-left"></i> Back to Blog</a>
+        <article>
+            <div class="article-header">
+                <h1 class="article-title">How Browser Games Are Made: A Beginner's Guide</h1>
+                <div class="article-meta">
+                    <span>By Void Network Team</span>
+                    <span>December 18, 2024</span>
+                    <span>7 min read</span>
+                </div>
+            </div>
+            <div class="article-content">
+                <p>Ever wondered what goes into creating the browser games you play on Void Network? The process is more accessible than you might think. With free tools and online resources, anyone can start making browser games. This guide walks you through the basics of how browser games are built, from concept to playable product.</p>
+
+                <h2>The Building Blocks</h2>
+
+                <h3>HTML: The Structure</h3>
+                <p>HTML creates the basic structure of web pages, including games. It defines where elements appear and how they relate to each other. For games, HTML typically provides a canvas element where graphics render and containers for user interface elements. Think of HTML as the skeleton that everything else attaches to.</p>
+
+                <h3>CSS: The Style</h3>
+                <p>CSS controls how things look. Colors, sizes, positions, and animations all come from CSS. While games often render graphics programmatically, CSS handles menus, buttons, and overlay elements. Good CSS makes games feel polished even before any code runs.</p>
+
+                <h3>JavaScript: The Brain</h3>
+                <p>JavaScript makes games actually work. It handles player input, game logic, physics, enemy behavior, scoring, and everything else that makes a game interactive. JavaScript runs directly in browsers without plugins, making it the primary language for browser game development.</p>
+
+                <div class="tip-box">
+                    <strong>Getting Started:</strong> You can write your first game with just a text editor and a web browser. Create an HTML file, add a canvas element, write some JavaScript, and open it in your browser. No special software required.
+                </div>
+
+                <h2>Game Engines and Frameworks</h2>
+
+                <h3>Why Use an Engine?</h3>
+                <p>Game engines handle common tasks that every game needs: rendering graphics, playing sounds, detecting collisions, managing game states. Writing these systems from scratch takes enormous effort. Engines let developers focus on what makes their game unique rather than reinventing wheels.</p>
+
+                <h3>Popular Browser Game Engines</h3>
+
+                <p>Phaser stands as the most popular open-source HTML5 game framework. Extensive documentation and active community support make it beginner-friendly. Thousands of tutorials cover everything from basic concepts to advanced techniques. Many games on Void Network were built with Phaser.</p>
+
+                <p>Construct 3 offers visual programming where you build game logic by connecting blocks rather than writing code. This approach lets non-programmers create sophisticated games. The tradeoff is less flexibility than code-based engines, but the accessibility opens game development to wider audiences.</p>
+
+                <p>Unity and Godot can export to WebGL, bringing powerful desktop engines to browsers. These suit developers with existing experience or ambitious projects requiring advanced features. The learning curve is steeper but capabilities expand dramatically.</p>
+
+                <h2>The Development Process</h2>
+
+                <h3>Step 1: Concept and Design</h3>
+                <p>Every game starts with an idea. What type of game? What makes it fun? What are the core mechanics? Sketching out answers to these questions prevents wasted effort later. Simple concepts often make better first projects. Pong, not World of Warcraft.</p>
+
+                <p>Game design documents capture ideas formally. Even simple games benefit from writing down mechanics, controls, and goals. This reference keeps development focused and helps identify problems before coding begins.</p>
+
+                <h3>Step 2: Prototyping</h3>
+                <p>Build the core mechanic first with placeholder graphics. Can you move a square around? Can it jump? Can it shoot? Does the basic action feel satisfying? Prototyping answers these questions quickly without investing in art or polish.</p>
+
+                <p>Kill bad ideas early. If the prototype isn't fun, fancy graphics won't save it. Many successful developers create dozens of prototypes for every game they finish. Rapid iteration finds fun faster than perfectionism.</p>
+
+                <div class="tip-box">
+                    <strong>Prototype Tip:</strong> Colored rectangles work fine for prototypes. Don't worry about art until you've proven the game is fun. Programmers call these "programmer art" and they serve their purpose perfectly.
+                </div>
+
+                <h3>Step 3: Production</h3>
+                <p>Once the prototype proves fun, production adds everything else. Real graphics replace placeholders. Sound effects and music create atmosphere. Levels get designed and balanced. Menus and options get implemented. This phase takes longest but builds on the solid foundation prototyping established.</p>
+
+                <h3>Step 4: Testing and Polish</h3>
+                <p>Testing reveals bugs and balance issues that developers miss. Fresh eyes catch problems familiarity blinds you to. Get people to play your game and watch silently. Where do they get confused? What frustrates them? What delights them?</p>
+
+                <p>Polish separates good games from great ones. Screen shake when things explode, particle effects on impacts, satisfying sound effects for actions. These small touches accumulate into games that feel professionally crafted.</p>
+
+                <h2>Essential Skills to Learn</h2>
+
+                <h3>Programming Fundamentals</h3>
+                <p>Variables, loops, conditionals, and functions form the foundation of all programming. These concepts transfer across languages and engines. Free resources like freeCodeCamp teach these basics interactively. Invest time here before jumping into game-specific tutorials.</p>
+
+                <h3>Basic Math</h3>
+                <p>Game development uses more math than typical web development. Position, velocity, collision detection, and angles all require mathematical thinking. High school algebra and geometry cover most needs. Trigonometry helps with rotation and projectiles.</p>
+
+                <h3>Problem-Solving Mindset</h3>
+                <p>Programming involves constant problem-solving. Something won't work as expected. You'll need to figure out why and fix it. Developing patience and systematic debugging approaches matters as much as technical knowledge.</p>
+
+                <h2>Resources for Beginners</h2>
+
+                <h3>Free Learning Platforms</h3>
+                <p>YouTube hosts countless game development tutorials for every skill level. Channels dedicated to Phaser, Unity, and general game design provide structured learning paths. Watch, code along, then modify to understand deeply.</p>
+
+                <p>Documentation for engines contains tutorials alongside reference material. Phaser's examples page demonstrates nearly every feature with runnable code. Reading documentation feels less exciting than videos but builds deeper understanding.</p>
+
+                <h3>Community Support</h3>
+                <p>Discord servers and forums for game engines welcome beginners. Asking questions after attempting solutions yourself gets helpful responses. The game development community generally enjoys helping newcomers succeed.</p>
+
+                <h2>Your First Project</h2>
+
+                <p>Start impossibly small. A single-screen game where you control something and have a goal. Avoid scope creep where ideas expand faster than implementation. Finishing small projects teaches more than abandoning ambitious ones.</p>
+
+                <p>Classic games make excellent first projects. Pong teaches basic physics and two-player interaction. Breakout adds level design and progression. Space Invaders introduces enemy patterns and shooting mechanics. These games became classics because their core mechanics are genuinely fun.</p>
+
+                <p>The games on Void Network were all made by people who once couldn't program at all. Everyone starts somewhere. Your first game will be rough, your tenth will be better, and somewhere along the way you'll make something you're proud of. The journey from player to creator is open to anyone willing to learn.</p>
+            </div>
+        </article>
+    </div>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

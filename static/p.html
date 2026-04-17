@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="en">
+    <link rel="stylesheet" href="/assets/css/matte-theme.css">
+<head>
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+    <script defer src="/s/script.js" data-website-id="b9510d8e-e1e5-4dff-ad86-297ebece5574"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Void Browser</title>
+<meta name="description" content="Void Network - The premier educational gaming platform for children. Explore hundreds of interactive learning games, STEM challenges, curriculum-aligned activities, and safe educational experiences designed to develop critical thinking, problem-solving, and creativity in kids of all ages.">
+    <meta name="keywords" content="educational games, learning games for kids, children education, STEM games, interactive learning, educational platform, kids learning games, safe games for children, curriculum aligned games, brain training games, Void Network, educational activities, kids STEM, math games, science games, reading games, spelling games, geography games, typing games, logic puzzles, memory games, children development, early childhood education, K-12 learning, classroom games">
+    <meta name="author" content="Void Network">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="language" content="English">
+    <meta name="revisit-after" content="7 days">
+    <meta name="rating" content="General">
+    <meta name="distribution" content="Global">
+    <meta name="category" content="Education">
+    <meta name="classification" content="Educational Games for Children">
+    <meta name="target-audience" content="children, parents, educators, teachers, schools">
+    <meta name="subject" content="Education, Learning Games, Children Development, STEM, Interactive Learning">
+    <meta name="content-rating" content="kids-safe">
+    <meta name="child-safe" content="true">
+    <meta name="educational-content" content="true">
+    <meta name="audience" content="K-12 Students, Parents, Educators, Teachers">
+    <meta name="topic" content="Educational Games, Learning Activities, STEM Education, Curriculum-Aligned Content">
+    <meta name="coverage" content="Worldwide">
+    <meta name="age-range" content="5-18">
+    <meta name="dc.title" content="Void Network - Educational Games for Children">
+    <meta name="dc.creator" content="Void Network">
+    <meta name="dc.subject" content="Educational Games, Learning, STEM, Children Development, Interactive Education">
+    <meta name="dc.description" content="Interactive educational games and learning activities for children. Curriculum-aligned STEM content, math games, reading exercises, and cognitive development tools.">
+    <meta name="dc.publisher" content="Void Network">
+    <meta name="dc.type" content="Interactive Resource">
+    <meta name="dc.format" content="text/html">
+    <meta name="dc.language" content="en">
+    <meta property="og:title" content="Void Network - Educational Games & Interactive Learning for Children">
+    <meta property="og:description" content="The ultimate educational gaming platform designed to expand children's knowledge through fun, interactive learning games. Hundreds of safe, engaging, and curriculum-aligned activities for kids of all ages. STEM, math, reading, science, and more.">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Void Network - Educational Gaming Platform">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:image" content="https://vng.lol/img/vnbannerv5.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="2560">
+    <meta property="og:image:height" content="1440">
+    <meta property="og:image:alt" content="Void Network - Educational Games for Children">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Void Network - Educational Games & Learning Platform for Children">
+    <meta name="twitter:description" content="Discover hundreds of fun educational games designed to help children learn, grow, and develop critical thinking skills. Safe, curriculum-aligned, and educator-approved content for kids of all ages.">
+    <meta name="twitter:image" content="https://vng.lol/img/vnbannerv5.png">
+    <meta name="twitter:image:alt" content="Void Network - Educational Games for Children">
+    <meta name="twitter:site" content="@VoidNetwork">
+    <meta name="twitter:creator" content="@VoidNetwork">
+    <link rel="icon" type="image/x-icon" href="/assets/img/void.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="/~r/2/index.js" defer></script>
+    <script src="/~r/1/scramjet.all.js" defer></script>
+    <script src="/~r/7/bundle.js" defer></script>
+    <script src="/~r/7/config.js" defer></script>
+    <script src="/lib/register-sw.js" defer></script>
+    <script src="/assets/js/particles.js" defer></script>
+    <script>console.log=console.debug=console.info=console.warn=console.error=()=>{};</script>
+    <script src="/assets/js/cthemes.js" defer></script>
+    <script src="/assets/js/blank.js" defer></script>
+    <script src="/assets/js/settings.js" defer></script>
+    <script src="/assets/footer/footer.js" defer></script>
+    <script src="/lib/pf.js" defer></script>
+    <script type="module" src="/popup-listener.js"></script>
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-814Y2X3KSF"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-814Y2X3KSF');
+    </script>
+    <style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #000;
+    color: #f5f5f5;
+    min-height: 100vh;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    user-select: none;
+}
+
+
+#particles-js {
+    z-index: 0 !important;
+    pointer-events: none !important;
+}
+
+
+.browser-container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 1;
+    background: transparent !important;
+}
+
+
+.combined-bar {
+    display: flex;
+    align-items: center;
+    height: 42px;
+    min-height: 42px;
+    background: rgba(8, 8, 8, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding: 0 6px;
+    gap: 4px;
+    flex-shrink: 0;
+    z-index: 100;
+}
+
+.combined-bar.hidden {
+    transform: translateY(-100%);
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    width: 100%;
+    top: 0;
+}
+
+
+.tab-list {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    flex-shrink: 1;
+    min-width: 0;
+    max-width: 40%;
+}
+
+.tab-list::-webkit-scrollbar { display: none; }
+
+.tab-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0 8px;
+    min-width: 80px;
+    max-width: 160px;
+    height: 26px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+    flex-shrink: 0;
+}
+
+.tab-item:hover {
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(255,255,255,0.08);
+}
+
+.tab-item.active {
+    background: rgba(255,255,255,0.12);
+    border-color: rgba(255,255,255,0.14);
+}
+
+.tab-title {
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.5);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+    pointer-events: none;
+}
+
+.tab-item.active .tab-title { color: rgba(255,255,255,0.9); }
+
+.tab-close {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.2);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6rem;
+    transition: all 0.15s;
+    flex-shrink: 0;
+    padding: 0;
+    line-height: 1;
+}
+
+.tab-close:hover {
+    background: rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.8);
+}
+
+.new-tab-btn {
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.04);
+    color: rgba(255,255,255,0.35);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    transition: all 0.15s;
+    flex-shrink: 0;
+}
+
+.new-tab-btn:hover {
+    background: rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.7);
+    border-color: rgba(255,255,255,0.1);
+}
+
+
+.bar-divider {
+    width: 1px;
+    height: 20px;
+    background: rgba(255,255,255,0.08);
+    margin: 0 4px;
+    flex-shrink: 0;
+}
+
+
+.nav-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.05);
+    color: rgba(255,255,255,0.6);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    flex-shrink: 0;
+}
+
+.nav-btn svg {
+    width: 14px;
+    height: 14px;
+    stroke-width: 2;
+}
+
+.nav-btn:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    border-color: rgba(255,255,255,0.12);
+}
+
+.nav-btn:active { transform: scale(0.95); }
+
+.nav-btn:disabled {
+    opacity: 0.25;
+    cursor: not-allowed;
+}
+
+.nav-btn:disabled:hover {
+    background: rgba(255,255,255,0.04);
+    color: rgba(255,255,255,0.6);
+    border-color: rgba(255,255,255,0.05);
+    transform: none;
+}
+
+
+.address-bar {
+    flex: 1;
+    min-width: 0;
+    height: 28px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px;
+    padding: 0 10px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.75rem;
+    color: #e8e8e8;
+    outline: none;
+    transition: all 0.2s;
+}
+
+.address-bar:focus {
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(255,255,255,0.15);
+    box-shadow: 0 0 0 2px rgba(99,102,241,0.15);
+}
+
+.address-bar::placeholder {
+    color: rgba(255,255,255,0.3);
+    font-weight: 300;
+}
+
+
+.browser-content {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 80px;
+    transition: margin 0.3s ease;
+    background: transparent !important;
+}
+
+.browser-content.fullscreen { margin-bottom: 0; }
+
+
+.welcome-screen {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    background: transparent !important;
+}
+
+.welcome-screen.hidden { display: none; }
+
+.welcome-card {
+    text-align: center;
+    max-width: 500px;
+    padding: 3rem 2.5rem;
+    background: rgba(10, 10, 10, 0.5);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 20px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+
+.welcome-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    background: linear-gradient(180deg, #4a4a4a 0%, #ffffff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 30px rgba(255,255,255,0.1));
+    animation: gentleGlow 4s ease-in-out infinite;
+    margin-bottom: 0.8rem;
+}
+
+.welcome-subtitle {
+    font-size: 0.95rem;
+    color: rgba(255,255,255,0.4);
+    font-weight: 300;
+    line-height: 1.5;
+}
+
+.welcome-subtitle a {
+    color: rgba(255,255,255,0.6);
+    text-decoration: none;
+}
+
+.welcome-subtitle a:hover { color: #fff; }
+
+@keyframes gentleGlow {
+    0%, 100% { filter: drop-shadow(0 0 30px rgba(255,255,255,0.1)); }
+    50% { filter: drop-shadow(0 0 40px rgba(255,255,255,0.15)); }
+}
+
+
+.browser-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: #fff;
+    position: absolute;
+    top: 0; left: 0;
+    display: none;
+    z-index: 1;
+}
+
+
+.loading-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.97);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    opacity: 1;
+    transition: opacity 0.5s ease;
+}
+
+.loading-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+}
+
+.loading-dots {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 1.5rem;
+}
+
+.loading-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.7);
+    animation: dotBounce 1.2s ease-in-out infinite;
+}
+
+.loading-dot:nth-child(1) { animation-delay: -0.24s; }
+.loading-dot:nth-child(2) { animation-delay: -0.12s; }
+.loading-dot:nth-child(3) { animation-delay: 0s; }
+
+@keyframes dotBounce {
+    0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+    40% { transform: scale(1); opacity: 1; }
+}
+
+.loading-text {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.4);
+    font-weight: 400;
+}
+
+.loading-progress {
+    width: 160px;
+    height: 3px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 1rem;
+}
+
+.loading-progress-bar {
+    height: 100%;
+    background: rgba(255,255,255,0.4);
+    border-radius: 3px;
+    animation: loadingProgress 2s ease-in-out infinite;
+}
+
+@keyframes loadingProgress {
+    0% { width: 0%; margin-left: 0%; }
+    50% { width: 60%; margin-left: 20%; }
+    100% { width: 0%; margin-left: 100%; }
+}
+
+
+.restore-ui-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: rgba(15,15,15,0.9);
+    border: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(20px);
+    color: rgba(255,255,255,0.7);
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    z-index: 10000;
+}
+
+.restore-ui-btn.visible { display: flex; }
+.restore-ui-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+
+.settings-wrapper {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.settings-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: 200px;
+    background: rgba(15, 15, 15, 0.95);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 8px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+    z-index: 1000;
+    display: none;
+    animation: dropdownFadeIn 0.15s ease;
+}
+
+.settings-dropdown.visible { display: block; }
+
+@keyframes dropdownFadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.settings-label {
+    font-size: 0.6rem;
+    color: rgba(255,255,255,0.35);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding: 4px 8px 6px;
+    font-weight: 600;
+}
+
+.proxy-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+    border: 1px solid transparent;
+}
+
+.proxy-option:hover {
+    background: rgba(255,255,255,0.06);
+}
+
+.proxy-option.active {
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(255,255,255,0.12);
+}
+
+.proxy-radio {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.25);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+}
+
+.proxy-option.active .proxy-radio {
+    border-color: rgba(255,255,255,0.8);
+}
+
+.proxy-radio-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: transparent;
+    transition: all 0.15s;
+}
+
+.proxy-option.active .proxy-radio-dot {
+    background: rgba(255,255,255,0.9);
+}
+
+.proxy-option-text {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.proxy-option-name {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.8);
+    font-weight: 500;
+}
+
+.proxy-option-desc {
+    font-size: 0.6rem;
+    color: rgba(255,255,255,0.35);
+    font-weight: 300;
+}
+
+nav.void-dynamic-island { transition: all 0.3s ease; }
+nav.void-dynamic-island.hidden {
+    transform: translateY(100%);
+    opacity: 0;
+    pointer-events: none;
+}
+
+
+@media (max-width: 768px) {
+    .welcome-title { font-size: 1.8rem; }
+    .welcome-card { padding: 2rem 1.5rem; margin: 1rem; }
+    .combined-bar { height: 38px; min-height: 38px; padding: 0 4px; }
+    .nav-btn { width: 26px; height: 26px; }
+    .nav-btn svg { width: 12px; height: 12px; }
+    .address-bar { height: 26px; font-size: 0.72rem; }
+    .tab-item { min-width: 60px; max-width: 120px; height: 24px; }
+    .tab-title { font-size: 0.6rem; }
+    .new-tab-btn { width: 22px; height: 22px; font-size: 0.8rem; }
+}
+
+@media (max-width: 480px) {
+    .tab-list { max-width: 35%; }
+    .tab-item { min-width: 50px; max-width: 90px; }
+    .tab-title { font-size: 0.55rem; }
+    .bar-divider { margin: 0 2px; }
+}
+    </style>
+</head>
+<body>
+
+    <button class="restore-ui-btn" id="restore-ui-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-.722-3.25"/><path d="M2 8a10.645 10.645 0 0 0 20 0"/><path d="m20 15-1.726-2.05"/><path d="m4 15 1.726-2.05"/><path d="m9 18 .722-3.25"/></svg>
+    </button>
+
+    <div class="browser-container">
+
+        <div class="combined-bar" id="combinedBar">
+            <div class="tab-list" id="tabList"></div>
+            <button class="new-tab-btn" id="newTabBtn" title="New Tab (Ctrl+T)">+</button>
+            <div class="bar-divider"></div>
+            <button class="nav-btn" id="back-btn" title="Back">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+            </button>
+            <button class="nav-btn" id="forward-btn" title="Forward">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </button>
+            <form id="uv-form" style="flex:1;min-width:0;display:flex">
+                <input id="uv-search-engine" value="https://duckduckgo.com/?q=%s" type="hidden"/>
+                <input type="text" class="address-bar" id="uv-address" placeholder="Search DuckDuckGo or enter address..." value="void://newtab" autocomplete="off">
+            </form>
+            <button class="nav-btn" id="refresh-btn" title="Refresh">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+            </button>
+            <button class="nav-btn" id="hide-ui-btn" title="Fullscreen Mode">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/></svg>
+            </button>
+            <div class="settings-wrapper">
+                <button class="nav-btn" id="settings-btn" title="Proxy Settings">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+                <div class="settings-dropdown" id="settingsDropdown">
+                    <div class="settings-label">Proxy Engine</div>
+                    <div class="proxy-option active" data-proxy="uv" id="proxyOptUV">
+                        <div class="proxy-radio"><div class="proxy-radio-dot"></div></div>
+                        <div class="proxy-option-text">
+                            <span class="proxy-option-name">Ultraviolet</span>
+                            <span class="proxy-option-desc">Default - more stable</span>
+                        </div>
+                    </div>
+                    <div class="proxy-option" data-proxy="scramjet" id="proxyOptScramjet">
+                        <div class="proxy-radio"><div class="proxy-radio-dot"></div></div>
+                        <div class="proxy-option-text">
+                            <span class="proxy-option-name">Scramjet</span>
+                            <span class="proxy-option-desc">Alternative - faster for some sites</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="browser-content" id="browserContent">
+            <div class="loading-overlay hidden" id="loadingOverlay">
+                <div class="loading-dots">
+                    <div class="loading-dot"></div>
+                    <div class="loading-dot"></div>
+                    <div class="loading-dot"></div>
+                </div>
+                <div class="loading-text">Loading...</div>
+                <div class="loading-progress"><div class="loading-progress-bar"></div></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+    const MAX_TABS = 12;
+    let tabs = [];
+    let activeTabId = null;
+    let tabIdCounter = 0;
+    let scramjetReady = false;
+    let currentProxy = localStorage.getItem('voidBrowserProxy') || 'uv';
+
+    const tabList = document.getElementById('tabList');
+    const newTabBtn = document.getElementById('newTabBtn');
+    const addressBar = document.getElementById('uv-address');
+    const browserContent = document.getElementById('browserContent');
+    const combinedBar = document.getElementById('combinedBar');
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    const backBtn = document.getElementById('back-btn');
+    const forwardBtn = document.getElementById('forward-btn');
+    const refreshBtn = document.getElementById('refresh-btn');
+    const hideUiBtn = document.getElementById('hide-ui-btn');
+    const restoreUiBtn = document.getElementById('restore-ui-btn');
+    const settingsBtn = document.getElementById('settings-btn');
+    const settingsDropdown = document.getElementById('settingsDropdown');
+    const proxyOptUV = document.getElementById('proxyOptUV');
+    const proxyOptScramjet = document.getElementById('proxyOptScramjet');
+
+    function createTab() {
+        if (tabs.length >= MAX_TABS) return;
+
+        const id = 'tab-' + (++tabIdCounter);
+
+        const welcome = document.createElement('div');
+        welcome.className = 'welcome-screen';
+        welcome.id = 'welcome-' + id;
+        welcome.innerHTML = `
+            <div class="welcome-card">
+                <h1 class="welcome-title">Void Browser</h1>
+                <p class="welcome-subtitle">Search the web or enter a URL above<br><a href="https://discord.gg/wjT53dnpQR" target="_blank">Join our Discord</a></p>
+            </div>
+        `;
+        browserContent.appendChild(welcome);
+
+        const iframe = document.createElement('iframe');
+        iframe.className = 'browser-iframe';
+        iframe.id = 'iframe-' + id;
+        browserContent.appendChild(iframe);
+
+        const tabEl = document.createElement('div');
+        tabEl.className = 'tab-item';
+        tabEl.dataset.tabId = id;
+        tabEl.innerHTML = `
+            <span class="tab-title">New Tab</span>
+            <button class="tab-close">\u00d7</button>
+        `;
+
+        tabEl.addEventListener('click', (e) => {
+            if (e.target.classList.contains('tab-close')) return;
+            switchTab(id);
+        });
+
+        tabEl.querySelector('.tab-close').addEventListener('click', (e) => {
+            e.stopPropagation();
+            closeTab(id);
+        });
+
+        tabList.appendChild(tabEl);
+
+        const tab = {
+            id, title: 'New Tab', url: 'void://newtab',
+            iframe, welcome, tabEl,
+            history: ['void://newtab'], historyIndex: 0,
+        };
+
+        tabs.push(tab);
+        switchTab(id);
+        return tab;
+    }
+
+    function switchTab(id) {
+        const tab = tabs.find(t => t.id === id);
+        if (!tab) return;
+        activeTabId = id;
+
+        tabs.forEach(t => {
+            t.iframe.style.display = 'none';
+            t.welcome.classList.add('hidden');
+            t.tabEl.classList.remove('active');
+        });
+
+        tab.tabEl.classList.add('active');
+
+        if (tab.url === 'void://newtab' || tab.url.startsWith('void://')) {
+            tab.welcome.classList.remove('hidden');
+            tab.iframe.style.display = 'none';
+        } else {
+            tab.welcome.classList.add('hidden');
+            tab.iframe.style.display = 'block';
+        }
+
+        addressBar.value = tab.url;
+        updateNavButtons(tab);
+        tab.tabEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+    }
+
+    function closeTab(id) {
+        const idx = tabs.findIndex(t => t.id === id);
+        if (idx === -1) return;
+        const tab = tabs[idx];
+        tab.iframe.remove();
+        tab.welcome.remove();
+        tab.tabEl.remove();
+        tabs.splice(idx, 1);
+        if (tabs.length === 0) { createTab(); return; }
+        if (activeTabId === id) {
+            switchTab(tabs[Math.min(idx, tabs.length - 1)].id);
+        }
+    }
+
+    function getActiveTab() { return tabs.find(t => t.id === activeTabId); }
+
+    function updateNavButtons(tab) {
+        if (!tab) tab = getActiveTab();
+        if (!tab) return;
+        backBtn.disabled = tab.historyIndex <= 0;
+        forwardBtn.disabled = tab.historyIndex >= tab.history.length - 1;
+    }
+
+    function addToTabHistory(tab, url) {
+        if (tab.historyIndex < tab.history.length - 1) {
+            tab.history = tab.history.slice(0, tab.historyIndex + 1);
+        }
+        tab.history.push(url);
+        tab.historyIndex = tab.history.length - 1;
+        updateNavButtons(tab);
+    }
+
+    function setTabTitle(tab, title) {
+        tab.title = title || 'New Tab';
+        tab.tabEl.querySelector('.tab-title').textContent = tab.title;
+    }
+
+
+    let uvReady = false;
+    let uvInitPromise = null;
+
+    async function initializeUV() {
+        if (uvReady) return;
+        if (uvInitPromise) return uvInitPromise;
+        uvInitPromise = (async () => {
+            try {
+                if (typeof registerSW === 'function') {
+                    await Promise.race([
+                        registerSW(),
+                        new Promise((_, reject) => setTimeout(() => reject(new Error('UV init timeout')), 8000))
+                    ]);
+                }
+                uvReady = true;
+            } catch (e) {
+                uvInitPromise = null;
+            }
+        })();
+        return uvInitPromise;
+    }
+
+    async function initializeScramjet() {
+        try {
+            if (typeof BareMux === 'undefined' || typeof window.$scramjetLoadController !== 'function') return;
+
+            const { ScramjetController } = window.$scramjetLoadController();
+            window.scramjet = new ScramjetController({
+                prefix: "/~r/p/",
+                files: {
+                    wasm: "/~r/1/scramjet.wasm.wasm",
+                    all: "/~r/1/scramjet.all.js",
+                    sync: "/~r/1/scramjet.sync.js",
+                },
+                flags: {
+                    serviceworkers: false,
+                    syncxhr: false,
+                    strictRewrites: false,
+                    rewriterLogs: false,
+                    captureErrors: false,
+                    cleanErrors: false,
+                    scramitize: false,
+                    sourcemaps: false,
+                    destructureRewrites: false,
+                    interceptDownloads: false,
+                    allowInvalidJs: true
+                }
+            });
+
+            await window.scramjet.init();
+
+            // Register root-scope SW for scramjet routing
+            const reg = await navigator.serviceWorker.register("/sw.js");
+            if (reg.installing) {
+                await Promise.race([
+                    new Promise((resolve, reject) => {
+                        reg.installing.addEventListener('statechange', e => {
+                            if (e.target.state === 'activated') resolve();
+                            else if (e.target.state === 'redundant') reject(new Error('SW redundant'));
+                        });
+                    }),
+                    new Promise((_, reject) => setTimeout(() => reject(new Error('SW timeout')), 10000))
+                ]);
+            }
+
+            scramjetReady = true;
+        } catch (e) {}
+    }
+
+    function isValidUrl(string) {
+        const protocolPattern = /^[a-zA-Z][a-zA-Z\d+\-.]*:/;
+        if (protocolPattern.test(string)) {
+            try { new URL(string); return true; } catch { return false; }
+        }
+        const urlPattern = /^[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+([/?#].*)?$/;
+        if (string.includes('.') && urlPattern.test(string.split(/[/?#]/)[0])) return true;
+        if (string.match(/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}(:\d+)?$/)) return true;
+        if (string.startsWith('localhost') || string.includes('localhost:')) return true;
+        return false;
+    }
+
+    function encodeUrl(url) {
+        if (!url.startsWith('http://') && !url.startsWith('https://')) url = 'https://' + url;
+
+        if (currentProxy === 'scramjet' && scramjetReady && window.scramjet && window.scramjet.encodeUrl) {
+            try { return window.scramjet.encodeUrl(url); }
+            catch (e) {}
+        }
+
+        // Fallback to UV
+        try { return __uv$config.prefix + __uv$config.encodeUrl(url); }
+        catch (error) { return url; }
+    }
+
+    // --- Settings dropdown ---
+    function setProxyPreference(proxy) {
+        currentProxy = proxy;
+        localStorage.setItem('voidBrowserProxy', proxy);
+        proxyOptUV.classList.toggle('active', proxy === 'uv');
+        proxyOptScramjet.classList.toggle('active', proxy === 'scramjet');
+    }
+
+    settingsBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        settingsDropdown.classList.toggle('visible');
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!settingsDropdown.contains(e.target) && e.target !== settingsBtn) {
+            settingsDropdown.classList.remove('visible');
+        }
+    });
+
+    proxyOptUV.addEventListener('click', () => {
+        setProxyPreference('uv');
+        settingsDropdown.classList.remove('visible');
+    });
+
+    proxyOptScramjet.addEventListener('click', () => {
+        setProxyPreference('scramjet');
+        settingsDropdown.classList.remove('visible');
+    });
+
+    // Apply saved preference on load
+    setProxyPreference(currentProxy);
+
+    function injectScripts(iframe) {
+        try {
+            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+            if (!iframeDoc || !iframeDoc.body) return;
+            const script = iframeDoc.createElement('script');
+            script.textContent = `
+                (function() {
+                    function removeDDGElements() {
+                        ['#header_wrapper','[data-testid="header"]','.header-wrap','.js-header-wrap','.ai-header-exp','#header','#header-non-nav',
+                         '#react-duckbar','[data-testid="duckbar"]','.header__search-wrap','#header-logo-wrapper','.header__logo-wrap','.header__content','.header__search',
+                         '#react-search-form','#search_form','[data-testid="search-form"]',
+                         '[data-testid="serp-popover-promo"]','.header--aside','.js-header-aside','[data-testid="serp-popover-promo-close"]',
+                         '#header-hamburger-menu-btn','.header__button--menu','.js-side-menu-open'
+                        ].forEach(s => document.querySelectorAll(s).forEach(el => el.remove()));
+                    }
+                    function preventNewTabs() {
+                        document.querySelectorAll('a[target="_blank"]').forEach(a => { a.target = '_self'; });
+                        document.querySelectorAll('form[target="_blank"]').forEach(f => { f.target = '_self'; });
+                        document.addEventListener('click', function(e) {
+                            const a = e.target.closest('a');
+                            if (a) a.removeAttribute('target');
+                        }, true);
+                        window.open = function(url) { if (url) window.location.href = url; return null; };
+                    }
+                    removeDDGElements();
+                    preventNewTabs();
+                    const obs = new MutationObserver(() => { removeDDGElements(); preventNewTabs(); });
+                    obs.observe(document.body, { childList: true, subtree: true });
+                    setTimeout(removeDDGElements, 200);
+                    setTimeout(removeDDGElements, 500);
+                })();
+            `;
+            iframeDoc.head.appendChild(script);
+        } catch (e) {}
+    }
+
+    function injectEruda(iframe) {
+        try {
+            const win = iframe.contentWindow;
+            const doc = iframe.contentDocument || win.document;
+            if (!win || !doc || !doc.body || win.__erudaInjected) return;
+            win.__erudaInjected = true;
+            const s = doc.createElement('script');
+            s.src = 'https://cdn.jsdelivr.net/npm/eruda';
+            s.onload = () => {
+                try { if (win.eruda) setTimeout(() => win.eruda.init({ useShadowDom: true, autoScale: true }), 300); }
+                catch (e) {}
+            };
+            (doc.head || doc.body).appendChild(s);
+        } catch (e) {}
+    }
+
+
+    function hideLoading() {
+        loadingOverlay.classList.add('hidden');
+        setTimeout(() => { loadingOverlay.style.display = 'none'; }, 350);
+    }
+
+    async function ensureProxyReady() {
+        // If UV is already ready or SW is already controlling, skip
+        if (uvReady || navigator.serviceWorker.controller) return;
+        // Try to init UV with a short timeout — don't block forever
+        try {
+            await Promise.race([
+                initializeUV(),
+                new Promise((_, reject) => setTimeout(() => reject(new Error('Proxy setup timeout')), 6000))
+            ]);
+        } catch (e) {
+            // Proceed anyway — SW might already be registered from another page
+        }
+    }
+
+    async function navigate(input, addToHistoryFlag = true) {
+        const tab = getActiveTab();
+        if (!tab || !input || !input.trim()) return;
+        input = input.trim();
+
+        if (input.startsWith('void://')) {
+            tab.url = input;
+            tab.iframe.style.display = 'none';
+            tab.welcome.classList.remove('hidden');
+            addressBar.value = input;
+            setTabTitle(tab, 'New Tab');
+            if (addToHistoryFlag) addToTabHistory(tab, input);
+            return;
+        }
+
+        loadingOverlay.classList.remove('hidden');
+        loadingOverlay.style.display = 'flex';
+
+        // Ensure proxy is initialized before navigating
+        await ensureProxyReady();
+
+        try {
+            let targetUrl;
+            if (isValidUrl(input)) {
+                targetUrl = input.startsWith('http') ? input : 'https://' + input;
+            } else {
+                targetUrl = 'https://duckduckgo.com/?q=' + encodeURIComponent(input);
+            }
+
+            const encodedUrl = encodeUrl(targetUrl);
+
+            // Timeout: if iframe doesn't load within 20s, hide loading overlay anyway
+            const navTimeout = setTimeout(hideLoading, 20000);
+
+            tab.iframe.onload = () => {
+                clearTimeout(navTimeout);
+                setTimeout(() => {
+                    injectScripts(tab.iframe);
+                    setTimeout(() => injectEruda(tab.iframe), 1000);
+                    try {
+                        const title = tab.iframe.contentDocument.title;
+                        if (title) setTabTitle(tab, title);
+                    } catch (e) {
+                        try { setTabTitle(tab, new URL(targetUrl).hostname.replace('www.', '')); }
+                        catch (e2) { setTabTitle(tab, input); }
+                    }
+                    hideLoading();
+                }, 150);
+            };
+
+            tab.iframe.onerror = () => {
+                clearTimeout(navTimeout);
+                hideLoading();
+            };
+
+            tab.iframe.src = encodedUrl;
+            tab.url = input;
+            addressBar.value = input;
+            tab.welcome.classList.add('hidden');
+            tab.iframe.style.display = 'block';
+            if (addToHistoryFlag) addToTabHistory(tab, input);
+
+        } catch (error) {
+            hideLoading();
+        }
+    }
+
+
+    addressBar.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') { e.preventDefault(); navigate(e.target.value); }
+    });
+    addressBar.addEventListener('focus', () => addressBar.select());
+
+    backBtn.addEventListener('click', () => {
+        const tab = getActiveTab();
+        if (!tab || tab.historyIndex <= 0) return;
+        tab.historyIndex--;
+        navigate(tab.history[tab.historyIndex], false);
+        updateNavButtons(tab);
+    });
+
+    forwardBtn.addEventListener('click', () => {
+        const tab = getActiveTab();
+        if (!tab || tab.historyIndex >= tab.history.length - 1) return;
+        tab.historyIndex++;
+        navigate(tab.history[tab.historyIndex], false);
+        updateNavButtons(tab);
+    });
+
+    refreshBtn.addEventListener('click', function() {
+        this.style.transition = 'transform 0.5s';
+        this.style.transform = 'rotate(360deg)';
+        setTimeout(() => { this.style.transition = ''; this.style.transform = ''; }, 500);
+        const tab = getActiveTab();
+        if (tab && tab.iframe.style.display !== 'none' && !tab.url.startsWith('void://')) {
+            navigate(tab.url, false);
+        }
+    });
+
+    newTabBtn.addEventListener('click', () => createTab());
+
+    hideUiBtn.addEventListener('click', () => {
+        combinedBar.classList.add('hidden');
+        browserContent.classList.add('fullscreen');
+        restoreUiBtn.classList.add('visible');
+        const island = document.querySelector('nav.void-dynamic-island');
+        if (island) island.classList.add('hidden');
+    });
+
+    restoreUiBtn.addEventListener('click', () => {
+        combinedBar.classList.remove('hidden');
+        browserContent.classList.remove('fullscreen');
+        restoreUiBtn.classList.remove('visible');
+        const island = document.querySelector('nav.void-dynamic-island');
+        if (island) island.classList.remove('hidden');
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === 't') { e.preventDefault(); createTab(); }
+        if ((e.ctrlKey || e.metaKey) && e.key === 'w') { e.preventDefault(); if (activeTabId) closeTab(activeTabId); }
+        if (e.ctrlKey && e.key === 'Tab') {
+            e.preventDefault();
+            const idx = tabs.findIndex(t => t.id === activeTabId);
+            if (e.shiftKey) { switchTab(tabs[idx > 0 ? idx - 1 : tabs.length - 1].id); }
+            else { switchTab(tabs[idx < tabs.length - 1 ? idx + 1 : 0].id); }
+        }
+    });
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Create tab FIRST so UI is immediately usable
+        createTab();
+        // Init proxies in background — don't block the UI
+        initializeUV();
+        initializeScramjet();
+    });
+    </script>
+
+<script src="/assets/js/wilway-popup.js" defer></script>
+</body>
+</html>

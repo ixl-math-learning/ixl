@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+
+    <script defer src="/s/script.js" data-website-id="b9510d8e-e1e5-4dff-ad86-297ebece5574"></script>
+    <noscript><img src="/t/p?payload=%7B%22website%22%3A%22b9510d8e-e1e5-4dff-ad86-297ebece5574%22%2C%22url%22%3A%22%2F%22%2C%22hostname%22%3A%22vng.lol%22%2C%22name%22%3A%22pageview%22%7D" style="display:none;"></noscript>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>Plinko - Void Games</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+:root{--s:1}
+html,body{height:100%;overflow:hidden;background:#0a0a0a;color:#f5f5f5}
+body{display:flex;flex-direction:column;user-select:none}
+.header{display:flex;justify-content:space-between;align-items:center;padding:calc(8px*var(--s)) calc(12px*var(--s));background:rgba(0,0,0,0.95);border-bottom:1px solid rgba(255,255,255,0.1);flex-shrink:0}
+.header-left{display:flex;gap:calc(8px*var(--s));align-items:center}
+.btn{padding:calc(8px*var(--s)) calc(14px*var(--s));background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:calc(8px*var(--s));color:#f5f5f5;font-size:calc(12px*var(--s));cursor:pointer;text-decoration:none;transition:all 0.2s}
+.btn:hover{background:rgba(255,255,255,0.2)}
+.btn.drop{background:rgba(76,175,80,0.3);border-color:rgba(76,175,80,0.5);font-weight:600}
+.btn.drop:disabled{opacity:0.5;cursor:not-allowed}
+.header-stats{display:flex;gap:calc(12px*var(--s))}
+.stat{text-align:center}
+.stat-label{font-size:calc(9px*var(--s));color:rgba(255,255,255,0.5);text-transform:uppercase}
+.stat-value{font-size:calc(14px*var(--s));font-weight:700}
+.stat-value.balls{color:#4caf50}
+.stat-value.pending{color:#ffeb3b}
+.stat-value.spent{color:#f44336}
+.game-container{flex:1;display:flex;flex-direction:column;align-items:center;overflow:hidden;padding:calc(5px*var(--s))}
+.board-wrap{position:relative;width:100%;max-width:calc(420px*var(--s));flex:1;display:flex;flex-direction:column}
+#gameCanvas{width:100%;flex:1;display:block;border-radius:calc(8px*var(--s))}
+.slots{display:flex;justify-content:center;gap:calc(2px*var(--s));padding:calc(4px*var(--s)) 0}
+.slot{flex:1;max-width:calc(36px*var(--s));height:calc(28px*var(--s));display:flex;align-items:center;justify-content:center;font-size:calc(9px*var(--s));font-weight:700;border-radius:calc(4px*var(--s));color:#fff;text-shadow:0 1px 2px rgba(0,0,0,0.5)}
+.controls{display:flex;gap:calc(8px*var(--s));padding:calc(8px*var(--s));flex-wrap:wrap;justify-content:center}
+.control-group{display:flex;flex-direction:column;gap:calc(4px*var(--s))}
+.control-label{font-size:calc(9px*var(--s));color:rgba(255,255,255,0.5);text-transform:uppercase}
+.control-row{display:flex;gap:calc(4px*var(--s))}
+.ctrl-btn{padding:calc(6px*var(--s)) calc(10px*var(--s));background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:calc(4px*var(--s));color:#fff;font-size:calc(10px*var(--s));cursor:pointer}
+.ctrl-btn.active{background:rgba(76,175,80,0.3);border-color:#4caf50}
+.ctrl-btn:hover{background:rgba(255,255,255,0.2)}
+.setup{position:fixed;inset:0;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:200;padding:calc(20px*var(--s));gap:calc(16px*var(--s))}
+.setup.hidden{display:none}
+.setup-title{font-size:calc(28px*var(--s));font-weight:800}
+.setup-section{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:calc(10px*var(--s));padding:calc(14px*var(--s));width:100%;max-width:calc(380px*var(--s))}
+.setup-label{font-size:calc(11px*var(--s));color:rgba(255,255,255,0.6);margin-bottom:calc(8px*var(--s));text-transform:uppercase}
+.opt-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(6px*var(--s))}
+.opt{padding:calc(10px*var(--s));background:rgba(255,255,255,0.05);border:2px solid rgba(255,255,255,0.1);border-radius:calc(6px*var(--s));cursor:pointer;text-align:center}
+.opt:hover{background:rgba(255,255,255,0.1)}
+.opt.selected{border-color:#4caf50;background:rgba(76,175,80,0.2)}
+.opt-main{font-size:calc(14px*var(--s));font-weight:700}
+.opt-sub{font-size:calc(9px*var(--s));color:rgba(255,255,255,0.5)}
+.setup-info{text-align:center;font-size:calc(13px*var(--s));color:rgba(255,255,255,0.7)}
+.setup-info span{color:#ffeb3b;font-weight:700}
+.start-btn{padding:calc(12px*var(--s)) calc(36px*var(--s));background:linear-gradient(135deg,#4caf50,#388e3c);border:none;border-radius:calc(8px*var(--s));color:#fff;font-size:calc(15px*var(--s));font-weight:700;cursor:pointer}
+.start-btn:hover{transform:scale(1.03)}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.95);display:none;align-items:center;justify-content:center;flex-direction:column;gap:calc(12px*var(--s));z-index:200;padding:calc(20px*var(--s))}
+.overlay.active{display:flex}
+.overlay-title{font-size:calc(32px*var(--s));font-weight:800}
+.overlay-title.win{color:#4caf50}
+.overlay-title.lose{color:#f44336}
+.overlay-vng{font-size:calc(18px*var(--s))}
+.overlay-vng.positive{color:#4caf50}
+.overlay-vng.negative{color:#f44336}
+.overlay-details{font-size:calc(12px*var(--s));color:rgba(255,255,255,0.6)}
+.loading{position:fixed;inset:0;background:#000;display:flex;align-items:center;justify-content:center;z-index:300;font-size:calc(14px*var(--s))}
+.loading.hidden{display:none}
+.popup{position:fixed;pointer-events:none;font-weight:700;font-size:calc(14px*var(--s));z-index:100;animation:floatUp 1.2s forwards}
+@keyframes floatUp{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(calc(-30px*var(--s)))}}
+.popup.win{color:#4caf50}
+.popup.lose{color:#f44336}
+    </style>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-814Y2X3KSF"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-814Y2X3KSF');
+</script>
+</head>
+<body>
+    <div class="loading" id="loading">Loading...</div>
+    <div class="setup" id="setup">
+        <div class="setup-title">Plinko</div>
+        <div class="setup-section">
+            <div class="setup-label">Risk Level</div>
+            <div class="opt-grid" id="riskOpts">
+                <div class="opt selected" data-risk="low"><div class="opt-main">Low</div><div class="opt-sub">Safe</div></div>
+                <div class="opt" data-risk="medium"><div class="opt-main">Medium</div><div class="opt-sub">Balanced</div></div>
+                <div class="opt" data-risk="high"><div class="opt-main">High</div><div class="opt-sub">Risky</div></div>
+            </div>
+        </div>
+        <div class="setup-section">
+            <div class="setup-label">Number of Balls</div>
+            <div class="opt-grid" id="ballOpts">
+                <div class="opt" data-balls="5"><div class="opt-main">5</div><div class="opt-sub">Quick</div></div>
+                <div class="opt selected" data-balls="10"><div class="opt-main">10</div><div class="opt-sub">Standard</div></div>
+                <div class="opt" data-balls="25"><div class="opt-main">25</div><div class="opt-sub">Long</div></div>
+            </div>
+        </div>
+        <div class="setup-info">Cost: <span id="setupCost">50</span> VNG for <span id="setupBalls">10</span> balls</div>
+        <button class="start-btn" id="startBtn">Start Game</button>
+        <a href="/voidgames/voidgames.html" class="btn">Back to Games</a>
+    </div>
+    <div class="header">
+        <div class="header-left">
+            <a href="/voidgames/voidgames.html" class="btn">←</a>
+            <button class="btn drop" id="dropBtn">Drop Ball</button>
+        </div>
+        <div class="header-stats">
+            <div class="stat"><div class="stat-label">Balls</div><div class="stat-value balls" id="ballsLeft">10</div></div>
+            <div class="stat"><div class="stat-label">Won</div><div class="stat-value pending" id="wonDisplay">+0</div></div>
+            <div class="stat"><div class="stat-label">Spent</div><div class="stat-value spent" id="spentDisplay">-0</div></div>
+        </div>
+    </div>
+    <div class="game-container">
+        <div class="board-wrap">
+            <canvas id="gameCanvas"></canvas>
+            <div class="slots" id="slots"></div>
+        </div>
+    </div>
+    <div class="overlay" id="overlay">
+        <div class="overlay-title" id="overlayTitle">GAME OVER</div>
+        <div class="overlay-vng" id="overlayVng">+0 VNG</div>
+        <div class="overlay-details" id="overlayDetails"></div>
+        <button class="btn" id="againBtn">Play Again</button>
+        <a href="/voidgames/voidgames.html" class="btn">Back to Games</a>
+    </div>
+<script>
+const API='/api/vg',COST_PER_BALL=5,ROWS=12;
+const MULTIPLIERS={
+    low:[5.6,2.1,1.4,1.1,1,0.5,1,1.1,1.4,2.1,5.6],
+    medium:[13,3,1.3,0.7,0.4,0.2,0.4,0.7,1.3,3,13],
+    high:[29,4,1.5,0.3,0.2,0,0.2,0.3,1.5,4,29]
+};
+const COLORS={
+    low:['#4caf50','#8bc34a','#cddc39','#ffeb3b','#ffc107','#ff9800','#ffc107','#ffeb3b','#cddc39','#8bc34a','#4caf50'],
+    medium:['#4caf50','#8bc34a','#cddc39','#ffc107','#ff9800','#f44336','#ff9800','#ffc107','#cddc39','#8bc34a','#4caf50'],
+    high:['#4caf50','#66bb6a','#cddc39','#ff9800','#f44336','#b71c1c','#f44336','#ff9800','#cddc39','#66bb6a','#4caf50']
+};
+
+let user,sessId,config={risk:'low',balls:10},ballsLeft=0,won=0,spent=0,dropping=false,gameOver=false;
+let engine,world,render,pegs=[],walls=[],activeBalls=[],slotBodies=[],slotWidth,boardTop;
+const {Engine,Render,World,Bodies,Body,Events,Runner}=Matter;
+
+function scale(){const vw=window.innerWidth,vh=window.innerHeight;const s=Math.min(vw/500,vh/700,1.3);document.documentElement.style.setProperty('--s',Math.max(0.5,s).toFixed(3))}
+scale();window.addEventListener('resize',()=>{scale();if(engine)initBoard()});
+
+function auth(){const s=localStorage.getItem('vg_user');if(!s){location.href='/voidgames/voidgames.html';return false}user=JSON.parse(s);return true}
+async function startSess(){try{const r=await fetch(API+'/game/start',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId:user.userId,sessionToken:user.sessionToken,gameType:'plinko'})});const d=await r.json();if(d.success){sessId=d.gameSessionId;return true}}catch{}return false}
+async function configureGame(){try{const r=await fetch(API+'/game/configure',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId:user.userId,sessionToken:user.sessionToken,gameSessionId:sessId,config:{risk:config.risk,totalBalls:config.balls}})});return(await r.json()).success}catch{}return false}
+async function deduct(a,reason){spent+=a;upd();try{await fetch(API+'/game/deduct',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId:user.userId,sessionToken:user.sessionToken,gameSessionId:sessId,amount:a,reason})})}catch{}}
+async function reportLanding(slotIndex,mult){try{const r=await fetch(API+'/game/event',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId:user.userId,sessionToken:user.sessionToken,gameSessionId:sessId,eventType:'plinko_land',eventData:{slotIndex,multiplier:mult}})});return(await r.json())}catch{}return null}
+async function endSess(net){try{await fetch(API+'/game/end',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId:user.userId,sessionToken:user.sessionToken,gameSessionId:sessId,finalScore:0,netAmount:net,penalty:0})})}catch{}sessId=null}
+
+function upd(){
+    document.getElementById('ballsLeft').textContent=ballsLeft;
+    document.getElementById('wonDisplay').textContent='+'+Math.floor(won);
+    document.getElementById('spentDisplay').textContent='-'+Math.floor(spent);
+    document.getElementById('dropBtn').disabled=ballsLeft<=0||dropping||gameOver;
+}
+
+function renderSlots(){
+    const c=document.getElementById('slots');c.innerHTML='';
+    const mults=MULTIPLIERS[config.risk],cols=COLORS[config.risk];
+    mults.forEach((m,i)=>{
+        const d=document.createElement('div');
+        d.className='slot';
+        d.style.background=cols[i];
+        d.textContent=m+'x';
+        c.appendChild(d);
+    });
+}
+
+function initBoard(){
+    if(engine){Engine.clear(engine);World.clear(world);if(render){Render.stop(render);render.canvas.remove()}}
+    const canvas=document.getElementById('gameCanvas');
+    const rect=canvas.parentElement.getBoundingClientRect();
+    const W=rect.width,H=rect.height-40;
+    
+    engine=Engine.create({enableSleeping:true});
+    world=engine.world;
+    world.gravity.y=1;
+    
+    render=Render.create({element:canvas.parentElement,engine,canvas,options:{width:W,height:H,wireframes:false,background:'#0a0a0a'}});
+    
+    const mults=MULTIPLIERS[config.risk];
+    const numSlots=mults.length;
+    slotWidth=W/(numSlots+2);
+    const pegRadius=4;
+    const ballRadius=6;
+    const startY=30;
+    const endY=H-35;
+    const rowSpacing=(endY-startY)/(ROWS+1);
+    boardTop=startY;
+    
+    pegs=[];
+    for(let row=0;row<ROWS;row++){
+        const pegsInRow=row%2===0?numSlots:numSlots-1;
+        const offsetX=row%2===0?slotWidth:slotWidth+slotWidth/2;
+        for(let col=0;col<pegsInRow;col++){
+            const x=offsetX+col*slotWidth;
+            const y=startY+row*rowSpacing+rowSpacing;
+            const peg=Bodies.circle(x,y,pegRadius,{isStatic:true,restitution:0.5,friction:0.1,render:{fillStyle:'#666'}});
+            pegs.push(peg);
+        }
+    }
+    World.add(world,pegs);
+    
+    const wallOpts={isStatic:true,restitution:0.3,render:{fillStyle:'#333'}};
+    walls=[
+        Bodies.rectangle(-5,H/2,10,H,wallOpts),
+        Bodies.rectangle(W+5,H/2,10,H,wallOpts)
+    ];
+    World.add(world,walls);
+    
+    slotBodies=[];
+    const slotY=H-15;
+    const dividerOpts={isStatic:true,render:{fillStyle:'#444'}};
+    for(let i=0;i<=numSlots;i++){
+        const x=slotWidth/2+i*slotWidth;
+        const div=Bodies.rectangle(x,slotY,4,30,dividerOpts);
+        slotBodies.push(div);
+    }
+    World.add(world,slotBodies);
+    
+    const floor=Bodies.rectangle(W/2,H+10,W,20,{isStatic:true,render:{visible:false},label:'floor'});
+    World.add(world,floor);
+    
+    Events.on(engine,'collisionStart',e=>{
+        e.pairs.forEach(p=>{
+            const ball=p.bodyA.label==='ball'?p.bodyA:p.bodyB.label==='ball'?p.bodyB:null;
+            const floor=p.bodyA.label==='floor'||p.bodyB.label==='floor';
+            if(ball&&floor)handleLand(ball);
+        });
+    });
+    
+    Render.run(render);
+    const runner=Runner.create();
+    Runner.run(runner,engine);
+}
+
+function dropBall(){
+    if(dropping||ballsLeft<=0||gameOver)return;
+    dropping=true;ballsLeft--;upd();
+    
+    const canvas=render.canvas;
+    const W=canvas.width;
+    const mults=MULTIPLIERS[config.risk];
+    const centerX=W/2+(Math.random()-0.5)*slotWidth*0.3;
+    
+    const ball=Bodies.circle(centerX,10,6,{
+        restitution:0.6,
+        friction:0.05,
+        frictionAir:0.01,
+        density:0.002,
+        label:'ball',
+        render:{fillStyle:'#fff'}
+    });
+    ball.slotIndex=-1;
+    activeBalls.push(ball);
+    World.add(world,ball);
+}
+
+async function handleLand(ball){
+    if(ball.landed)return;
+    ball.landed=true;
+    
+    const x=ball.position.x;
+    const mults=MULTIPLIERS[config.risk];
+    let idx=Math.floor((x-slotWidth/2)/slotWidth);
+    idx=Math.max(0,Math.min(mults.length-1,idx));
+    const mult=mults[idx];
+    
+    const res=await reportLanding(idx,mult);
+    const payout=res?.vngChange||0;
+    
+    if(payout>0)won+=payout;
+    
+    const rect=render.canvas.getBoundingClientRect();
+    const px=rect.left+ball.position.x;
+    const py=rect.top+ball.position.y-20;
+    showPopup(payout,px,py);
+    
+    setTimeout(()=>{
+        World.remove(world,ball);
+        activeBalls=activeBalls.filter(b=>b!==ball);
+        dropping=false;upd();
+        if(ballsLeft<=0&&activeBalls.length===0)endGame();
+    },500);
+}
+
+function showPopup(v,x,y){
+    const d=Math.floor(v);
+    const p=document.createElement('div');
+    p.className='popup '+(v>=0?'win':'lose');
+    p.textContent=(v>=0?'+':'')+d;
+    p.style.left=x+'px';
+    p.style.top=y+'px';
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(),1200);
+}
+
+async function endGame(){
+    gameOver=true;
+    const net=won-spent;
+    await endSess(net);
+    const t=document.getElementById('overlayTitle');
+    const v=document.getElementById('overlayVng');
+    const d=document.getElementById('overlayDetails');
+    t.textContent=net>=0?'PROFIT!':'GAME OVER';
+    t.className='overlay-title '+(net>=0?'win':'lose');
+    v.textContent='Net: '+(net>=0?'+':'')+Math.floor(net)+' VNG';
+    v.className='overlay-vng '+(net>=0?'positive':'negative');
+    d.textContent='Won: +'+Math.floor(won)+' | Spent: -'+Math.floor(spent);
+    document.getElementById('overlay').classList.add('active');
+}
+
+function initSetup(){
+    const updateInfo=()=>{
+        document.getElementById('setupCost').textContent=config.balls*COST_PER_BALL;
+        document.getElementById('setupBalls').textContent=config.balls;
+    };
+    document.querySelectorAll('#riskOpts .opt').forEach(o=>{
+        o.onclick=()=>{
+            document.querySelectorAll('#riskOpts .opt').forEach(x=>x.classList.remove('selected'));
+            o.classList.add('selected');
+            config.risk=o.dataset.risk;
+            renderSlots();
+        };
+    });
+    document.querySelectorAll('#ballOpts .opt').forEach(o=>{
+        o.onclick=()=>{
+            document.querySelectorAll('#ballOpts .opt').forEach(x=>x.classList.remove('selected'));
+            o.classList.add('selected');
+            config.balls=parseInt(o.dataset.balls);
+            updateInfo();
+        };
+    });
+    document.getElementById('startBtn').onclick=startGame;
+    updateInfo();
+    renderSlots();
+}
+
+async function startGame(){
+    const cost=config.balls*COST_PER_BALL;
+    ballsLeft=config.balls;won=0;spent=0;gameOver=false;dropping=false;
+    document.getElementById('setup').classList.add('hidden');
+    document.getElementById('loading').classList.remove('hidden');
+    
+    if(!await startSess()){alert('Failed');document.getElementById('setup').classList.remove('hidden');document.getElementById('loading').classList.add('hidden');return}
+    if(!await configureGame()){alert('Config failed');document.getElementById('setup').classList.remove('hidden');document.getElementById('loading').classList.add('hidden');return}
+    await deduct(cost,'plinko_bundle');
+    
+    renderSlots();
+    initBoard();
+    upd();
+    document.getElementById('loading').classList.add('hidden');
+}
+
+function playAgain(){
+    document.getElementById('overlay').classList.remove('active');
+    document.getElementById('setup').classList.remove('hidden');
+}
+
+async function init(){
+    if(!auth())return;
+    initSetup();
+    document.getElementById('dropBtn').onclick=dropBall;
+    document.getElementById('againBtn').onclick=playAgain;
+    document.getElementById('loading').classList.add('hidden');
+}
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Blooket Bot - Void Network V5</title>
+    <link rel="stylesheet" href="/assets/css/matte-theme.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="/assets/js/particles.js" defer></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            touch-action: manipulation;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #000000;
+            color: #f5f5f5;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .bb-container {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem 2rem 6rem;
+        }
+
+        .bb-card {
+            background: var(--matte-bg-card);
+            border: 1px solid var(--matte-border-subtle);
+            border-radius: var(--matte-radius-xl);
+            box-shadow: var(--matte-shadow-lg);
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 520px;
+        }
+
+        .bb-title {
+            font-size: 2rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(180deg, #4a4a4a 0%, #ffffff 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .bb-subtitle {
+            text-align: center;
+            color: var(--matte-text-muted);
+            font-size: 0.85rem;
+            margin-bottom: 2rem;
+        }
+
+        .bb-label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--matte-text-secondary);
+            margin-bottom: 0.4rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .bb-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: var(--matte-bg-elevated);
+            border: 1px solid var(--matte-border-default);
+            border-radius: var(--matte-radius-sm);
+            color: var(--matte-text-primary);
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            outline: none;
+            transition: border-color 0.2s, background 0.2s;
+            margin-bottom: 1rem;
+        }
+
+        .bb-input:focus {
+            border-color: var(--matte-border-hover);
+            background: var(--matte-bg-hover);
+        }
+
+        .bb-input::placeholder {
+            color: var(--matte-text-muted);
+            font-weight: 400;
+        }
+
+        .bb-join-btn {
+            width: 100%;
+            padding: 0.85rem;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--matte-border-default);
+            border-radius: var(--matte-radius-sm);
+            color: var(--matte-text-primary);
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 1.5rem;
+        }
+
+        .bb-join-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: var(--matte-border-hover);
+            box-shadow: var(--matte-shadow-md);
+        }
+
+        .bb-join-btn:active {
+            transform: scale(0.98);
+        }
+
+        .bb-toggles {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .bb-toggle-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .bb-toggle-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--matte-text-secondary);
+        }
+
+        .bb-toggle-hint {
+            font-size: 0.7rem;
+            color: var(--matte-text-muted);
+            margin-top: 0.25rem;
+        }
+
+        .bb-switch {
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            position: relative;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            flex-shrink: 0;
+        }
+
+        .bb-switch::before {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--matte-text-muted);
+            top: 3px;
+            left: 3px;
+            transition: transform 0.3s, background 0.3s;
+        }
+
+        .bb-switch[data-on="true"] {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .bb-switch[data-on="true"]::before {
+            transform: translateX(20px);
+            background: var(--matte-text-primary);
+        }
+
+        .bb-status {
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--matte-text-muted);
+            padding: 0.5rem;
+        }
+
+        .bb-error {
+            position: fixed;
+            bottom: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #e84135;
+            color: #fff;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--matte-radius-sm);
+            font-size: 0.9rem;
+            font-weight: 500;
+            box-shadow: var(--matte-shadow-lg);
+            transition: bottom 0.3s ease;
+            z-index: 9999;
+            white-space: nowrap;
+        }
+
+        .bb-error.show {
+            bottom: 2rem;
+        }
+
+        .bb-back {
+            position: fixed;
+            top: 1.5rem;
+            left: 1.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--matte-bg-card);
+            border: 1px solid var(--matte-border-subtle);
+            border-radius: var(--matte-radius-sm);
+            color: var(--matte-text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .bb-back:hover {
+            background: var(--matte-bg-hover);
+            color: var(--matte-text-primary);
+            border-color: var(--matte-border-hover);
+        }
+
+        /* Control panel (shown after joining) */
+        #ctrlpanel {
+            margin-top: 1.5rem;
+        }
+
+        #ctrlpanel .normtext {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--matte-text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        #ctrlpanel .cheatcontainer {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        #ctrlpanel button {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--matte-border-default);
+            border-radius: var(--matte-radius-sm);
+            color: var(--matte-text-primary);
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        #ctrlpanel button:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: var(--matte-border-hover);
+        }
+
+        #ctrlpanel .inputcontainer {
+            background: var(--matte-bg-elevated);
+            border: 1px solid var(--matte-border-default);
+            border-radius: var(--matte-radius-sm);
+            padding: 0.5rem;
+            display: inline-flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        #ctrlpanel .inputcontainer > div {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--matte-text-secondary);
+            text-align: center;
+        }
+
+        #ctrlpanel .inputcontainer > input,
+        #ctrlpanel .inputcontainer > select,
+        #ctrlpanel .inputcontainer .typing-dropdown {
+            padding: 0.4rem 0.6rem;
+            background: var(--matte-bg-card);
+            border: 1px solid var(--matte-border-default);
+            border-radius: 6px;
+            color: var(--matte-text-primary);
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.8rem;
+            outline: none;
+        }
+
+        #ctrlpanel .inputcontainer > input:focus,
+        #ctrlpanel .inputcontainer > select:focus,
+        #ctrlpanel .inputcontainer .typing-dropdown:focus {
+            border-color: var(--matte-border-hover);
+        }
+
+        /* Chat panel */
+        .chat {
+            position: fixed;
+            margin: 10px;
+            background: var(--matte-bg-card);
+            border: 1px solid var(--matte-border-subtle);
+            border-radius: var(--matte-radius-md);
+            box-shadow: var(--matte-shadow-lg);
+            z-index: 100;
+        }
+
+        .chatcontainer {
+            width: 400px;
+            height: 200px;
+            background: var(--matte-bg-elevated);
+            margin: 10px;
+            border-radius: 8px;
+            flex-direction: column-reverse;
+            display: flex;
+            overflow-y: auto;
+        }
+
+        .chatmsg {
+            color: var(--matte-text-primary);
+            font-size: 0.85rem;
+            margin-left: 5px;
+            padding: 2px 0;
+        }
+
+        .chatinpcontainer {
+            margin: 10px;
+        }
+
+        .chatinpcontainer input {
+            width: 100%;
+            padding: 0.4rem 0.6rem;
+            background: var(--matte-bg-elevated);
+            border: 1px solid var(--matte-border-default);
+            border-radius: 6px;
+            color: var(--matte-text-primary);
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.85rem;
+            outline: none;
+        }
+
+        .dragcontainer {
+            background: var(--matte-bg-hover);
+            font-size: 0.75rem;
+            position: absolute;
+            border-radius: 6px;
+            font-weight: 600;
+            color: var(--matte-text-secondary);
+            top: -25px;
+            right: 5px;
+        }
+
+        #drag {
+            margin: 4px 8px;
+            user-select: none;
+            cursor: move;
+        }
+
+        ::selection {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        @media (max-width: 560px) {
+            .bb-card {
+                padding: 1.5rem;
+            }
+            .bb-title {
+                font-size: 1.5rem;
+            }
+            .chatcontainer {
+                width: 280px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="/index.html" class="bb-back">Back</a>
+
+    <div class="bb-container">
+        <div class="bb-card">
+            <h1 class="bb-title">Blooket Bot</h1>
+            <p class="bb-subtitle">Join and control Blooket games</p>
+
+            <div id="cc">
+                <label class="bb-label">Game ID</label>
+                <input id="gcode" class="bb-input" placeholder="Enter game code" autocomplete="off">
+
+                <label class="bb-label">Nickname</label>
+                <input id="gname" class="bb-input" placeholder="Enter nickname" autocomplete="off">
+
+                <button class="bb-join-btn" onclick="join()">Join Game</button>
+
+                <div class="bb-toggles">
+                    <div class="bb-toggle-row">
+                        <div>
+                            <div class="bb-toggle-label">Incognito Mode</div>
+                        </div>
+                        <div class="bb-switch" id="icogmode" data-on="true"></div>
+                    </div>
+                    <div class="bb-toggle-row">
+                        <div>
+                            <div class="bb-toggle-label">Bypass Filter</div>
+                        </div>
+                        <div class="bb-switch" id="bcf" data-on="false"></div>
+                    </div>
+                    <div class="bb-toggle-row">
+                        <div>
+                            <div class="bb-toggle-label">First Place Switch</div>
+                            <div class="bb-toggle-hint">Your amount must not be a number</div>
+                        </div>
+                        <div class="bb-switch" id="fpswitch" data-on="true"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="ctrlpanel"></div>
+
+            <div class="bb-status" id="status">Status: Loading...</div>
+        </div>
+    </div>
+
+    <div class="chat" style="top: 350px; left: 200px; display: none;">
+        <div class="chatcontainer">
+            <div class="chatmsg"></div>
+        </div>
+        <div class="chatinpcontainer">
+            <input id="chat" placeholder="Type a message...">
+        </div>
+        <div class="dragcontainer">
+            <div id="drag">Drag</div>
+        </div>
+    </div>
+
+    <div class="bb-error" id="error"></div>
+
+    <script type="module">
+        import { initializeApp, deleteApp } from 'https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js';
+        import { getAuth, signInWithCustomToken, setPersistence } from 'https://www.gstatic.com/firebasejs/10.10.0/firebase-auth.js';
+        import { getDatabase, ref, set, get, onValue } from 'https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js';
+        window.initializeApp = initializeApp;
+        window.getAuth = getAuth;
+        window.deleteApp = deleteApp;
+        window.getDatabase = getDatabase;
+        window.ref = ref;
+        window.set = set;
+        window.get = get;
+        window.onValue = onValue;
+        window.signInWithCustomToken = signInWithCustomToken;
+        window.setPersistence = setPersistence;
+        const urlcode = new URLSearchParams(window.location.search).get('code');
+        if (urlcode) {
+            document.querySelector('#gcode').value = urlcode;
+        }
+    </script>
+    <script src="https://zalgo.org/lunicode.js"></script>
+    <script src="/assets/blooketbot/script.js"></script>
+    <script src="/assets/footer/footer.js" defer></script>
+    <script src="/assets/js/settings.js" defer></script>
+    <script src="/assets/js/blank.js" defer></script>
+</body>
+</html>

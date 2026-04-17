@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Editor - Void Network</title>
+    <meta name="robots" content="noindex, nofollow">
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-814Y2X3KSF"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-814Y2X3KSF');
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/theme/material-darker.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0a0a0a;
+            color: #f5f5f5;
+            min-height: 100vh;
+        }
+
+
+        #login-view {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .login-card {
+            background: rgba(25, 25, 25, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 2.5rem;
+            width: 380px;
+            max-width: 90vw;
+        }
+        .login-card h1 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+            text-align: center;
+        }
+        .login-card .subtitle {
+            font-size: 0.85rem;
+            color: rgba(245, 245, 245, 0.45);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .input-group { margin-bottom: 1rem; }
+        .input-group input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: #f5f5f5;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .input-group input:focus { border-color: rgba(88, 101, 242, 0.6); }
+
+        .btn {
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        .btn-primary {
+            background: #5865F2;
+            color: white;
+            width: 100%;
+        }
+        .btn-primary:hover { background: #4752C4; }
+        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+        .error-msg {
+            color: #f87171;
+            font-size: 0.8rem;
+            text-align: center;
+            margin-top: 0.75rem;
+            min-height: 1.2rem;
+        }
+
+
+        #editor-view {
+            display: none;
+            height: 100vh;
+            flex-direction: column;
+        }
+        .toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.6rem 1rem;
+            background: #111;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            flex-shrink: 0;
+        }
+        .toolbar-left {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .toolbar h2 {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: rgba(245, 245, 245, 0.8);
+        }
+        #session-timer {
+            font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.8rem;
+            color: rgba(245, 245, 245, 0.4);
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+            letter-spacing: 0.5px;
+            transition: color 0.3s, background 0.3s;
+        }
+        #session-timer.warning {
+            color: #fb923c;
+            background: rgba(251, 146, 60, 0.1);
+        }
+        #session-timer.critical {
+            color: #f87171;
+            background: rgba(248, 113, 113, 0.12);
+        }
+        .toolbar-actions {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        .btn-submit {
+            background: #22c55e;
+            color: white;
+            padding: 0.45rem 1.1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+        }
+        .btn-submit:hover { background: #16a34a; }
+        .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.08);
+            color: rgba(245, 245, 245, 0.7);
+            padding: 0.45rem 0.9rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+        }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.12); }
+        .btn-danger {
+            background: rgba(248, 113, 113, 0.12);
+            color: #f87171;
+            padding: 0.45rem 0.9rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+        }
+        .btn-danger:hover { background: rgba(248, 113, 113, 0.22); }
+        .btn-help {
+            background: rgba(88, 101, 242, 0.15);
+            color: #818cf8;
+            padding: 0.3rem 0.6rem;
+            border-radius: 50%;
+            font-size: 0.9rem;
+            font-weight: 700;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+            position: relative;
+            z-index: 60;
+        }
+        .btn-help:hover { background: rgba(88, 101, 242, 0.28); }
+
+        #editor-container {
+            flex: 1;
+            overflow: hidden;
+        }
+        .CodeMirror {
+            height: 100% !important;
+            font-size: 13.5px;
+            font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+        }
+
+        .status-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.35rem 1rem;
+            background: #111;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            font-size: 0.75rem;
+            color: rgba(245, 245, 245, 0.45);
+            flex-shrink: 0;
+        }
+        #status-msg { color: rgba(245, 245, 245, 0.6); transition: color 0.2s; }
+        #status-msg.success { color: #4ade80; }
+        #status-msg.error { color: #f87171; }
+
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal {
+            background: #1a1a1a;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 480px;
+            width: 90%;
+        }
+        .modal h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+        }
+        .modal p {
+            color: rgba(245, 245, 245, 0.55);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+        .modal-actions {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: flex-end;
+        }
+
+
+        #spotlight-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 50;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        #spotlight-overlay.active {
+            pointer-events: auto;
+            opacity: 1;
+        }
+        .spotlight-bg {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+        }
+        .spotlight-tooltip {
+            position: absolute;
+            background: #1e1e2e;
+            border: 1px solid rgba(88, 101, 242, 0.4);
+            border-radius: 14px;
+            padding: 1.25rem 1.5rem;
+            max-width: 300px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            transform: translateY(10px);
+            opacity: 0;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+        }
+        #spotlight-overlay.active .spotlight-tooltip {
+            transform: translateY(0);
+            opacity: 1;
+            transition-delay: 0.3s;
+        }
+        .spotlight-tooltip h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+            color: #a5b4fc;
+        }
+        .spotlight-tooltip p {
+            font-size: 0.82rem;
+            color: rgba(245, 245, 245, 0.6);
+            line-height: 1.55;
+            margin-bottom: 0.9rem;
+        }
+        .spotlight-tooltip button {
+            background: #5865F2;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.45rem 1rem;
+            font-size: 0.82rem;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: inherit;
+            transition: background 0.2s;
+        }
+        .spotlight-tooltip button:hover { background: #4752C4; }
+        .spotlight-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 2px solid #5865F2;
+            box-shadow: 0 0 0 4000px rgba(0, 0, 0, 0.82);
+            animation: spotlight-pulse 2s ease-in-out infinite;
+        }
+        @keyframes spotlight-pulse {
+            0%, 100% { box-shadow: 0 0 0 4000px rgba(0, 0, 0, 0.82), 0 0 12px rgba(88, 101, 242, 0.4); }
+            50% { box-shadow: 0 0 0 4000px rgba(0, 0, 0, 0.82), 0 0 24px rgba(88, 101, 242, 0.7); }
+        }
+
+
+        #help-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            transition: background 0.35s ease;
+        }
+        #help-overlay.active {
+            background: rgba(0, 0, 0, 0.8);
+            pointer-events: auto;
+        }
+        .help-card {
+            background: #1a1a1a;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2.5rem;
+            max-width: 560px;
+            width: 92%;
+            transform: translateY(30px);
+            opacity: 0;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+            position: relative;
+            max-height: 85vh;
+            overflow: hidden;
+        }
+        #help-overlay.active .help-card {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        .help-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255, 255, 255, 0.08);
+            border: none;
+            color: rgba(245, 245, 245, 0.5);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        .help-close:hover { background: rgba(255, 255, 255, 0.15); color: #f5f5f5; }
+        .help-step-indicator {
+            display: flex;
+            gap: 0.4rem;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+        .help-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            transition: all 0.3s ease;
+        }
+        .help-dot.active {
+            background: #5865F2;
+            width: 24px;
+            border-radius: 4px;
+        }
+        .help-content-wrapper {
+            position: relative;
+            min-height: 280px;
+        }
+        .help-step {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transform: translateX(20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            pointer-events: none;
+        }
+        .help-step.active {
+            opacity: 1;
+            transform: translateX(0);
+            pointer-events: auto;
+            position: relative;
+        }
+        .help-step h3 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: #f5f5f5;
+        }
+        .help-step p {
+            color: rgba(245, 245, 245, 0.6);
+            font-size: 0.88rem;
+            line-height: 1.7;
+            margin-bottom: 0.5rem;
+        }
+        .help-step .code-example {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 0.85rem 1rem;
+            font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.78rem;
+            color: #a5b4fc;
+            margin: 0.75rem 0;
+            overflow-x: auto;
+            white-space: pre;
+            line-height: 1.6;
+        }
+        .help-step .tag {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.6rem;
+        }
+        .tag-red { background: rgba(248, 113, 113, 0.15); color: #f87171; }
+        .tag-blue { background: rgba(96, 165, 250, 0.15); color: #60a5fa; }
+        .tag-green { background: rgba(74, 222, 128, 0.15); color: #4ade80; }
+        .tag-yellow { background: rgba(250, 204, 21, 0.15); color: #facc15; }
+        .tag-purple { background: rgba(167, 139, 250, 0.15); color: #a78bfa; }
+        .tag-orange { background: rgba(251, 146, 60, 0.15); color: #fb923c; }
+        .help-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .help-nav button {
+            padding: 0.5rem 1.2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+        .help-nav .help-prev {
+            background: rgba(255, 255, 255, 0.08);
+            color: rgba(245, 245, 245, 0.7);
+        }
+        .help-nav .help-prev:hover { background: rgba(255, 255, 255, 0.12); }
+        .help-nav .help-prev:disabled { opacity: 0; pointer-events: none; }
+        .help-nav .help-next {
+            background: #5865F2;
+            color: white;
+        }
+        .help-nav .help-next:hover { background: #4752C4; }
+        .help-step-count {
+            font-size: 0.75rem;
+            color: rgba(245, 245, 245, 0.35);
+        }
+
+
+        .notif-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 400;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transform: translateY(-100%);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .notif-banner.visible { transform: translateY(0); }
+        .notif-banner.approved {
+            background: linear-gradient(135deg, #166534, #15803d);
+            color: #bbf7d0;
+        }
+        .notif-banner.declined {
+            background: linear-gradient(135deg, #991b1b, #b91c1c);
+            color: #fecaca;
+        }
+        .notif-banner button {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: inherit;
+            padding: 0.3rem 0.7rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.8rem;
+        }
+        .notif-banner button:hover { background: rgba(255,255,255,0.3); }
+    </style>
+</head>
+<body>
+    <div id="login-view">
+        <div class="login-card">
+            <h1>Game Editor</h1>
+            <p class="subtitle">Enter the editor password to modify the game list</p>
+            <div class="input-group">
+                <input type="password" id="password-input" placeholder="Password" autocomplete="off">
+            </div>
+            <button class="btn btn-primary" id="login-btn">Login</button>
+            <div class="error-msg" id="login-error"></div>
+        </div>
+    </div>
+
+    <div id="editor-view">
+        <div class="toolbar">
+            <div class="toolbar-left">
+                <h2>gg.js - Game List Editor</h2>
+                <span id="session-timer"></span>
+            </div>
+            <div class="toolbar-actions">
+                <button class="btn btn-help" id="help-btn" title="Help & Tips">?</button>
+                <button class="btn btn-secondary" id="refresh-btn">Refresh</button>
+                <button class="btn btn-submit" id="submit-btn">Send Edit Request</button>
+                <button class="btn btn-danger" id="logout-btn">Logout</button>
+            </div>
+        </div>
+        <div id="editor-container">
+            <textarea id="code-editor"></textarea>
+        </div>
+        <div class="status-bar">
+            <span id="status-msg"></span>
+            <span id="cursor-pos">Ln 1, Col 1</span>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="confirm-modal">
+        <div class="modal">
+            <h3>Submit Edit Request?</h3>
+            <p>Your changes will be sent to the admin for approval via Discord. The game list will only update once the admin accepts your request.</p>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="cancel-submit">Cancel</button>
+                <button class="btn btn-submit" id="confirm-submit">Send Request</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="spotlight-overlay">
+        <div class="spotlight-bg"></div>
+        <div class="spotlight-ring" id="spotlight-ring"></div>
+        <div class="spotlight-tooltip" id="spotlight-tooltip">
+            <h4>Read this first!</h4>
+            <p>Before you start editing, check out the tips and guidelines so you know what to do and what to avoid.</p>
+            <button id="spotlight-btn">Open Tips</button>
+        </div>
+    </div>
+
+
+    <div id="help-overlay">
+        <div class="help-card">
+            <button class="help-close" id="help-close">&times;</button>
+            <div class="help-step-indicator" id="help-dots"></div>
+            <div class="help-content-wrapper" id="help-content"></div>
+            <div class="help-nav">
+                <button class="help-prev" id="help-prev">Back</button>
+                <span class="help-step-count" id="help-step-count"></span>
+                <button class="help-next" id="help-next">Next</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="notif-banner" id="notif-banner">
+        <span id="notif-text"></span>
+        <button id="notif-dismiss">Dismiss</button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/addon/edit/matchbrackets.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/addon/edit/closebrackets.min.js"></script>
+    <script>
+        (function () {
+            'use strict';
+
+            let token = null;
+            let editor = null;
+            let originalContent = '';
+            let originalHash = '';
+            let timerInterval = null;
+            let loginTime = 0;
+            let pendingEditId = null;
+            let pollInterval = null;
+            var SESSION_DURATION = 3600000;
+
+            const loginView = document.getElementById('login-view');
+            const editorView = document.getElementById('editor-view');
+            const passwordInput = document.getElementById('password-input');
+            const loginBtn = document.getElementById('login-btn');
+            const loginError = document.getElementById('login-error');
+            const submitBtn = document.getElementById('submit-btn');
+            const refreshBtn = document.getElementById('refresh-btn');
+            const logoutBtn = document.getElementById('logout-btn');
+            const statusMsg = document.getElementById('status-msg');
+            const cursorPos = document.getElementById('cursor-pos');
+            const confirmModal = document.getElementById('confirm-modal');
+            const cancelSubmit = document.getElementById('cancel-submit');
+            const confirmSubmitBtn = document.getElementById('confirm-submit');
+            const sessionTimer = document.getElementById('session-timer');
+            const notifBanner = document.getElementById('notif-banner');
+            const notifText = document.getElementById('notif-text');
+
+            function setStatus(msg, type) {
+                statusMsg.textContent = msg;
+                statusMsg.className = type || '';
+                if (type === 'success' || type === 'error') {
+                    setTimeout(function () {
+                        if (statusMsg.textContent === msg) {
+                            statusMsg.textContent = '';
+                            statusMsg.className = '';
+                        }
+                    }, 5000);
+                }
+            }
+
+            function apiHeaders() {
+                return { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' };
+            }
+
+
+            function showNotification(text, type) {
+                notifText.textContent = text;
+                notifBanner.className = 'notif-banner ' + type + ' visible';
+                setTimeout(function () {
+                    notifBanner.classList.remove('visible');
+                }, 15000);
+            }
+            document.getElementById('notif-dismiss').addEventListener('click', function () {
+                notifBanner.classList.remove('visible');
+            });
+
+
+            function startPolling(editId) {
+                pendingEditId = editId;
+                if (pollInterval) clearInterval(pollInterval);
+                pollInterval = setInterval(async function () {
+                    if (!token || !pendingEditId) { stopPolling(); return; }
+                    try {
+                        var res = await fetch('/api/editor/status?editId=' + encodeURIComponent(pendingEditId), {
+                            headers: { 'Authorization': 'Bearer ' + token }
+                        });
+                        if (!res.ok) return;
+                        var data = await res.json();
+                        if (data.status === 'approved') {
+                            stopPolling();
+                            showNotification('Your edit has been approved! The game list is now live.', 'approved');
+                            loadContent();
+                        } else if (data.status === 'declined') {
+                            stopPolling();
+                            showNotification('Your edit was declined by an admin.', 'declined');
+                        } else if (data.status === 'unknown') {
+                            stopPolling();
+                        }
+                    } catch (e) {  }
+                }, 8000);
+            }
+
+            function stopPolling() {
+                pendingEditId = null;
+                if (pollInterval) { clearInterval(pollInterval); pollInterval = null; }
+            }
+
+
+            function startTimer() {
+                if (timerInterval) clearInterval(timerInterval);
+                updateTimerDisplay();
+                timerInterval = setInterval(updateTimerDisplay, 1000);
+            }
+
+            function updateTimerDisplay() {
+                var remaining = SESSION_DURATION - (Date.now() - loginTime);
+                if (remaining <= 0) {
+                    logout();
+                    loginError.textContent = 'Session expired (1 hour limit)';
+                    return;
+                }
+                var mins = Math.floor(remaining / 60000);
+                var secs = Math.floor((remaining % 60000) / 1000);
+                sessionTimer.textContent = (mins < 10 ? '0' : '') + mins + ':' + (secs < 10 ? '0' : '') + secs;
+
+                if (remaining <= 120000) {
+                    sessionTimer.className = 'critical';
+                } else if (remaining <= 300000) {
+                    sessionTimer.className = 'warning';
+                } else {
+                    sessionTimer.className = '';
+                }
+            }
+
+            function stopTimer() {
+                if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+                sessionTimer.textContent = '';
+                sessionTimer.className = '';
+            }
+
+
+            async function login() {
+                var password = passwordInput.value;
+                if (!password) { loginError.textContent = 'Enter a password'; return; }
+
+                loginBtn.disabled = true;
+                loginError.textContent = '';
+
+                try {
+                    var res = await fetch('/api/editor/login', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ password: password })
+                    });
+                    var data = await res.json();
+
+                    if (!res.ok) {
+                        loginError.textContent = data.error || 'Login failed';
+                        return;
+                    }
+
+                    token = data.token;
+                    loginTime = Date.now();
+                    sessionStorage.setItem('editorToken', token);
+                    sessionStorage.setItem('editorLoginTime', String(loginTime));
+                    showEditor();
+                } catch (err) {
+                    loginError.textContent = 'Connection error';
+                } finally {
+                    loginBtn.disabled = false;
+                }
+            }
+
+            loginBtn.addEventListener('click', login);
+            passwordInput.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter') login();
+            });
+
+
+            async function showEditor() {
+                loginView.style.display = 'none';
+                editorView.style.display = 'flex';
+
+                if (!editor) {
+                    editor = CodeMirror.fromTextArea(document.getElementById('code-editor'), {
+                        mode: 'javascript',
+                        theme: 'material-darker',
+                        lineNumbers: true,
+                        matchBrackets: true,
+                        autoCloseBrackets: true,
+                        tabSize: 4,
+                        indentWithTabs: true,
+                        lineWrapping: false,
+                        viewportMargin: 50
+                    });
+                    editor.on('cursorActivity', function () {
+                        var pos = editor.getCursor();
+                        cursorPos.textContent = 'Ln ' + (pos.line + 1) + ', Col ' + (pos.ch + 1);
+                    });
+                }
+
+                startTimer();
+                await loadContent();
+
+
+                if (!localStorage.getItem('editorHelpSeen')) {
+                    setTimeout(showSpotlight, 600);
+                }
+            }
+
+
+            async function loadContent() {
+                setStatus('Loading...');
+                try {
+                    var res = await fetch('/api/editor/content', {
+                        headers: { 'Authorization': 'Bearer ' + token }
+                    });
+
+                    if (res.status === 401) {
+                        logout();
+                        loginError.textContent = 'Session expired';
+                        return;
+                    }
+
+                    var data = await res.json();
+                    if (!res.ok) throw new Error(data.error);
+
+                    originalContent = data.content;
+                    originalHash = data.hash || '';
+                    editor.setValue(data.content);
+                    editor.clearHistory();
+                    setStatus('Loaded', 'success');
+                } catch (err) {
+                    setStatus('Failed to load: ' + err.message, 'error');
+                }
+            }
+
+            refreshBtn.addEventListener('click', loadContent);
+
+
+            function logout() {
+                token = null;
+                loginTime = 0;
+                originalHash = '';
+                stopTimer();
+                stopPolling();
+                sessionStorage.removeItem('editorToken');
+                sessionStorage.removeItem('editorLoginTime');
+                editorView.style.display = 'none';
+                loginView.style.display = 'flex';
+                passwordInput.value = '';
+                loginError.textContent = '';
+            }
+            logoutBtn.addEventListener('click', logout);
+
+
+            submitBtn.addEventListener('click', function () {
+                if (!editor) return;
+                var content = editor.getValue();
+                if (content === originalContent) {
+                    setStatus('No changes to submit', 'error');
+                    return;
+                }
+                confirmModal.classList.add('active');
+            });
+
+            cancelSubmit.addEventListener('click', function () {
+                confirmModal.classList.remove('active');
+            });
+
+            confirmModal.addEventListener('click', function (e) {
+                if (e.target === confirmModal) confirmModal.classList.remove('active');
+            });
+
+            confirmSubmitBtn.addEventListener('click', async function () {
+                confirmModal.classList.remove('active');
+                confirmSubmitBtn.disabled = true;
+                submitBtn.disabled = true;
+                setStatus('Submitting edit request...');
+
+                try {
+                    var res = await fetch('/api/editor/submit', {
+                        method: 'POST',
+                        headers: apiHeaders(),
+                        body: JSON.stringify({ content: editor.getValue(), originalHash: originalHash })
+                    });
+
+                    if (res.status === 401) {
+                        logout();
+                        loginError.textContent = 'Session expired';
+                        return;
+                    }
+
+                    var data = await res.json();
+
+                    if (res.status === 409) {
+                        setStatus('File changed by someone else! Click Refresh to get the latest version.', 'error');
+                        return;
+                    }
+
+                    if (!res.ok) throw new Error(data.error);
+
+                    setStatus('Edit request sent! You\'ll be notified when it\'s reviewed.', 'success');
+
+
+                    if (data.editId) startPolling(data.editId);
+                } catch (err) {
+                    setStatus('Failed: ' + err.message, 'error');
+                } finally {
+                    confirmSubmitBtn.disabled = false;
+                    submitBtn.disabled = false;
+                }
+            });
+
+
+            function showSpotlight() {
+                var helpBtn = document.getElementById('help-btn');
+                var rect = helpBtn.getBoundingClientRect();
+                var ring = document.getElementById('spotlight-ring');
+                var tooltip = document.getElementById('spotlight-tooltip');
+                var overlay = document.getElementById('spotlight-overlay');
+
+                var pad = 10;
+                var cx = rect.left + rect.width / 2;
+                var cy = rect.top + rect.height / 2;
+                var radius = Math.max(rect.width, rect.height) / 2 + pad;
+
+                ring.style.left = (cx - radius) + 'px';
+                ring.style.top = (cy - radius) + 'px';
+                ring.style.width = (radius * 2) + 'px';
+                ring.style.height = (radius * 2) + 'px';
+
+
+                tooltip.style.top = (rect.bottom + 16) + 'px';
+                tooltip.style.right = '1rem';
+
+                overlay.classList.add('active');
+
+                document.getElementById('spotlight-btn').addEventListener('click', function () {
+                    overlay.classList.remove('active');
+                    localStorage.setItem('editorHelpSeen', '1');
+                    openHelp();
+                });
+
+
+                overlay.querySelector('.spotlight-bg').addEventListener('click', function () {
+                    overlay.classList.remove('active');
+                    localStorage.setItem('editorHelpSeen', '1');
+                });
+            }
+
+
+            var helpSteps = [
+                {
+                    title: 'Welcome to the Game Editor',
+                    tag: null,
+                    body: '<p>This editor lets you modify <strong>gg.js</strong> \u2014 the master game list that powers every game on the site.</p><p>Your changes won\'t go live immediately. After you submit, an admin will review and approve or decline your edit via Discord. <strong>You\'ll be notified right here</strong> when your edit is reviewed.</p><p>Let\'s walk through what you need to know.</p>'
+                },
+                {
+                    title: 'Game Object Structure',
+                    tag: ['INFO', 'tag-blue'],
+                    body: '<p>Each game is a JavaScript object in the <strong>gamesData</strong> array with these required fields:</p><div class="code-example">{\n    title: "Game Name",\n    imgSrc: "/img/gameimg/game.png",\n    link: /* proxy link */\n}</div><p>Make sure every game object has all three fields. Separate entries with commas.</p>'
+                },
+                {
+                    title: 'Local Games \u2014 Be Careful',
+                    tag: ['WARNING', 'tag-orange'],
+                    body: '<p>Games using <strong>LocalGameEncoder.createEncodedLink(...)</strong> are hosted locally on the server:</p><div class="code-example">link: LocalGameEncoder.createEncodedLink("/local games/slope-game-main/index.html")</div><p>You can edit these entries, but if you do, you <strong>must change the link</strong> to use a UV or Scramjet proxy link instead. You don\'t have access to local server files.</p><p><strong>Never use LocalGameEncoder for games you add or modify.</strong> It only works for games already hosted on the server.</p>'
+                },
+                {
+                    title: 'Ultraviolet Proxy (Preferred)',
+                    tag: ['UV PROXY', 'tag-green'],
+                    body: '<p>Games loaded through the <strong>Ultraviolet (UV)</strong> proxy use this link format:</p><div class="code-example">link: __uv$config.prefix + __uv$config.encodeUrl("https://game-url.com")</div><p>UV is the <strong>faster and more stable</strong> proxy. Always try UV first when adding or modifying a game.</p>'
+                },
+                {
+                    title: 'Scramjet Proxy (Backup)',
+                    tag: ['SCRAMJET', 'tag-yellow'],
+                    body: '<p>Games loaded through <strong>Scramjet</strong> use this format:</p><div class="code-example">link: makeScramjetLink("https://game-url.com")</div><p>Scramjet is <strong>slower and laggier</strong> than UV. Only use it when a game has compatibility issues with UV.</p><p>You can switch a game between UV and Scramjet by changing its link format.</p>'
+                },
+                {
+                    title: 'Never Use LocalGameEncoder',
+                    tag: ['IMPORTANT', 'tag-red'],
+                    body: '<p><strong>No game you add or modify should use LocalGameEncoder.</strong></p><div class="code-example">// WRONG - don\'t do this:\nlink: LocalGameEncoder.createEncodedLink("/local games/...")\n\n// CORRECT - use UV:\nlink: __uv$config.prefix + __uv$config.encodeUrl("https://...")\n\n// CORRECT - use Scramjet (only if UV doesn\'t work):\nlink: makeScramjetLink("https://...")</div><p>LocalGameEncoder only works for files already on the server. Since you can\'t upload files, always use a proxy link.</p>'
+                },
+                {
+                    title: 'Game Images',
+                    tag: ['IMAGES', 'tag-purple'],
+                    body: '<p>The <strong>imgSrc</strong> field sets the game\'s thumbnail. You can use:</p><div class="code-example">// Relative path (for images already on the server)\nimgSrc: "/img/gameimg/mygame.png"\n\n// External CDN URL\nimgSrc: "https://cdn.example.com/image.jpg"</div><p>Supported formats: <strong>.png, .jpg, .jpeg, .webp, .avif</strong>. Keep images reasonable in size.</p>'
+                },
+                {
+                    title: 'Syntax & Submitting',
+                    tag: ['TIPS', 'tag-blue'],
+                    body: '<p>Before submitting, double-check:</p><p>\u2022 Every game object has <strong>matching curly braces</strong> <code>{ }</code><br>\u2022 Objects are <strong>separated by commas</strong><br>\u2022 All strings use <strong>matching quotes</strong><br>\u2022 The <strong>gamesData</strong> array brackets <code>[ ]</code> are intact</p><p>Click <strong>Refresh</strong> before editing to get the latest version. After submitting, stay on this page \u2014 you\'ll see a notification when your edit is approved or declined.</p>'
+                }
+            ];
+
+            var currentStep = 0;
+            var helpOverlay = document.getElementById('help-overlay');
+            var helpContent = document.getElementById('help-content');
+            var helpDots = document.getElementById('help-dots');
+            var helpPrev = document.getElementById('help-prev');
+            var helpNext = document.getElementById('help-next');
+            var helpStepCount = document.getElementById('help-step-count');
+
+            function renderHelpDots() {
+                helpDots.innerHTML = '';
+                for (var i = 0; i < helpSteps.length; i++) {
+                    var dot = document.createElement('div');
+                    dot.className = 'help-dot' + (i === currentStep ? ' active' : '');
+                    helpDots.appendChild(dot);
+                }
+            }
+
+            function renderHelpStep() {
+                var step = helpSteps[currentStep];
+                var html = '';
+                if (step.tag) {
+                    html += '<span class="tag ' + step.tag[1] + '">' + step.tag[0] + '</span>';
+                }
+                html += '<h3>' + step.title + '</h3>';
+                html += step.body;
+
+                helpContent.innerHTML = '';
+                var div = document.createElement('div');
+                div.className = 'help-step active';
+                div.innerHTML = html;
+                helpContent.appendChild(div);
+
+                renderHelpDots();
+                helpPrev.disabled = currentStep === 0;
+                helpNext.textContent = currentStep === helpSteps.length - 1 ? 'Got it' : 'Next';
+                helpStepCount.textContent = (currentStep + 1) + ' / ' + helpSteps.length;
+            }
+
+            function openHelp() {
+                currentStep = 0;
+                renderHelpStep();
+                helpOverlay.classList.add('active');
+            }
+
+            function closeHelp() {
+                helpOverlay.classList.remove('active');
+            }
+
+            document.getElementById('help-btn').addEventListener('click', openHelp);
+            document.getElementById('help-close').addEventListener('click', closeHelp);
+            helpOverlay.addEventListener('click', function (e) {
+                if (e.target === helpOverlay) closeHelp();
+            });
+
+            helpNext.addEventListener('click', function () {
+                if (currentStep >= helpSteps.length - 1) {
+                    closeHelp();
+                    return;
+                }
+                currentStep++;
+                renderHelpStep();
+            });
+
+            helpPrev.addEventListener('click', function () {
+                if (currentStep <= 0) return;
+                currentStep--;
+                renderHelpStep();
+            });
+
+
+            document.addEventListener('keydown', function (e) {
+                if (!helpOverlay.classList.contains('active')) return;
+                if (e.key === 'Escape') closeHelp();
+                if (e.key === 'ArrowRight' || e.key === 'Enter') helpNext.click();
+                if (e.key === 'ArrowLeft') helpPrev.click();
+            });
+
+
+            var savedToken = sessionStorage.getItem('editorToken');
+            var savedLoginTime = sessionStorage.getItem('editorLoginTime');
+            if (savedToken && savedLoginTime) {
+                var elapsed = Date.now() - Number(savedLoginTime);
+                if (elapsed < SESSION_DURATION) {
+                    token = savedToken;
+                    loginTime = Number(savedLoginTime);
+                    showEditor();
+                } else {
+                    sessionStorage.removeItem('editorToken');
+                    sessionStorage.removeItem('editorLoginTime');
+                }
+            }
+        })();
+    </script>
+<script src="/assets/js/wilway-popup.js" defer></script>
+</body>
+</html>
