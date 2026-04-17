@@ -1,0 +1,2042 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+
+    <script defer src="/s/script.js" data-website-id="b9510d8e-e1e5-4dff-ad86-297ebece5574"></script>
+    <noscript><img src="/t/p?payload=%7B%22website%22%3A%22b9510d8e-e1e5-4dff-ad86-297ebece5574%22%2C%22url%22%3A%22%2F%22%2C%22hostname%22%3A%22vng.lol%22%2C%22name%22%3A%22pageview%22%7D" style="display:none;"></noscript>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Void Games Hardcore Snake</title>
+    <link rel="shortcut icon" href="./assets/favicon.png" type="image/png">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            height: 100%;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 25%, #0f0f0f 50%, #1a1a1a 75%, #0a0a0a 100%);
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'SF Pro Display', Roboto, Helvetica, Arial, sans-serif;
+            overflow-x: hidden;
+            font-weight: 300;
+            background-attachment: fixed;
+        }
+
+        /* Animated Background */
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at top left, rgba(40,40,40,0.3) 0%, transparent 50%),
+                radial-gradient(ellipse at top right, rgba(60,60,60,0.2) 0%, transparent 50%),
+                radial-gradient(ellipse at bottom left, rgba(30,30,30,0.3) 0%, transparent 50%),
+                radial-gradient(ellipse at bottom right, rgba(50,50,50,0.2) 0%, transparent 50%),
+                linear-gradient(135deg, #000000 0%, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%, #000000 100%);
+            background-size: 200% 200%, 200% 200%, 200% 200%, 200% 200%, 100% 100%;
+            animation: gentleFlow 12s ease-in-out infinite;
+            z-index: -2;
+        }
+
+        .matrix-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 30% 40%, rgba(255,255,255,0.02) 0%, transparent 60%),
+                radial-gradient(circle at 70% 80%, rgba(255,255,255,0.015) 0%, transparent 60%),
+                radial-gradient(circle at 20% 80%, rgba(255,255,255,0.01) 0%, transparent 60%);
+            animation: floatingLights 15s ease-in-out infinite;
+        }
+
+        .matrix-bg::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                0deg,
+                transparent 0%,
+                rgba(255,255,255,0.005) 50%,
+                transparent 100%
+            );
+            animation: subtleShimmer 8s ease-in-out infinite;
+        }
+
+        /* Floating Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 40%, transparent 70%);
+            border-radius: 50%;
+            animation: elegantFloat 18s infinite ease-in-out;
+            filter: blur(1px);
+            opacity: 0.6;
+        }
+
+        /* Main Container */
+        .game-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            padding: 0 1rem;
+        }
+
+        /* Header */
+        .header {
+            padding: 2rem 3rem;
+            background: 
+                linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 100%),
+                rgba(0,0,0,0.4);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            position: relative;
+            box-shadow: 
+                0 1px 40px rgba(0,0,0,0.1),
+                inset 0 1px 0 rgba(255,255,255,0.08),
+                inset 0 -1px 0 rgba(255,255,255,0.02);
+            flex-shrink: 0;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: gentleGlow 6s ease-in-out infinite;
+        }
+
+        .nav-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.75rem;
+            font-weight: 500;
+            background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 30%, #e8e8e8 70%, #ffffff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 0.5px;
+            position: relative;
+        }
+
+        .logo::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            opacity: 0;
+            animation: logoShine 4s ease-in-out infinite;
+        }
+
+        .coin-display {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+            background: 
+                linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.06) 100%),
+                rgba(0,0,0,0.2);
+            padding: 0.9rem 1.6rem;
+            border-radius: 25px;
+            border: 1px solid rgba(255,255,255,0.12);
+            box-shadow: 
+                0 8px 32px rgba(0,0,0,0.15),
+                inset 0 1px 0 rgba(255,255,255,0.15),
+                inset 0 -1px 0 rgba(0,0,0,0.1);
+            backdrop-filter: blur(20px) saturate(150%);
+            -webkit-backdrop-filter: blur(20px) saturate(150%);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .coin-display:hover {
+            transform: translateY(-1px);
+            box-shadow: 
+                0 12px 40px rgba(0,0,0,0.2),
+                inset 0 1px 0 rgba(255,255,255,0.2),
+                inset 0 -1px 0 rgba(0,0,0,0.1);
+        }
+
+        .coin-icon {
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, #FFD700 0%, #FFC107 30%, #FF8F00 100%);
+            border-radius: 50%;
+            box-shadow: 
+                0 4px 12px rgba(255,215,0,0.25),
+                inset 0 1px 0 rgba(255,255,255,0.4),
+                inset 0 -1px 0 rgba(0,0,0,0.1);
+            animation: coinPulse 4s ease-in-out infinite;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .coin-icon::before {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 16px;
+            height: 16px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.3), transparent);
+            border-radius: 50%;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            position: relative;
+            min-height: 0;
+            max-width: none;
+            margin: 0;
+            width: 100%;
+        }
+
+        /* Game Container - Much larger */
+        .game-container-inner {
+            width: 75%;
+            max-width: none;
+            height: 75vh;
+            min-height: 800px;
+            max-height: none;
+            animation: elegantEntrance 1.8s cubic-bezier(0.19, 1, 0.22, 1);
+            background: 
+                linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%),
+                rgba(0,0,0,0.3);
+            border-radius: 24px;
+            border: 1px solid rgba(255,255,255,0.15);
+            backdrop-filter: blur(40px) saturate(180%);
+            box-shadow: 
+                0 20px 60px rgba(0,0,0,0.4),
+                inset 0 1px 0 rgba(255,255,255,0.1),
+                inset 0 -1px 0 rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: 
+                linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 100%),
+                rgba(0,0,0,0.4);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(40px) saturate(180%);
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .game-title {
+            font-size: 1.5rem;
+            font-weight: 500;
+            background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 30%, #e8e8e8 70%, #ffffff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .game-board {
+            flex: 1;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: 
+                linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%),
+                rgba(0,0,0,0.2);
+            padding: 2rem;
+            overflow: hidden;
+        }
+
+        #snake-canvas {
+            display: block;
+            background: 
+                linear-gradient(135deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.5) 100%);
+            border: 2px solid rgba(255,255,255,0.15);
+            border-radius: 16px;
+            box-shadow: 
+                0 8px 32px rgba(0,0,0,0.3),
+                inset 0 0 20px rgba(77, 124, 255, 0.15);
+            backdrop-filter: blur(10px);
+        }
+
+        .score-display {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            background: 
+                linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%),
+                rgba(0,0,0,0.3);
+            padding: 0.8rem 1.2rem;
+            border-radius: 16px;
+            font-size: 1.1rem;
+            color: #4d7cff;
+            text-shadow: 0 0 10px rgba(77, 124, 255, 0.5);
+            border: 1px solid rgba(77, 124, 255, 0.3);
+            z-index: 15;
+            backdrop-filter: blur(20px) saturate(150%);
+            box-shadow: 
+                0 8px 32px rgba(0,0,0,0.15),
+                inset 0 1px 0 rgba(255,255,255,0.1);
+        }
+
+        .score-value {
+            font-weight: 600;
+            color: #FFF;
+            font-size: 1.2rem;
+        }
+
+        .speed-display {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: 
+                linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%),
+                rgba(0,0,0,0.3);
+            padding: 0.8rem 1.2rem;
+            border-radius: 16px;
+            font-size: 1.1rem;
+            color: #4d7cff;
+            text-shadow: 0 0 10px rgba(77, 124, 255, 0.5);
+            border: 1px solid rgba(77, 124, 255, 0.3);
+            z-index: 15;
+            backdrop-filter: blur(20px) saturate(150%);
+            box-shadow: 
+                0 8px 32px rgba(0,0,0,0.15),
+                inset 0 1px 0 rgba(255,255,255,0.1);
+        }
+
+        .speed-value {
+            font-weight: 600;
+            color: #FFF;
+            font-size: 1.2rem;
+        }
+
+        .warning-border {
+            position: absolute;
+            inset: 0;
+            border: 3px solid transparent;
+            border-radius: 20px;
+            pointer-events: none;
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .warning-border.visible {
+            border-color: rgba(244, 67, 54, 0.8);
+            box-shadow: 
+                0 0 20px rgba(244, 67, 54, 0.5),
+                inset 0 0 20px rgba(244, 67, 54, 0.2);
+            animation: warningPulse 0.3s infinite alternate;
+            opacity: 1;
+        }
+
+        /* Touch Controls */
+        .touch-controls {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            z-index: 20;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .touch-controls:hover {
+            opacity: 1;
+        }
+
+        .touch-btn {
+            width: 60px;
+            height: 60px;
+            background: 
+                linear-gradient(135deg, rgba(77, 124, 255, 0.2) 0%, rgba(77, 124, 255, 0.1) 100%),
+                rgba(0,0,0,0.3);
+            border: 1px solid rgba(77, 124, 255, 0.4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: rgba(255, 255, 255, 0.9);
+            pointer-events: auto;
+            user-select: none;
+            -webkit-user-select: none;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(20px) saturate(150%);
+            box-shadow: 
+                0 4px 16px rgba(0,0,0,0.15),
+                inset 0 1px 0 rgba(255,255,255,0.1);
+        }
+
+        .touch-btn:active {
+            background: 
+                linear-gradient(135deg, rgba(77, 124, 255, 0.4) 0%, rgba(77, 124, 255, 0.2) 100%),
+                rgba(0,0,0,0.4);
+            transform: scale(0.95);
+            box-shadow: 
+                0 2px 8px rgba(0,0,0,0.2),
+                inset 0 1px 0 rgba(255,255,255,0.15);
+        }
+
+        /* Only show touch controls on mobile/touch devices */
+        @media (hover: hover) {
+            .touch-controls {
+                display: none;
+            }
+        }
+
+        /* Overlays */
+        .game-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: 
+                linear-gradient(135deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.8) 100%);
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(20px) saturate(150%);
+        }
+
+        .game-overlay.visible {
+            opacity: 1;
+            pointer-events: all;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .overlay-content {
+            text-align: center;
+            padding: 2.5rem;
+            background: 
+                linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.08) 100%),
+                rgba(0,0,0,0.6);
+            border-radius: 24px;
+            border: 1px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(40px) saturate(180%);
+            box-shadow: 
+                0 25px 50px rgba(0,0,0,0.3),
+                inset 0 1px 0 rgba(255,255,255,0.2);
+            max-width: 90%;
+            animation: floatEffect 4s infinite ease-in-out;
+        }
+
+        .overlay-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 30%, #e8e8e8 70%, #ffffff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 500;
+        }
+
+        .overlay-title.win {
+            background: linear-gradient(135deg, #4CAF50 0%, #8BC34A 50%, #4CAF50 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .overlay-title.lose {
+            background: linear-gradient(135deg, #f44336 0%, #E91E63 50%, #f44336 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .overlay-message {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            color: rgba(255,255,255,0.8);
+            line-height: 1.6;
+        }
+
+        .game-btn {
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            background: 
+                linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.04) 100%),
+                rgba(0,0,0,0.1);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 20px;
+            cursor: pointer;
+            backdrop-filter: blur(20px) saturate(150%);
+            transition: all 0.3s ease;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                0 8px 32px rgba(0,0,0,0.15),
+                inset 0 1px 0 rgba(255,255,255,0.15);
+        }
+
+        .game-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+            transition: all 0.6s ease;
+        }
+
+        .game-btn:hover::before {
+            left: 100%;
+        }
+
+        .game-btn:hover {
+            background: 
+                linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.08) 100%),
+                rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+            box-shadow: 
+                0 16px 48px rgba(0,0,0,0.25),
+                inset 0 1px 0 rgba(255,255,255,0.2);
+        }
+
+        .game-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: 
+                linear-gradient(135deg, rgba(100,100,100,0.1) 0%, rgba(100,100,100,0.05) 100%),
+                rgba(0,0,0,0.2);
+        }
+
+        .game-btn.insufficient {
+            background: 
+                linear-gradient(135deg, rgba(244, 67, 54, 0.2) 0%, rgba(244, 67, 54, 0.1) 100%),
+                rgba(0,0,0,0.2);
+            border-color: rgba(244, 67, 54, 0.3);
+            color: #ffcccc;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            background: 
+                linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 100%),
+                rgba(0,0,0,0.4);
+            border-radius: 0 0 20px 20px;
+            margin-top: auto;
+            flex-shrink: 0;
+        }
+
+        .back-btn {
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            background: 
+                linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 100%),
+                rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 20px;
+            color: rgba(255,255,255,0.8);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 0.3px;
+            backdrop-filter: blur(20px) saturate(150%);
+        }
+
+        .back-btn:hover {
+            color: #fff;
+            border-color: rgba(255,255,255,0.25);
+            background: 
+                linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.06) 100%),
+                rgba(0,0,0,0.2);
+        }
+
+        .reward-popup {
+            position: absolute;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #FFD700;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+            pointer-events: none;
+            opacity: 0;
+            z-index: 25;
+            animation: rewardFloat 1.5s ease-out forwards;
+        }
+
+        .coin-change {
+            position: absolute;
+            top: -30px;
+            right: 50%;
+            transform: translateX(50%);
+            font-size: 1rem;
+            font-weight: 600;
+            z-index: 1000;
+            pointer-events: none;
+            animation: coinChangeFloat 2s ease-out forwards;
+        }
+
+        .coin-change.positive {
+            color: #4CAF50;
+        }
+
+        .coin-change.negative {
+            color: #f44336;
+        }
+
+        /* Animations */
+        @keyframes elegantFloat {
+            0% { 
+                transform: translateY(100vh) rotate(0deg) scale(0.5); 
+                opacity: 0; 
+            }
+            5% { 
+                opacity: 0.3; 
+                transform: translateY(95vh) rotate(18deg) scale(0.8);
+            }
+            15% { 
+                opacity: 0.6; 
+                transform: translateY(85vh) rotate(45deg) scale(1);
+            }
+            85% { 
+                opacity: 0.6; 
+                transform: translateY(15vh) rotate(315deg) scale(1);
+            }
+            95% { 
+                opacity: 0.3; 
+                transform: translateY(5vh) rotate(342deg) scale(0.8);
+            }
+            100% { 
+                transform: translateY(-5vh) rotate(360deg) scale(0.5); 
+                opacity: 0; 
+            }
+        }
+
+        @keyframes gentleFlow {
+            0%, 100% { 
+                background-position: 0% 50%, 0% 50%, 0% 50%, 0% 50%, 0% 0%; 
+                transform: scale(1);
+            }
+            25% { 
+                background-position: 25% 75%, 75% 25%, 25% 25%, 75% 75%, 25% 25%; 
+                transform: scale(1.02);
+            }
+            50% { 
+                background-position: 100% 50%, 50% 100%, 100% 100%, 50% 50%, 50% 50%; 
+                transform: scale(1);
+            }
+            75% { 
+                background-position: 75% 25%, 25% 75%, 75% 75%, 25% 25%, 75% 75%; 
+                transform: scale(1.02);
+            }
+        }
+
+        @keyframes floatingLights {
+            0%, 100% { 
+                background-position: 30% 40%, 70% 80%, 20% 80%; 
+                opacity: 0.5;
+            }
+            33% { 
+                background-position: 70% 20%, 30% 60%, 80% 40%; 
+                opacity: 0.8;
+            }
+            66% { 
+                background-position: 50% 90%, 90% 30%, 10% 70%; 
+                opacity: 0.6;
+            }
+        }
+
+        @keyframes subtleShimmer {
+            0%, 100% { 
+                transform: translateX(-100%) skewX(-15deg); 
+                opacity: 0; 
+            }
+            50% { 
+                transform: translateX(100%) skewX(-15deg); 
+                opacity: 0.3; 
+            }
+        }
+
+        @keyframes gentleGlow {
+            0%, 100% { 
+                opacity: 0.6; 
+                transform: translateX(-50%) scaleX(0.8); 
+            }
+            50% { 
+                opacity: 1; 
+                transform: translateX(-50%) scaleX(1.2); 
+            }
+        }
+
+        @keyframes logoShine {
+            0%, 100% { 
+                opacity: 0; 
+                transform: scaleX(0); 
+            }
+            20%, 80% { 
+                opacity: 0.6; 
+                transform: scaleX(1); 
+            }
+        }
+
+        @keyframes coinPulse {
+            0%, 100% { 
+                transform: scale(1) rotate(0deg); 
+                box-shadow: 0 4px 12px rgba(255,215,0,0.25);
+            }
+            25% { 
+                transform: scale(1.05) rotate(90deg); 
+                box-shadow: 0 6px 18px rgba(255,215,0,0.35);
+            }
+            50% { 
+                transform: scale(1.08) rotate(180deg); 
+                box-shadow: 0 8px 24px rgba(255,215,0,0.4);
+            }
+            75% { 
+                transform: scale(1.05) rotate(270deg); 
+                box-shadow: 0 6px 18px rgba(255,215,0,0.35);
+            }
+        }
+
+        @keyframes elegantEntrance {
+            0% { 
+                transform: translateY(40px) scale(0.95); 
+                opacity: 0; 
+                filter: blur(20px);
+            }
+            50% { 
+                transform: translateY(20px) scale(0.98); 
+                opacity: 0.7; 
+                filter: blur(10px);
+            }
+            100% { 
+                transform: translateY(0) scale(1); 
+                opacity: 1; 
+                filter: blur(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes floatEffect {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes warningPulse {
+            0% { 
+                border-color: rgba(244, 67, 54, 0.4);
+                box-shadow: 0 0 10px rgba(244, 67, 54, 0.3);
+            }
+            100% { 
+                border-color: rgba(244, 67, 54, 0.9);
+                box-shadow: 0 0 30px rgba(244, 67, 54, 0.7);
+            }
+        }
+
+        @keyframes rewardFloat {
+            0% { 
+                transform: translateY(0);
+                opacity: 0;
+            }
+            20% { 
+                opacity: 1;
+            }
+            80% {
+                opacity: 1;
+            }
+            100% { 
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+        }
+
+        @keyframes coinChangeFloat {
+            0% {
+                opacity: 1;
+                transform: translateX(50%) translateY(0);
+            }
+            100% {
+                opacity: 0;
+                transform: translateX(50%) translateY(-50px);
+            }
+        }
+
+        /* Particle effect */
+        .particle {
+            position: absolute;
+            background: rgba(77, 124, 255, 0.5);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem 1.5rem;
+            }
+            
+            .logo {
+                font-size: 1.3rem;
+            }
+            
+            .coin-display {
+                padding: 0.6rem 1rem;
+                gap: 0.6rem;
+            }
+
+            .coin-icon {
+                width: 16px;
+                height: 16px;
+            }
+            
+            .main-content {
+                padding: 0.5rem;
+            }
+            
+            .game-container-inner {
+                width: 99%;
+                height: 85vh;
+                min-height: 650px;
+            }
+            
+            .touch-controls {
+                opacity: 0.9;
+                bottom: 1rem;
+            }
+
+            .touch-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+            
+            .overlay-content {
+                padding: 2rem;
+            }
+            
+            .overlay-title {
+                font-size: 1.5rem;
+            }
+
+            .game-board {
+                padding: 1.5rem;
+            }
+
+            .score-display,
+            .speed-display {
+                padding: 0.6rem 1rem;
+                font-size: 1rem;
+            }
+
+            .score-value,
+            .speed-value {
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .game-container-inner {
+                width: 99%;
+                height: 85vh;
+                min-height: 600px;
+            }
+            
+            .touch-controls {
+                gap: 10px;
+            }
+
+            .touch-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 1.3rem;
+            }
+            
+            .overlay-content {
+                padding: 1.5rem;
+            }
+
+            .game-board {
+                padding: 1rem;
+            }
+
+            .score-display {
+                top: 1rem;
+                left: 1rem;
+            }
+
+            .speed-display {
+                top: 1rem;
+                right: 1rem;
+            }
+        }
+
+        /* Hidden class */
+        .hidden {
+            display: none !important;
+        }
+    </style>
+
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-814Y2X3KSF"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-814Y2X3KSF');
+</script>
+</head>
+
+<body>
+    <!-- Animated Background -->
+    <div class="matrix-bg"></div>
+    <div class="particles" id="particles"></div>
+
+    <div class="game-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="nav-row">
+                <div class="logo">Void Hardcore Snake</div>
+                <div class="coin-display">
+                    <div class="coin-icon"></div>
+                    <span id="coinDisplay">0</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="game-container-inner">
+                <div class="game-header">
+                    <div class="game-title">Hardcore Snake</div>
+                </div>
+                
+                <div class="game-board">
+                    <div class="score-display">Score: <span class="score-value" id="scoreValue">0</span></div>
+                    <div class="speed-display">Speed: <span class="speed-value" id="speedValue">1</span>x</div>
+                    <div class="warning-border" id="warningBorder"></div>
+                    <canvas id="snake-canvas"></canvas>
+                    
+                    <!-- Touch Controls for Mobile -->
+                    <div class="touch-controls">
+                        <div class="touch-btn" id="touch-up">⬆️</div>
+                        <div class="touch-btn" id="touch-left">⬅️</div>
+                        <div class="touch-btn" id="touch-down">⬇️</div>
+                        <div class="touch-btn" id="touch-right">➡️</div>
+                    </div>
+                    
+                    <!-- Start Screen Overlay -->
+                    <div class="game-overlay visible" id="start-screen">
+                        <div class="overlay-content">
+                            <h2 class="overlay-title">Hardcore Snake</h2>
+                            <p class="overlay-message">
+                                Navigate the snake to collect apples.<br>
+                                Each apple gives you 100 coins.<br>
+                                <span style="color: #f44336; font-weight: 600;">But beware...</span><br>
+                                • The snake moves FAST<br>
+                                • Obstacles appear randomly<br>
+                                • Speed increases over time<br>
+                                <span style="color: #f44336; font-weight: 600;">Cost to play: 50 coins</span>
+                            </p>
+                            <button id="start-btn" class="game-btn">Start Game</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Game Over Overlay -->
+                    <div class="game-overlay" id="game-over-screen">
+                        <div class="overlay-content">
+                            <h2 class="overlay-title lose">Game Over</h2>
+                            <p class="overlay-message">
+                                You scored <span id="final-score">0</span> points!<br>
+                                Earned: <span id="apples-earned" style="color: #4CAF50; font-weight: 600;">0</span> coins from apples<br>
+                                Lost: <span style="color: #f44336; font-weight: 600;">100 coins</span> for dying
+                            </p>
+                            <button id="restart-btn" class="game-btn">Play Again</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="controls">
+                    <button id="back-btn" class="back-btn">Back to Games</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Firebase and Game Scripts -->
+    <script type="module">
+        // Firebase imports
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+        import { 
+            getFirestore, 
+            doc, 
+            getDoc, 
+            updateDoc, 
+            setDoc, 
+            serverTimestamp
+        } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCkAp_GCGCtw4zv7GgHJOE9GPgIaPEuOvQ",
+            authDomain: "void-games-c8d9e.firebaseapp.com",
+            projectId: "void-games-c8d9e",
+            storageBucket: "void-games-c8d9e.firebasestorage.app",
+            messagingSenderId: "1063089929776",
+            appId: "1:1063089929776:web:8e226a23a4f3ab9c5777f5"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Game variables
+        let currentUser = null;
+        let _coinBalance = 0;
+        let canvas, ctx;
+        let snake = [];
+        let direction = 'right';
+        let nextDirection = 'right';
+        let apple = null;
+        let obstacles = [];
+        let score = 0;
+        let applesEaten = 0;
+        let gameActive = false;
+        let gameLoop = null;
+        let speedMultiplier = 1;
+        let canvasWidth, canvasHeight;
+        let gridWidth, gridHeight;
+        let showingBorderWarning = false;
+        let lastObstacleTime = 0;
+        let touchStartX = 0;
+        let touchStartY = 0;
+
+        // Game configuration
+        const GAME_CONFIG = {
+            startCost: 50,
+            deathPenalty: 100,
+            appleReward: 100,
+            gridSize: 20,
+            initialSpeed: 100,
+            speedIncrement: 0.5,
+            maxSpeed: 15,
+            obstacleRate: 0.3,
+            maxObstacles: 20,
+            borderWarningTime: 500
+        };
+
+        // DOM elements
+        const coinDisplay = document.getElementById('coinDisplay');
+        const startScreen = document.getElementById('start-screen');
+        const gameOverScreen = document.getElementById('game-over-screen');
+        const startBtn = document.getElementById('start-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const backBtn = document.getElementById('back-btn');
+        const scoreValue = document.getElementById('scoreValue');
+        const speedValue = document.getElementById('speedValue');
+        const warningBorder = document.getElementById('warningBorder');
+
+        // Initialize particles animation
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            
+            setInterval(() => {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                
+                const size = Math.random() * 8 + 3;
+                particle.style.width = particle.style.height = size + 'px';
+                particle.style.animationDuration = (Math.random() * 8 + 12) + 's';
+                particle.style.animationDelay = (Math.random() * 2) + 's';
+                
+                particlesContainer.appendChild(particle);
+                
+                setTimeout(() => {
+                    if (particle.parentNode) {
+                        particle.remove();
+                    }
+                }, 22000);
+            }, 600);
+        }
+
+        // Coin management functions
+        async function loadUserBalance() {
+            if (!currentUser) {
+                _coinBalance = 1000;
+                updateCoinDisplay();
+                return;
+            }
+
+            try {
+                const userRef = doc(db, 'users', currentUser.uid);
+                const userDoc = await getDoc(userRef);
+                
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    _coinBalance = userData.accountBalance || 1000;
+                    updateCoinDisplay();
+                } else {
+                    await setDoc(userRef, { 
+                        accountBalance: 1000,
+                        username: currentUser.displayName || "Player",
+                        email: currentUser.email,
+                        createdAt: serverTimestamp()
+                    });
+                    _coinBalance = 1000;
+                    updateCoinDisplay();
+                }
+            } catch (error) {
+                console.error("Error loading balance:", error);
+                _coinBalance = 1000;
+                updateCoinDisplay();
+            }
+        }
+
+        async function updateCoins(amount, showAnimation = true) {
+            _coinBalance += amount;
+            updateCoinDisplay();
+
+            if (showAnimation && amount !== 0) {
+                showCoinChangeAnimation(amount);
+            }
+
+            if (!currentUser) return true;
+
+            try {
+                const userRef = doc(db, 'users', currentUser.uid);
+                await updateDoc(userRef, {
+                    accountBalance: _coinBalance,
+                    lastUpdated: serverTimestamp()
+                });
+                return true;
+            } catch (error) {
+                console.error("Error updating coins:", error);
+                return true;
+            }
+        }
+
+        function updateCoinDisplay() {
+            coinDisplay.textContent = _coinBalance.toLocaleString();
+            updateStartButtonAppearance();
+        }
+
+        function showCoinChangeAnimation(amount) {
+            const coinChange = document.createElement('div');
+            coinChange.className = `coin-change ${amount > 0 ? 'positive' : 'negative'}`;
+            coinChange.textContent = `${amount > 0 ? '+' : ''}${amount}`;
+            
+            const coinDisplayElement = document.querySelector('.coin-display');
+            coinDisplayElement.style.position = 'relative';
+            coinDisplayElement.appendChild(coinChange);
+            
+            setTimeout(() => {
+                if (coinChange.parentNode) {
+                    coinChange.remove();
+                }
+            }, 2000);
+        }
+
+        function updateStartButtonAppearance() {
+            if (_coinBalance < GAME_CONFIG.startCost) {
+                startBtn.classList.add('insufficient');
+                startBtn.textContent = "Insufficient Coins (Need 50)";
+                startBtn.disabled = true;
+            } else {
+                startBtn.classList.remove('insufficient');
+                startBtn.textContent = "Start Game";
+                startBtn.disabled = false;
+            }
+        }
+
+        // Game functions
+        function initCanvas() {
+            canvas = document.getElementById('snake-canvas');
+            if (!canvas) {
+                console.error("Canvas element not found!");
+                return false;
+            }
+
+            ctx = canvas.getContext('2d');
+            
+            const gameBoardRect = document.querySelector('.game-board').getBoundingClientRect();
+            
+            canvasWidth = Math.floor(gameBoardRect.width * 0.85);
+            canvasHeight = Math.floor(gameBoardRect.height * 0.75);
+            
+            canvasWidth = Math.floor(canvasWidth / GAME_CONFIG.gridSize) * GAME_CONFIG.gridSize;
+            canvasHeight = Math.floor(canvasHeight / GAME_CONFIG.gridSize) * GAME_CONFIG.gridSize;
+            
+            canvas.width = canvasWidth;
+            canvas.height = canvasHeight;
+            
+            gridWidth = canvasWidth / GAME_CONFIG.gridSize;
+            gridHeight = canvasHeight / GAME_CONFIG.gridSize;
+            
+            return true;
+        }
+
+        async function initGame() {
+            if (_coinBalance < GAME_CONFIG.startCost) {
+                alert('Insufficient coins! You need 50 coins to play.');
+                return;
+            }
+
+            // Deduct game cost
+            updateCoins(-GAME_CONFIG.startCost);
+            
+            // Reset game state
+            score = 0;
+            applesEaten = 0;
+            obstacles = [];
+            speedMultiplier = 1;
+            direction = 'right';
+            nextDirection = 'right';
+            showingBorderWarning = false;
+            lastObstacleTime = Date.now();
+            
+            // Create initial snake
+            const startX = Math.floor(gridWidth / 2);
+            const startY = Math.floor(gridHeight / 2);
+            
+            snake = [
+                { x: startX, y: startY },
+                { x: startX - 1, y: startY },
+                { x: startX - 2, y: startY }
+            ];
+            
+            // Create first apple
+            spawnApple();
+            
+            // Update displays
+            updateScoreDisplay();
+            
+            // Hide start screen
+            startScreen.classList.remove('visible');
+            
+            // Start the game
+            gameActive = true;
+            
+            if (gameLoop) clearInterval(gameLoop);
+            gameLoop = setInterval(gameStep, GAME_CONFIG.initialSpeed);
+            
+            // Create particles
+            createGameParticles(20);
+        }
+
+        function gameStep() {
+            if (!gameActive) return;
+            
+            moveSnake();
+            
+            if (checkCollisions()) {
+                endGame();
+                return;
+            }
+            
+            if (checkAppleCollision()) {
+                score += 1;
+                applesEaten += 1;
+                
+                updateCoins(GAME_CONFIG.appleReward);
+                showRewardPopup(GAME_CONFIG.appleReward);
+                
+                // Maybe spawn obstacle
+                if (Math.random() < GAME_CONFIG.obstacleRate && obstacles.length < GAME_CONFIG.maxObstacles) {
+                    spawnObstacle();
+                    lastObstacleTime = Date.now();
+                }
+                
+                spawnApple();
+                
+                // Increase speed
+                speedMultiplier = Math.min(GAME_CONFIG.maxSpeed, speedMultiplier + GAME_CONFIG.speedIncrement);
+                
+                clearInterval(gameLoop);
+                const newSpeed = GAME_CONFIG.initialSpeed / speedMultiplier;
+                gameLoop = setInterval(gameStep, newSpeed);
+            }
+            
+            updateScoreDisplay();
+            drawGame();
+            
+            // Add occasional obstacle over time
+            if (Date.now() - lastObstacleTime > 10000) {
+                if (Math.random() < 0.01 && obstacles.length < GAME_CONFIG.maxObstacles) {
+                    spawnObstacle();
+                    lastObstacleTime = Date.now();
+                }
+            }
+        }
+
+        function updateScoreDisplay() {
+            scoreValue.textContent = score;
+            speedValue.textContent = speedMultiplier.toFixed(1);
+        }
+
+        function moveSnake() {
+            if ((direction === 'up' && nextDirection === 'down') ||
+                (direction === 'down' && nextDirection === 'up') ||
+                (direction === 'left' && nextDirection === 'right') ||
+                (direction === 'right' && nextDirection === 'left')) {
+                nextDirection = direction;
+            }
+            
+            direction = nextDirection;
+            
+            const head = { ...snake[0] };
+            
+            switch (direction) {
+                case 'up':
+                    head.y -= 1;
+                    break;
+                case 'down':
+                    head.y += 1;
+                    break;
+                case 'left':
+                    head.x -= 1;
+                    break;
+                case 'right':
+                    head.x += 1;
+                    break;
+            }
+            
+            snake.unshift(head);
+            
+            if (!checkAppleCollision()) {
+                snake.pop();
+            }
+            
+            checkNearWall();
+        }
+
+        function checkNearWall() {
+            const head = snake[0];
+            const isNearWall = 
+                head.x <= 1 || 
+                head.x >= gridWidth - 2 || 
+                head.y <= 1 || 
+                head.y >= gridHeight - 2;
+            
+            if (isNearWall && !showingBorderWarning) {
+                showingBorderWarning = true;
+                warningBorder.classList.add('visible');
+                
+                playWarningSound();
+                
+                setTimeout(() => {
+                    warningBorder.classList.remove('visible');
+                    showingBorderWarning = false;
+                }, GAME_CONFIG.borderWarningTime);
+            }
+        }
+
+        function playWarningSound() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.type = 'sawtooth';
+                oscillator.frequency.value = 220;
+                gainNode.gain.value = 0.1;
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.start();
+                oscillator.frequency.setValueAtTime(220, audioContext.currentTime);
+                oscillator.frequency.setValueAtTime(440, audioContext.currentTime + 0.1);
+                oscillator.frequency.setValueAtTime(220, audioContext.currentTime + 0.2);
+                
+                gainNode.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + 0.3);
+                oscillator.stop(audioContext.currentTime + 0.3);
+            } catch (e) {
+                console.log("Audio not supported");
+            }
+        }
+
+        function checkCollisions() {
+            const head = snake[0];
+            
+            // Check wall collisions
+            if (head.x < 0 || head.x >= gridWidth || head.y < 0 || head.y >= gridHeight) {
+                return true;
+            }
+            
+            // Check collision with snake body
+            for (let i = 1; i < snake.length; i++) {
+                if (head.x === snake[i].x && head.y === snake[i].y) {
+                    return true;
+                }
+            }
+            
+            // Check collision with obstacles
+            for (const obstacle of obstacles) {
+                if (head.x === obstacle.x && head.y === obstacle.y) {
+                    return true;
+                }
+            }
+            
+            return false;
+        }
+
+        function checkAppleCollision() {
+            const head = snake[0];
+            return apple && head.x === apple.x && head.y === apple.y;
+        }
+
+        function spawnApple() {
+            let x, y;
+            let validPosition = false;
+            let attempts = 0;
+            
+            while (!validPosition && attempts < 100) {
+                attempts++;
+                x = Math.floor(Math.random() * gridWidth);
+                y = Math.floor(Math.random() * gridHeight);
+                
+                validPosition = true;
+                
+                // Check if position is on snake
+                for (const segment of snake) {
+                    if (x === segment.x && y === segment.y) {
+                        validPosition = false;
+                        break;
+                    }
+                }
+                
+                // Check if position is on obstacle
+                if (validPosition) {
+                    for (const obstacle of obstacles) {
+                        if (x === obstacle.x && y === obstacle.y) {
+                            validPosition = false;
+                            break;
+                        }
+                    }
+                }
+            }
+            
+            if (!validPosition) {
+                x = snake[0].x + 5;
+                y = snake[0].y + 5;
+                x = Math.max(0, Math.min(x, gridWidth - 1));
+                y = Math.max(0, Math.min(y, gridHeight - 1));
+            }
+            
+            apple = { x, y };
+        }
+
+        function spawnObstacle() {
+            if (obstacles.length >= GAME_CONFIG.maxObstacles) return;
+            
+            let x, y;
+            let validPosition = false;
+            let attempts = 0;
+            
+            while (!validPosition && attempts < 100) {
+                attempts++;
+                x = Math.floor(Math.random() * gridWidth);
+                y = Math.floor(Math.random() * gridHeight);
+                
+                validPosition = true;
+                
+                // Check if position is on snake or too close to head
+                for (const segment of snake) {
+                    const distX = Math.abs(x - segment.x);
+                    const distY = Math.abs(y - segment.y);
+                    
+                    if ((x === segment.x && y === segment.y) || 
+                        (segment === snake[0] && distX <= 2 && distY <= 2)) {
+                        validPosition = false;
+                        break;
+                    }
+                }
+                
+                // Check if position is on apple
+                if (validPosition && apple && x === apple.x && y === apple.y) {
+                    validPosition = false;
+                }
+                
+                // Check if position is on another obstacle
+                if (validPosition) {
+                    for (const obstacle of obstacles) {
+                        if (x === obstacle.x && y === obstacle.y) {
+                            validPosition = false;
+                            break;
+                        }
+                    }
+                }
+            }
+            
+            if (validPosition) {
+                obstacles.push({ x, y });
+            }
+        }
+
+        function drawGame() {
+            if (!ctx) return;
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+            
+            // Draw grid
+            drawGrid();
+            
+            // Draw obstacles
+            drawObstacles();
+            
+            // Draw apple
+            drawApple();
+            
+            // Draw snake
+            drawSnake();
+        }
+
+        function drawGrid() {
+            ctx.strokeStyle = 'rgba(77, 124, 255, 0.1)';
+            ctx.lineWidth = 0.5;
+            
+            for (let x = 0; x <= gridWidth; x++) {
+                ctx.beginPath();
+                ctx.moveTo(x * GAME_CONFIG.gridSize, 0);
+                ctx.lineTo(x * GAME_CONFIG.gridSize, canvasHeight);
+                ctx.stroke();
+            }
+            
+            for (let y = 0; y <= gridHeight; y++) {
+                ctx.beginPath();
+                ctx.moveTo(0, y * GAME_CONFIG.gridSize);
+                ctx.lineTo(canvasWidth, y * GAME_CONFIG.gridSize);
+                ctx.stroke();
+            }
+        }
+
+        function drawObstacles() {
+            for (const obstacle of obstacles) {
+                if (obstacle.x < 0 || obstacle.x >= gridWidth || 
+                    obstacle.y < 0 || obstacle.y >= gridHeight) {
+                    continue;
+                }
+                
+                const x = obstacle.x * GAME_CONFIG.gridSize;
+                const y = obstacle.y * GAME_CONFIG.gridSize;
+                
+                ctx.fillStyle = '#b71c1c';
+                ctx.fillRect(x, y, GAME_CONFIG.gridSize, GAME_CONFIG.gridSize);
+                
+                ctx.shadowColor = 'rgba(244, 67, 54, 0.8)';
+                ctx.shadowBlur = 10;
+                ctx.strokeStyle = '#f44336';
+                ctx.lineWidth = 1;
+                ctx.strokeRect(x, y, GAME_CONFIG.gridSize, GAME_CONFIG.gridSize);
+                ctx.shadowBlur = 0;
+            }
+        }
+
+        function drawApple() {
+            if (!apple) return;
+            
+            if (apple.x < 0 || apple.x >= gridWidth || 
+                apple.y < 0 || apple.y >= gridHeight) {
+                spawnApple();
+                return;
+            }
+            
+            const x = apple.x * GAME_CONFIG.gridSize;
+            const y = apple.y * GAME_CONFIG.gridSize;
+            const size = GAME_CONFIG.gridSize;
+            
+            const gradient = ctx.createRadialGradient(
+                x + size/2, y + size/2, size/10,
+                x + size/2, y + size/2, size/2
+            );
+            gradient.addColorStop(0, '#f44336');
+            gradient.addColorStop(1, '#b71c1c');
+            
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.arc(x + size/2, y + size/2, size/2 - 1, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.fillStyle = '#33691E';
+            ctx.fillRect(x + size/2 - 1, y + 2, 2, 3);
+            
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+            ctx.beginPath();
+            ctx.arc(x + size/3, y + size/3, size/6, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.shadowColor = 'rgba(244, 67, 54, 0.8)';
+            ctx.shadowBlur = 10;
+            ctx.strokeStyle = '#f44336';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.arc(x + size/2, y + size/2, size/2 - 1, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+        }
+
+        function drawSnake() {
+            for (let i = 0; i < snake.length; i++) {
+                const segment = snake[i];
+                
+                if (segment.x < -1 || segment.x > gridWidth || 
+                    segment.y < -1 || segment.y > gridHeight) {
+                    continue;
+                }
+                
+                const x = segment.x * GAME_CONFIG.gridSize;
+                const y = segment.y * GAME_CONFIG.gridSize;
+                const size = GAME_CONFIG.gridSize;
+                
+                const ratio = Math.min(i / (snake.length - 1), 1);
+                const alpha = 1 - ratio * 0.3;
+                
+                ctx.fillStyle = `rgba(77, 124, 255, ${alpha})`;
+                ctx.fillRect(x, y, size, size);
+                
+                ctx.fillStyle = `rgba(255, 255, 255, ${alpha * 0.3})`;
+                ctx.fillRect(x + 2, y + 2, size - 4, size - 4);
+                
+                if (i === 0) {
+                    drawSnakeHead(x, y, size);
+                }
+                
+                ctx.shadowColor = 'rgba(77, 124, 255, 0.8)';
+                ctx.shadowBlur = i === 0 ? 15 : 5;
+                ctx.strokeStyle = '#4d7cff';
+                ctx.lineWidth = i === 0 ? 2 : 1;
+                ctx.strokeRect(x, y, size, size);
+                ctx.shadowBlur = 0;
+            }
+        }
+
+        function drawSnakeHead(x, y, size) {
+            let leftEyeX, leftEyeY, rightEyeX, rightEyeY;
+            
+            switch (direction) {
+                case 'up':
+                    leftEyeX = x + size/4;
+                    leftEyeY = y + size/4;
+                    rightEyeX = x + size*3/4;
+                    rightEyeY = y + size/4;
+                    break;
+                case 'down':
+                    leftEyeX = x + size/4;
+                    leftEyeY = y + size*3/4;
+                    rightEyeX = x + size*3/4;
+                    rightEyeY = y + size*3/4;
+                    break;
+                case 'left':
+                    leftEyeX = x + size/4;
+                    leftEyeY = y + size/4;
+                    rightEyeX = x + size/4;
+                    rightEyeY = y + size*3/4;
+                    break;
+                case 'right':
+                    leftEyeX = x + size*3/4;
+                    leftEyeY = y + size/4;
+                    rightEyeX = x + size*3/4;
+                    rightEyeY = y + size*3/4;
+                    break;
+                default:
+                    leftEyeX = x + size*3/4;
+                    leftEyeY = y + size/4;
+                    rightEyeX = x + size*3/4;
+                    rightEyeY = y + size*3/4;
+            }
+            
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            ctx.arc(leftEyeX, leftEyeY, size/8, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(rightEyeX, rightEyeY, size/8, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.fillStyle = 'black';
+            ctx.beginPath();
+            ctx.arc(leftEyeX, leftEyeY, size/16, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(rightEyeX, rightEyeY, size/16, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        async function endGame() {
+            if (!gameActive) return;
+            
+            gameActive = false;
+            clearInterval(gameLoop);
+            
+            playDeathSound();
+            
+            updateCoins(-GAME_CONFIG.deathPenalty);
+            
+            const finalScore = document.getElementById('final-score');
+            const applesEarnedElement = document.getElementById('apples-earned');
+            
+            if (finalScore) finalScore.textContent = score;
+            if (applesEarnedElement) applesEarnedElement.textContent = applesEaten * GAME_CONFIG.appleReward;
+            
+            createDeathExplosion();
+            
+            setTimeout(() => {
+                gameOverScreen.classList.add('visible');
+            }, 1000);
+        }
+
+        function playDeathSound() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.type = 'sawtooth';
+                oscillator.frequency.value = 440;
+                gainNode.gain.value = 0.2;
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.start();
+                oscillator.frequency.exponentialRampToValueAtTime(100, audioContext.currentTime + 0.3);
+                gainNode.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + 0.5);
+                oscillator.stop(audioContext.currentTime + 0.5);
+            } catch (e) {
+                console.log("Audio not supported");
+            }
+        }
+
+        function createDeathExplosion() {
+            if (snake.length === 0) return;
+            
+            const head = snake[0];
+            const x = (head.x * GAME_CONFIG.gridSize) + (GAME_CONFIG.gridSize / 2);
+            const y = (head.y * GAME_CONFIG.gridSize) + (GAME_CONFIG.gridSize / 2);
+            
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                const particleX = x + (Math.random() - 0.5) * 10;
+                const particleY = y + (Math.random() - 0.5) * 10;
+                
+                particle.style.left = `${particleX}px`;
+                particle.style.top = `${particleY}px`;
+                
+                const size = Math.random() * 8 + 2;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                const colors = ['#4d7cff', '#f44336', '#b71c1c', '#1f3a70'];
+                particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                
+                const angle = Math.random() * Math.PI * 2;
+                const distance = Math.random() * 100 + 50;
+                const speedX = Math.cos(angle) * distance;
+                const speedY = Math.sin(angle) * distance;
+                
+                particle.style.transition = 'all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                
+                const gameBoard = document.querySelector('.game-board');
+                if (gameBoard) {
+                    gameBoard.appendChild(particle);
+                    
+                    setTimeout(() => {
+                        particle.style.transform = `translate(${speedX}px, ${speedY}px) scale(0.1)`;
+                        particle.style.opacity = '0';
+                    }, 10);
+                    
+                    setTimeout(() => {
+                        if (particle.parentNode) {
+                            particle.parentNode.removeChild(particle);
+                        }
+                    }, 1000);
+                }
+            }
+        }
+
+        function showRewardPopup(amount) {
+            if (!apple) return;
+            
+            const popup = document.createElement('div');
+            popup.className = 'reward-popup';
+            popup.textContent = `+${amount}`;
+            
+            const x = (apple.x * GAME_CONFIG.gridSize) + (GAME_CONFIG.gridSize / 2);
+            const y = (apple.y * GAME_CONFIG.gridSize) + (GAME_CONFIG.gridSize / 2);
+            
+            popup.style.left = `${x}px`;
+            popup.style.top = `${y}px`;
+            
+            const gameBoard = document.querySelector('.game-board');
+            if (gameBoard) {
+                gameBoard.appendChild(popup);
+                
+                setTimeout(() => {
+                    if (popup.parentNode) {
+                        popup.parentNode.removeChild(popup);
+                    }
+                }, 1500);
+            }
+        }
+
+        function createGameParticles(count) {
+            const existingParticles = document.querySelectorAll('.particle');
+            existingParticles.forEach(p => p.remove());
+            
+            for (let i = 0; i < count; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                
+                const size = Math.random() * 3 + 1;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                particle.style.opacity = Math.random() * 0.5 + 0.2;
+                particle.style.animation = `float ${Math.random() * 10 + 5}s linear infinite`;
+                particle.style.animationDelay = `${Math.random() * 5}s`;
+                
+                const gameBoard = document.querySelector('.game-board');
+                if (gameBoard) {
+                    gameBoard.appendChild(particle);
+                }
+            }
+        }
+
+        function changeDirection(newDirection) {
+            if (!gameActive) return;
+            
+            if (!['up', 'down', 'left', 'right'].includes(newDirection)) {
+                return;
+            }
+            
+            if (
+                (direction === 'up' && newDirection === 'down') ||
+                (direction === 'down' && newDirection === 'up') ||
+                (direction === 'left' && newDirection === 'right') ||
+                (direction === 'right' && newDirection === 'left')
+            ) {
+                return;
+            }
+            
+            nextDirection = newDirection;
+        }
+
+        function setupTouchControls() {
+            const touchUp = document.getElementById('touch-up');
+            const touchDown = document.getElementById('touch-down');
+            const touchLeft = document.getElementById('touch-left');
+            const touchRight = document.getElementById('touch-right');
+
+            if (touchUp) {
+                touchUp.addEventListener('touchstart', (e) => {
+                    if (gameActive) changeDirection('up');
+                    e.preventDefault();
+                });
+            }
+
+            if (touchDown) {
+                touchDown.addEventListener('touchstart', (e) => {
+                    if (gameActive) changeDirection('down');
+                    e.preventDefault();
+                });
+            }
+
+            if (touchLeft) {
+                touchLeft.addEventListener('touchstart', (e) => {
+                    if (gameActive) changeDirection('left');
+                    e.preventDefault();
+                });
+            }
+
+            if (touchRight) {
+                touchRight.addEventListener('touchstart', (e) => {
+                    if (gameActive) changeDirection('right');
+                    e.preventDefault();
+                });
+            }
+
+            if (canvas) {
+                canvas.addEventListener('touchstart', (e) => {
+                    touchStartX = e.touches[0].clientX;
+                    touchStartY = e.touches[0].clientY;
+                }, false);
+
+                canvas.addEventListener('touchmove', (e) => {
+                    if (!gameActive || !touchStartX || !touchStartY) return;
+                    
+                    const touchEndX = e.touches[0].clientX;
+                    const touchEndY = e.touches[0].clientY;
+                    
+                    const diffX = touchStartX - touchEndX;
+                    const diffY = touchStartY - touchEndY;
+                    
+                    if (Math.abs(diffX) > Math.abs(diffY)) {
+                        if (diffX > 10) {
+                            changeDirection('left');
+                        } else if (diffX < -10) {
+                            changeDirection('right');
+                        }
+                    } else {
+                        if (diffY > 10) {
+                            changeDirection('up');
+                        } else if (diffY < -10) {
+                            changeDirection('down');
+                        }
+                    }
+                    
+                    touchStartX = touchEndX;
+                    touchStartY = touchEndY;
+                    
+                    e.preventDefault();
+                }, false);
+            }
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            
+            if (!initCanvas()) {
+                console.error("Failed to initialize canvas");
+                return;
+            }
+            
+            // Keyboard controls
+            document.addEventListener('keydown', (e) => {
+                if (!gameActive) return;
+                
+                switch (e.key) {
+                    case 'ArrowUp':
+                    case 'w':
+                    case 'W':
+                        changeDirection('up');
+                        e.preventDefault();
+                        break;
+                    case 'ArrowDown':
+                    case 's':
+                    case 'S':
+                        changeDirection('down');
+                        e.preventDefault();
+                        break;
+                    case 'ArrowLeft':
+                    case 'a':
+                    case 'A':
+                        changeDirection('left');
+                        e.preventDefault();
+                        break;
+                    case 'ArrowRight':
+                    case 'd':
+                    case 'D':
+                        changeDirection('right');
+                        e.preventDefault();
+                        break;
+                }
+            });
+            
+            startBtn.addEventListener('click', initGame);
+            
+            restartBtn.addEventListener('click', () => {
+                gameOverScreen.classList.remove('visible');
+                initGame();
+            });
+            
+            backBtn.addEventListener('click', () => {
+                window.location.href = '/learning.html';
+            });
+            
+            setupTouchControls();
+            
+            window.addEventListener('resize', () => {
+                if (initCanvas()) {
+                    if (gameActive) {
+                        drawGame();
+                    }
+                }
+            });
+        });
+
+        // Authentication state listener
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUser = user;
+                await loadUserBalance();
+            } else {
+                currentUser = null;
+                _coinBalance = 1000;
+                updateCoinDisplay();
+            }
+        });
+
+        // Initialize without user
+        if (!currentUser) {
+            _coinBalance = 1000;
+            updateCoinDisplay();
+        }
+    </script>
+</body>
+</html>

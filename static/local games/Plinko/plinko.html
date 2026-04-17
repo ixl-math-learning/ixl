@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+
+    <script defer src="/s/script.js" data-website-id="b9510d8e-e1e5-4dff-ad86-297ebece5574"></script>
+    <noscript><img src="/t/p?payload=%7B%22website%22%3A%22b9510d8e-e1e5-4dff-ad86-297ebece5574%22%2C%22url%22%3A%22%2F%22%2C%22hostname%22%3A%22vng.lol%22%2C%22name%22%3A%22pageview%22%7D" style="display:none;"></noscript>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Void Games Plinko</title>
+    <link rel="shortcut icon" href="./assets/favicon.png" type="image/png">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            height: 100%;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 25%, #0f0f0f 50%, #1a1a1a 75%, #0a0a0a 100%);
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'SF Pro Display', Roboto, Helvetica, Arial, sans-serif;
+            overflow-x: hidden;
+            font-weight: 300;
+            background-attachment: fixed;
+        }
+
+        /* Animated Background */
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at top left, rgba(40,40,40,0.3) 0%, transparent 50%),
+                radial-gradient(ellipse at top right, rgba(60,60,60,0.2) 0%, transparent 50%),
+                radial-gradient(ellipse at bottom left, rgba(30,30,30,0.3) 0%, transparent 50%),
+                radial-gradient(ellipse at bottom right, rgba(50,50,50,0.2) 0%, transparent 50%),
+                linear-gradient(135deg, #000000 0%, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%, #000000 100%);
+            background-size: 200% 200%, 200% 200%, 200% 200%, 200% 200%, 100% 100%;
+            animation: gentleFlow 12s ease-in-out infinite;
+            z-index: -2;
+        }
+
+        .matrix-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 30% 40%, rgba(255,255,255,0.02) 0%, transparent 60%),
+                radial-gradient(circle at 70% 80%, rgba(255,255,255,0.015) 0%, transparent 60%),
+                radial-gradient(circle at 20% 80%, rgba(255,255,255,0.01) 0%, transparent 60%);
+            animation: floatingLights 15s ease-in-out infinite;
+        }
+
+        .matrix-bg::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                0deg,
+                transparent 0%,
+                rgba(255,255,255,0.005) 50%,
+                transparent 100%
+            );
+            animation: subtleShimmer 8s ease-in-out infinite;
+        }
+
+        /* Floating Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 40%, transparent 70%);
+            border-radius: 50%;
+            animation: elegantFloat 18s infinite ease-in-out;
+            filter: blur(1px);
+            opacity: 0.6;
+        }
+
+        /* Main Container */
+        .game-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            padding: 0 1rem;
+        }
+
+        /* Header */
+        .header {
+            padding: 2rem 3rem;
+            background: 
+                linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 100%),
+                rgba(0,0,0,0.4);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            position: relative;
+            box-shadow: 
+                0 1px 40px rgba(0,0,0,0.1),
+                inset 0 1px 0 rgba(255,255,255,0.08),
+                inset 0 -1px 0 rgba(255,255,255,0.02);
+            flex-shrink: 0;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: gentleGlow 6s ease-in-out infinite;
+        }
+
+        .nav-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.75rem;
+            font-weight: 500;
+            background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 30%, #e8e8e8 70%, #ffffff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 0.5px;
+            position: relative;
+        }
+
+        .logo::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            opacity: 0;
+            animation: logoShine 4s ease-in-out infinite;
+        }
+
+        .coin-display {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+            background: 
+                linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.06) 100%),
+                rgba(0,0,0,0.2);
+            padding: 0.9rem 1.6rem;
+            border-radius: 25px;
+            border: 1px solid rgba(255,255,255,0.12);
+            box-shadow: 
+                0 8px 32px rgba(0,0,0,0.15),
+                inset 0 1px 0 rgba(255,255,255,0.15),
+                inset 0 -1px 0 rgba(0,0,0,0.1);
+            backdrop-filter: blur(20px) saturate(150%);
+            -webkit-backdrop-filter: blur(20px) saturate(150%);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .coin-display:hover {
+            transform: translateY(-1px);
+            box-shadow: 
+                0 12px 40px rgba(0,0,0,0.2),
+                inset 0 1px 0 rgba(255,255,255,0.2),
+                inset 0 -1px 0 rgba(0,0,0,0.1);
+        }
+
+        .coin-icon {
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, #FFD700 0%, #FFC107 30%, #FF8F00 100%);
+            border-radius: 50%;
+            box-shadow: 
+                0 4px 12px rgba(255,215,0,0.25),
+                inset 0 1px 0 rgba(255,255,255,0.4),
+                inset 0 -1px 0 rgba(0,0,0,0.1);
+            animation: coinPulse 4s ease-in-out infinite;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .coin-icon::before {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 16px;
+            height: 16px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.3), transparent);
+            border-radius: 50%;
+        }
+
+        .coin-change {
+            position: absolute;
+            top: -30px;
+            right: 50%;
+            transform: translateX(50%);
+            font-size: 1rem;
+            font-weight: 600;
+            z-index: 1000;
+            pointer-events: none;
+            animation: coinChangeFloat 2s ease-out forwards;
+        }
+
+        .coin-change.positive {
+            color: #4CAF50;
+        }
+
+        .coin-change.negative {
+            color: #f44336;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            position: relative;
+            min-height: 0;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Game Container */
+        .game-container-inner {
+            width: 75%;
+            max-width: 800px;
+            margin: 2rem auto;
+            animation: elegantEntrance 1.8s cubic-bezier(0.19, 1, 0.22, 1);
+            background: 
+                linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%),
+                rgba(0,0,0,0.3);
+            border-radius: 24px;
+            border: 1px solid rgba(255,255,255,0.15);
+            backdrop-filter: blur(40px) saturate(180%);
+            box-shadow: 
+                0 20px 60px rgba(0,0,0,0.4),
+                inset 0 1px 0 rgba(255,255,255,0.1),
+                inset 0 -1px 0 rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            background: 
+                linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 100%),
+                rgba(0,0,0,0.4);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(40px) saturate(180%);
+            position: relative;
+            text-align: center;
+        }
+
+        .game-title {
+            font-size: 2rem;
+            margin: 0;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f8f8 25%, #e8e8e8 50%, #f8f8f8 75%, #ffffff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 300;
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .game-subtitle {
+            font-size: 1rem;
+            color: rgba(255,255,255,0.7);
+            margin: 0.5rem 0 0 0;
+            font-weight: 300;
+        }
+
+        .game-board {
+            position: relative;
+            height: 500px;
+            background: linear-gradient(180deg, 
+                rgba(135, 206, 235, 0.1) 0%, 
+                rgba(176, 224, 230, 0.1) 50%,
+                rgba(224, 246, 255, 0.1) 100%);
+            overflow: hidden;
+            margin: 0;
+        }
+
+        #canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            z-index: 1;
+            display: block;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1.5rem 2rem;
+            background: 
+                linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 100%),
+                rgba(0,0,0,0.4);
+            border-radius: 0 0 20px 20px;
+        }
+
+        .control-btn {
+            padding: 1rem 2rem;
+            background: 
+                linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 100%),
+                rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 20px;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            font-weight: 400;
+            letter-spacing: 0.3px;
+            backdrop-filter: blur(20px) saturate(150%);
+            position: relative;
+            overflow: hidden;
+            font-size: 1rem;
+            text-transform: uppercase;
+            min-width: 120px;
+        }
+
+        .control-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .control-btn:hover::before {
+            left: 100%;
+        }
+
+        .control-btn:hover {
+            background: 
+                linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.06) 100%),
+                rgba(0,0,0,0.2);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 
+                0 16px 48px rgba(0,0,0,0.25),
+                inset 0 1px 0 rgba(255,255,255,0.2),
+                inset 0 -1px 0 rgba(0,0,0,0.1);
+        }
+
+        .control-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .score-display {
+            text-align: center;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            min-height: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: 
+                linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%),
+                rgba(0,0,0,0.2);
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .win-amount {
+            font-weight: bold;
+            font-size: 1.4rem;
+            color: #4caf50;
+            text-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+        }
+
+        .lose-amount {
+            font-weight: bold;
+            font-size: 1.4rem;
+            color: #f44336;
+            text-shadow: 0 0 10px rgba(244, 67, 54, 0.3);
+        }
+
+        /* Animations */
+        @keyframes elegantFloat {
+            0% { 
+                transform: translateY(100vh) rotate(0deg) scale(0.5); 
+                opacity: 0; 
+            }
+            5% { 
+                opacity: 0.3; 
+                transform: translateY(95vh) rotate(18deg) scale(0.8);
+            }
+            15% { 
+                opacity: 0.6; 
+                transform: translateY(85vh) rotate(45deg) scale(1);
+            }
+            85% { 
+                opacity: 0.6; 
+                transform: translateY(15vh) rotate(315deg) scale(1);
+            }
+            95% { 
+                opacity: 0.3; 
+                transform: translateY(5vh) rotate(342deg) scale(0.8);
+            }
+            100% { 
+                transform: translateY(-5vh) rotate(360deg) scale(0.5); 
+                opacity: 0; 
+            }
+        }
+
+        @keyframes gentleFlow {
+            0%, 100% { 
+                background-position: 0% 50%, 0% 50%, 0% 50%, 0% 50%, 0% 0%; 
+                transform: scale(1);
+            }
+            25% { 
+                background-position: 25% 75%, 75% 25%, 25% 25%, 75% 75%, 25% 25%; 
+                transform: scale(1.02);
+            }
+            50% { 
+                background-position: 100% 50%, 50% 100%, 100% 100%, 50% 50%, 50% 50%; 
+                transform: scale(1);
+            }
+            75% { 
+                background-position: 75% 25%, 25% 75%, 75% 75%, 25% 25%, 75% 75%; 
+                transform: scale(1.02);
+            }
+        }
+
+        @keyframes floatingLights {
+            0%, 100% { 
+                background-position: 30% 40%, 70% 80%, 20% 80%; 
+                opacity: 0.5;
+            }
+            33% { 
+                background-position: 70% 20%, 30% 60%, 80% 40%; 
+                opacity: 0.8;
+            }
+            66% { 
+                background-position: 50% 90%, 90% 30%, 10% 70%; 
+                opacity: 0.6;
+            }
+        }
+
+        @keyframes subtleShimmer {
+            0%, 100% { 
+                transform: translateX(-100%) skewX(-15deg); 
+                opacity: 0; 
+            }
+            50% { 
+                transform: translateX(100%) skewX(-15deg); 
+                opacity: 0.3; 
+            }
+        }
+
+        @keyframes gentleGlow {
+            0%, 100% { 
+                opacity: 0.6; 
+                transform: translateX(-50%) scaleX(0.8); 
+            }
+            50% { 
+                opacity: 1; 
+                transform: translateX(-50%) scaleX(1.2); 
+            }
+        }
+
+        @keyframes logoShine {
+            0%, 100% { 
+                opacity: 0; 
+                transform: scaleX(0); 
+            }
+            20%, 80% { 
+                opacity: 0.6; 
+                transform: scaleX(1); 
+            }
+        }
+
+        @keyframes coinPulse {
+            0%, 100% { 
+                transform: scale(1) rotate(0deg); 
+                box-shadow: 0 4px 12px rgba(255,215,0,0.25);
+            }
+            25% { 
+                transform: scale(1.05) rotate(90deg); 
+                box-shadow: 0 6px 18px rgba(255,215,0,0.35);
+            }
+            50% { 
+                transform: scale(1.08) rotate(180deg); 
+                box-shadow: 0 8px 24px rgba(255,215,0,0.4);
+            }
+            75% { 
+                transform: scale(1.05) rotate(270deg); 
+                box-shadow: 0 6px 18px rgba(255,215,0,0.35);
+            }
+        }
+
+        @keyframes elegantEntrance {
+            0% { 
+                transform: translateY(40px) scale(0.95); 
+                opacity: 0; 
+                filter: blur(20px);
+            }
+            50% { 
+                transform: translateY(20px) scale(0.98); 
+                opacity: 0.7; 
+                filter: blur(10px);
+            }
+            100% { 
+                transform: translateY(0) scale(1); 
+                opacity: 1; 
+                filter: blur(0);
+            }
+        }
+
+        @keyframes coinChangeFloat {
+            0% {
+                opacity: 1;
+                transform: translateX(50%) translateY(0);
+            }
+            100% {
+                opacity: 0;
+                transform: translateX(50%) translateY(-50px);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem 1.5rem;
+            }
+            
+            .logo {
+                font-size: 1.3rem;
+            }
+            
+            .coin-display {
+                padding: 0.6rem 1rem;
+                gap: 0.6rem;
+            }
+
+            .coin-icon {
+                width: 16px;
+                height: 16px;
+            }
+            
+            .main-content {
+                padding: 1rem;
+            }
+            
+            .game-container-inner {
+                margin: 1rem auto;
+                max-width: 95%;
+            }
+            
+            .game-board {
+                height: 400px;
+            }
+            
+            .control-btn {
+                padding: 0.7rem 1.2rem;
+                font-size: 0.9rem;
+                min-width: 100px;
+            }
+            
+            .game-header {
+                padding: 1rem 1.5rem;
+            }
+            
+            .game-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .game-container-inner {
+                margin: 0.5rem auto;
+                max-width: 98%;
+            }
+            
+            .game-board {
+                height: 350px;
+            }
+            
+            .game-header {
+                padding: 0.8rem 1rem;
+            }
+            
+            .game-title {
+                font-size: 1.2rem;
+            }
+            
+            .controls {
+                padding: 1rem;
+                gap: 1rem;
+            }
+            
+            .control-btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-height: 600px) {
+            .game-container-inner {
+                margin: 0.5rem auto;
+            }
+            
+            .game-board {
+                height: 300px;
+            }
+            
+            .main-content {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-814Y2X3KSF"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-814Y2X3KSF');
+</script>
+</head>
+
+<body>
+    <!-- Animated Background -->
+    <div class="matrix-bg"></div>
+    <div class="particles" id="particles"></div>
+
+    <div class="game-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="nav-row">
+                <div class="logo">Void Plinko</div>
+                <div class="coin-display">
+                    <div class="coin-icon"></div>
+                    <span id="coinAmount">0</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="game-container-inner">
+                <div class="game-header">
+                    <div>
+                        <h1 class="game-title">Plinko</h1>
+                        <p class="game-subtitle">Drop the ball and test your luck</p>
+                    </div>
+                </div>
+                
+                <div class="game-board">
+                    <canvas id="canvas"></canvas>
+                </div>
+                
+                <div class="score-display" id="scoreDisplay">
+                    Drop a ball for 100 coins - negative balance allowed!
+                </div>
+                
+                <div class="controls">
+                    <button id="dropButton" class="control-btn">Drop Ball</button>
+                    <button id="resetButton" class="control-btn">Reset Game</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Firebase and Game Scripts -->
+    <script type="module">
+        // Firebase imports
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+        import { 
+            getFirestore, 
+            doc, 
+            getDoc, 
+            updateDoc, 
+            setDoc, 
+            serverTimestamp
+        } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCkAp_GCGCtw4zv7GgHJOE9GPgIaPEuOvQ",
+            authDomain: "void-games-c8d9e.firebaseapp.com",
+            projectId: "void-games-c8d9e",
+            storageBucket: "void-games-c8d9e.firebasestorage.app",
+            messagingSenderId: "1063089929776",
+            appId: "1:1063089929776:web:8e226a23a4f3ab9c5777f5"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Game variables
+        let currentUser = null;
+        let _coinBalance = 0;
+        let gameActive = false;
+        let gameComplete = false;
+
+        // Game objects
+        let ball = null;
+        let pegs = [];
+        let buckets = [];
+        let animationFrame = null;
+
+        // DOM Elements
+        const coinDisplay = document.getElementById('coinAmount');
+        const dropButton = document.getElementById('dropButton');
+        const resetButton = document.getElementById('resetButton');
+        const scoreDisplay = document.getElementById('scoreDisplay');
+
+        // Game Configuration
+        const config = {
+            ballRadius: 8,
+            pegRadius: 4,
+            pegSpacing: 50,
+            pegRows: 8,
+            dropSpeed: 2,
+            gravity: 0.6,
+            friction: 0.85,
+            bounceSpeed: 0.7,
+            buckets: 5,
+            minReward: -1500,
+            maxReward: 1500,
+            dropCost: 100,
+            resetCost: 100
+        };
+
+        // Initialize canvas
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let canvasWidth, canvasHeight;
+
+        // Coin management functions
+        async function loadUserBalance() {
+            if (!currentUser) {
+                _coinBalance = 1000;
+                updateCoinDisplay();
+                return;
+            }
+
+            try {
+                const userRef = doc(db, 'users', currentUser.uid);
+                const userDoc = await getDoc(userRef);
+                
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    _coinBalance = userData.accountBalance || 1000;
+                    updateCoinDisplay();
+                } else {
+                    await setDoc(userRef, { 
+                        accountBalance: 1000,
+                        username: currentUser.displayName || "Player",
+                        email: currentUser.email,
+                        createdAt: serverTimestamp()
+                    });
+                    _coinBalance = 1000;
+                    updateCoinDisplay();
+                }
+            } catch (error) {
+                console.error("Error loading balance:", error);
+                _coinBalance = 1000;
+                updateCoinDisplay();
+            }
+        }
+
+        async function updateCoins(amount, showAnimation = true) {
+            _coinBalance += amount;
+            updateCoinDisplay();
+
+            if (showAnimation && amount !== 0) {
+                showCoinChangeAnimation(amount);
+            }
+
+            if (!currentUser) return true;
+
+            try {
+                const userRef = doc(db, 'users', currentUser.uid);
+                await updateDoc(userRef, {
+                    accountBalance: _coinBalance,
+                    lastUpdated: serverTimestamp()
+                });
+                return true;
+            } catch (error) {
+                console.error("Error updating coins:", error);
+                return true;
+            }
+        }
+
+        function updateCoinDisplay() {
+            coinDisplay.textContent = _coinBalance.toLocaleString();
+            
+            // Update drop button title based on coin balance
+            if (_coinBalance < config.dropCost) {
+                dropButton.title = "Drop a ball (will go negative)";
+            } else {
+                dropButton.title = "Drop a ball";
+            }
+        }
+
+        function showCoinChangeAnimation(amount) {
+            const coinChange = document.createElement('div');
+            coinChange.className = `coin-change ${amount > 0 ? 'positive' : 'negative'}`;
+            coinChange.textContent = `${amount > 0 ? '+' : ''}${amount}`;
+            
+            const coinDisplayElement = document.querySelector('.coin-display');
+            coinDisplayElement.style.position = 'relative';
+            coinDisplayElement.appendChild(coinChange);
+            
+            setTimeout(() => {
+                if (coinChange.parentNode) {
+                    coinChange.remove();
+                }
+            }, 2000);
+        }
+
+        // Resize canvas to fit container
+        function resizeCanvas() {
+            const gameBoard = document.querySelector('.game-board');
+            if (!gameBoard) return;
+            
+            canvasWidth = gameBoard.clientWidth;
+            canvasHeight = gameBoard.clientHeight;
+            
+            canvas.width = canvasWidth;
+            canvas.height = canvasHeight;
+            
+            if (!gameActive) {
+                setupGame();
+                drawGame();
+            }
+        }
+
+        // Utility function to shuffle an array
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Generate bucket rewards
+        function generateBucketRewards() {
+            const rewards = [];
+            for (let i = 0; i < config.buckets; i++) {
+                let reward;
+                if (i < 2) {
+                    reward = Math.floor(Math.random() * (0 - config.minReward) + config.minReward);
+                } else if (i >= config.buckets - 2) {
+                    reward = Math.floor(Math.random() * config.maxReward);
+                } else {
+                    reward = Math.floor(Math.random() * (config.maxReward - config.minReward) + config.minReward);
+                }
+                rewards.push(reward);
+            }
+            
+            for (let i = 0; i < rewards.length; i++) {
+                rewards[i] = Math.round(rewards[i] / 10) * 10;
+            }
+            
+            shuffleArray(rewards);
+            return rewards;
+        }
+
+        // Setup the game
+        function setupGame() {
+            if (animationFrame) {
+                cancelAnimationFrame(animationFrame);
+            }
+            
+            if (!canvasWidth || !canvasHeight) {
+                resizeCanvas();
+            }
+            
+            ball = null;
+            pegs = [];
+            buckets = [];
+            gameActive = false;
+            gameComplete = false;
+            
+            updateCoinDisplay();
+            
+            const startX = canvasWidth / 2;
+            const startY = 60;
+            
+            const optimalPegSpacing = Math.min(
+                config.pegSpacing,
+                canvasWidth / (config.pegRows + 1),
+                canvasHeight / (config.pegRows + 4)
+            );
+            
+            const actualPegSpacing = Math.min(config.pegSpacing, optimalPegSpacing);
+            
+            // Create pegs in triangular pattern
+            for (let row = 0; row < config.pegRows; row++) {
+                const pegCount = row + 1;
+                
+                for (let i = 0; i < pegCount; i++) {
+                    const x = startX - (pegCount - 1) * actualPegSpacing / 2 + i * actualPegSpacing;
+                    const y = startY + row * actualPegSpacing;
+                    
+                    pegs.push({
+                        x: x,
+                        y: y,
+                        radius: config.pegRadius
+                    });
+                }
+            }
+            
+            // Setup buckets
+            const bucketWidth = canvasWidth / config.buckets;
+            const bucketY = canvasHeight - 60;
+            const rewards = generateBucketRewards();
+            
+            for (let i = 0; i < config.buckets; i++) {
+                const x = (i * bucketWidth) + (bucketWidth / 2);
+                buckets.push({
+                    x: x,
+                    y: bucketY,
+                    width: bucketWidth,
+                    height: 50,
+                    reward: rewards[i]
+                });
+            }
+            
+            drawGame();
+        }
+
+        // Drop ball function
+        async function dropBall() {
+            if (gameActive || gameComplete) return;
+            
+            // Always allow dropping, even with negative balance
+            await updateCoins(-config.dropCost);
+            
+            ball = {
+                x: canvasWidth / 2,
+                y: 30,
+                radius: config.ballRadius,
+                velocityX: 0,
+                velocityY: config.dropSpeed
+            };
+            
+            gameActive = true;
+            gameComplete = false;
+            dropButton.disabled = true;
+            resetButton.disabled = true;
+            scoreDisplay.textContent = 'Ball dropping...';
+            animateGame();
+        }
+
+        // Reset game function
+        async function resetGame() {
+            // Always allow reset, even with negative balance
+            await updateCoins(-config.resetCost);
+            scoreDisplay.innerHTML = `<span class="lose-amount">Reset cost: -${config.resetCost} coins</span>`;
+            setupGame();
+        }
+
+        // Main game animation loop
+        function animateGame() {
+            if (!gameActive) return;
+            
+            ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+            updateBall();
+            drawGame();
+            animationFrame = requestAnimationFrame(animateGame);
+        }
+
+        // Update ball physics
+        function updateBall() {
+            if (!ball) return;
+            
+            ball.velocityY += config.gravity;
+            ball.x += ball.velocityX;
+            ball.y += ball.velocityY;
+            
+            // Check for collisions with pegs
+            for (const peg of pegs) {
+                const dx = ball.x - peg.x;
+                const dy = ball.y - peg.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance < ball.radius + peg.radius) {
+                    const angle = Math.atan2(dy, dx);
+                    
+                    const minDistance = ball.radius + peg.radius;
+                    ball.x = peg.x + Math.cos(angle) * minDistance;
+                    ball.y = peg.y + Math.sin(angle) * minDistance;
+                    
+                    const normalX = dx / distance;
+                    const normalY = dy / distance;
+                    
+                    const dotProduct = ball.velocityX * normalX + ball.velocityY * normalY;
+                    
+                    ball.velocityX -= 2 * dotProduct * normalX;
+                    ball.velocityY -= 2 * dotProduct * normalY;
+                    
+                    ball.velocityX *= config.friction * config.bounceSpeed;
+                    ball.velocityY *= config.friction * config.bounceSpeed;
+                    
+                    ball.velocityX += (Math.random() - 0.5) * 0.8;
+                }
+            }
+            
+            // Keep ball within bounds
+            if (ball.x - ball.radius < 0) {
+                ball.x = ball.radius;
+                ball.velocityX = Math.abs(ball.velocityX) * config.friction;
+            } else if (ball.x + ball.radius > canvasWidth) {
+                ball.x = canvasWidth - ball.radius;
+                ball.velocityX = -Math.abs(ball.velocityX) * config.friction;
+            }
+            
+            // Check if ball has entered a bucket
+            if (ball.y > buckets[0].y - ball.radius) {
+                for (let i = 0; i < buckets.length; i++) {
+                    const bucket = buckets[i];
+                    if (ball.x > bucket.x - bucket.width / 2 && 
+                        ball.x < bucket.x + bucket.width / 2) {
+                        
+                        gameComplete = true;
+                        gameActive = false;
+                        
+                        updateCoins(bucket.reward);
+                        
+                        if (bucket.reward >= 0) {
+                            scoreDisplay.innerHTML = `You won: <span class="win-amount">+${bucket.reward}</span>`;
+                        } else {
+                            scoreDisplay.innerHTML = `You lost: <span class="lose-amount">${bucket.reward}</span>`;
+                        }
+                        
+                        dropButton.disabled = false;
+                        resetButton.disabled = false;
+                        break;
+                    }
+                }
+            }
+            
+            // Force ball into bucket if it escapes
+            if (ball.y > canvasHeight) {
+                let nearestBucket = buckets[0];
+                let nearestDistance = Math.abs(ball.x - buckets[0].x);
+                
+                for (let i = 1; i < buckets.length; i++) {
+                    const distance = Math.abs(ball.x - buckets[i].x);
+                    if (distance < nearestDistance) {
+                        nearestDistance = distance;
+                        nearestBucket = buckets[i];
+                    }
+                }
+                
+                ball.x = nearestBucket.x;
+                ball.y = nearestBucket.y + 1;
+                ball.velocityX = 0;
+                ball.velocityY = 1;
+            }
+        }
+
+        // Draw all game elements
+        function drawGame() {
+            if (!canvas || !ctx) return;
+            
+            if (canvas.width === 0 || canvas.height === 0) {
+                resizeCanvas();
+            }
+            
+            ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+            
+            // Draw pegs
+            pegs.forEach(peg => {
+                ctx.beginPath();
+                ctx.arc(peg.x, peg.y, peg.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+                ctx.fill();
+                
+                ctx.shadowColor = 'rgba(255, 255, 255, 0.8)';
+                ctx.shadowBlur = 8;
+                ctx.strokeStyle = 'white';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+                ctx.shadowBlur = 0;
+            });
+            
+            // Draw buckets
+            buckets.forEach(bucket => {
+                ctx.beginPath();
+                ctx.rect(bucket.x - bucket.width / 2, bucket.y, bucket.width, bucket.height);
+                ctx.fillStyle = 'rgba(40, 40, 40, 0.9)';
+                ctx.fill();
+                
+                ctx.shadowColor = 'rgba(255, 255, 255, 0.6)';
+                ctx.shadowBlur = 6;
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                ctx.shadowBlur = 0;
+                
+                ctx.font = 'bold 14px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                
+                if (bucket.reward >= 0) {
+                    ctx.fillStyle = '#4caf50';
+                    ctx.fillText(`+${bucket.reward}`, bucket.x, bucket.y + bucket.height / 2);
+                } else {
+                    ctx.fillStyle = '#f44336';
+                    ctx.fillText(`${bucket.reward}`, bucket.x, bucket.y + bucket.height / 2);
+                }
+            });
+            
+            // Draw guide triangle
+            if (pegs.length > 0) {
+                const topPeg = pegs[0];
+                const lastRowStartIndex = Math.max(0, pegs.length - config.pegRows);
+                const leftPeg = pegs[lastRowStartIndex];
+                const rightPeg = pegs[pegs.length - 1];
+                
+                ctx.beginPath();
+                ctx.moveTo(topPeg.x, topPeg.y - 20);
+                ctx.lineTo(leftPeg.x - 20, buckets[0].y);
+                ctx.lineTo(rightPeg.x + 20, buckets[0].y);
+                ctx.closePath();
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+            }
+            
+            // Draw ball
+            if (ball) {
+                ctx.beginPath();
+                ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+                
+                const gradient = ctx.createRadialGradient(
+                    ball.x - 3, ball.y - 3, 1,
+                    ball.x, ball.y, ball.radius
+                );
+                gradient.addColorStop(0, '#fff');
+                gradient.addColorStop(1, '#aaa');
+                
+                ctx.fillStyle = gradient;
+                ctx.fill();
+                
+                ctx.shadowColor = 'rgba(255, 255, 255, 0.8)';
+                ctx.shadowBlur = 12;
+                ctx.strokeStyle = 'white';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+                ctx.shadowBlur = 0;
+            }
+        }
+
+        // Initialize particles animation
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            
+            setInterval(() => {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                
+                const size = Math.random() * 8 + 3;
+                particle.style.width = particle.style.height = size + 'px';
+                particle.style.animationDuration = (Math.random() * 8 + 12) + 's';
+                particle.style.animationDelay = (Math.random() * 2) + 's';
+                
+                particlesContainer.appendChild(particle);
+                
+                setTimeout(() => {
+                    if (particle.parentNode) {
+                        particle.remove();
+                    }
+                }, 22000);
+            }, 600);
+        }
+
+        // Authentication state listener
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUser = user;
+                await loadUserBalance();
+            } else {
+                currentUser = null;
+                _coinBalance = 1000;
+                updateCoinDisplay();
+            }
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            
+            if (!currentUser) {
+                _coinBalance = 1000;
+                updateCoinDisplay();
+            }
+            
+            // Event listeners
+            dropButton.addEventListener('click', dropBall);
+            resetButton.addEventListener('click', resetGame);
+            window.addEventListener('resize', resizeCanvas);
+            
+            // Initial setup
+            resizeCanvas();
+            setupGame();
+        });
+    </script>
+</body>
+</html>
