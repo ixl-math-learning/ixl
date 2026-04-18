@@ -154,6 +154,13 @@ self.addEventListener('fetch', function (event) {
   // Out-of-scope absolute paths — start by mapping known server-only paths.
   if (method !== 'GET' && method !== 'HEAD') return;
 
+  // 0a. Other jsdelivr paths (/gh/<other-repo>, /npm/<pkg>, /esm/<pkg>) — pass
+  //     through to the browser so jsdelivr serves them directly. Don't
+  //     rewrite, don't redirect.
+  if (p.indexOf('/gh/') === 0 || p.indexOf('/npm/') === 0 || p.indexOf('/esm/') === 0) {
+    return;
+  }
+
   // 0. Stubs for specific Voidv5 scripts that don't work standalone.
   //    scramjet-preload tries to set up a SharedWorker whose wisp transport
   //    won't connect; without a stub it spins in a "no MessagePort" retry
