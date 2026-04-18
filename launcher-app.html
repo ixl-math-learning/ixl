@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="origin">
+<title>Void Network V5</title>
+<meta name="description" content="Educational games and apps.">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="https://ssl.gstatic.com/classroom/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/assets/css/matte-theme.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+html,body{width:100%;height:100%;background:#000;color:#f5f5f5;overflow:hidden;user-select:none}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:-1;background:radial-gradient(circle at 20% 30%,rgba(255,255,255,.015),transparent 60%),radial-gradient(circle at 80% 70%,rgba(255,255,255,.01),transparent 55%),radial-gradient(circle at 40% 80%,rgba(255,255,255,.012),transparent 58%),radial-gradient(circle at 60% 20%,rgba(255,255,255,.008),transparent 65%)}
+
+/* Header with holographic title + search bar */
+#top{padding:2.5rem 1.5rem 1rem;display:flex;flex-direction:column;align-items:center;position:relative}
+.holographic-title{font-size:3.5rem;font-weight:800;text-align:center;letter-spacing:3px;background:linear-gradient(45deg,#fff 0%,#f0f0f0 25%,#fafafa 50%,#e8e8e8 75%,#fff 100%);background-size:300% 300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:holo 4s ease-in-out infinite;filter:drop-shadow(0 0 30px rgba(255,255,255,.2));margin-bottom:1.5rem;cursor:default}
+@keyframes holo{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.search-container{width:100%;max-width:600px;position:relative;margin-bottom:1.25rem}
+#search{width:100%;height:54px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:30px;padding:0 50px 0 22px;color:#f5f5f5;font-size:14px;font-weight:400;outline:none;backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);transition:all .3s ease;box-shadow:0 4px 20px rgba(0,0,0,.3)}
+#search:focus{border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.08);transform:translateY(-1px)}
+#search::placeholder{color:rgba(245,245,245,.5);font-weight:300}
+.search-icon{position:absolute;right:18px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:rgba(245,245,245,.45);pointer-events:none}
+.search-icon svg{width:100%;height:100%;stroke:currentColor}
+.privacy-link{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:1.25rem}
+.privacy-link a{color:rgba(245,245,245,.45);font-size:.72rem;font-weight:300;text-decoration:none;padding:4px 10px;border-radius:8px;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);transition:all .3s}
+.privacy-link a:hover{color:rgba(245,245,245,.8);background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.12)}
+
+/* Back button (hidden initially, shown when playing) */
+#back{position:fixed;top:14px;left:14px;z-index:15;display:none;background:rgba(30,30,30,.85);color:#f5f5f5;border:1px solid rgba(255,255,255,.1);padding:8px 14px;border-radius:22px;font-size:12px;cursor:pointer;font-family:inherit;backdrop-filter:blur(20px)}
+#back:hover{background:rgba(50,50,50,.95)}
+#back.on{display:inline-block}
+
+/* Games grid */
+#grid-wrap{position:absolute;left:0;right:0;top:260px;bottom:0;overflow-y:auto;padding:12px 20px 80px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.1) transparent}
+#grid-wrap::-webkit-scrollbar{width:8px}
+#grid-wrap::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:4px}
+#grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:16px;max-width:1480px;margin:0 auto}
+.game-card{background:#0f0f0f;border:1px solid rgba(255,255,255,.04);border-radius:14px;overflow:hidden;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.3);transition:all .2s;position:relative}
+.game-card:hover{border-color:rgba(255,255,255,.1);background:#141414;box-shadow:0 8px 32px rgba(0,0,0,.5);transform:translateY(-2px)}
+.game-card img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;background:#050505}
+.game-card .t{padding:10px 12px;font-size:12px;line-height:1.3;color:#f0f0f0;font-weight:500;min-height:40px;display:flex;align-items:center}
+.tag{position:absolute;top:8px;left:8px;background:rgba(0,0,0,.7);color:rgba(170,200,248,.95);font-size:9px;padding:2px 6px;border-radius:3px;font-weight:600;letter-spacing:.5px;text-transform:uppercase}
+.empty{text-align:center;color:rgba(255,255,255,.35);font-size:14px;padding:60px 20px}
+
+#frame{position:fixed;top:0;left:0;width:100vw;height:100vh;border:0;background:#000;display:none;z-index:10}
+#frame.on{display:block}
+
+#cloak{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000;z-index:50;transition:opacity .3s}
+#cloak.done{opacity:0;pointer-events:none}
+.spin{width:36px;height:36px;border:2px solid rgba(255,255,255,.12);border-top-color:rgba(255,255,255,.8);border-radius:50%;animation:sp 1s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+@media (max-width:768px){
+  .holographic-title{font-size:2.4rem;letter-spacing:2px;margin-bottom:1rem}
+  #top{padding:1.5rem 1rem .5rem}
+  #grid-wrap{top:210px}
+}
+@media (max-width:480px){
+  .holographic-title{font-size:1.9rem}
+  #grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+  .game-card .t{font-size:11px;padding:8px 10px}
+}
+</style>
+</head>
+<body>
+<div id="top">
+  <h1 class="holographic-title">Void Network V5</h1>
+  <div class="search-container">
+    <input id="search" type="text" placeholder="Search for Games/Apps..." autocomplete="off" spellcheck="false">
+    <div class="search-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+  </div>
+</div>
+<div id="grid-wrap"><div id="grid"></div></div>
+<iframe id="frame" title="Classroom" allow="fullscreen; clipboard-read; clipboard-write; autoplay; encrypted-media; gamepad; accelerometer; gyroscope; microphone; camera; midi; picture-in-picture" allowfullscreen referrerpolicy="no-referrer"></iframe>
+<button id="back" type="button">&larr; Back</button>
+<div id="cloak"><div class="spin"></div></div>
+
+<script type="module">
+const BASE_STATIC = '/gh/ixl-math-learning/ixl@main/static';
+
+// Stubs so gg.js parses
+window.LocalGameEncoder = { createEncodedLink: p => p };
+window.__uv$config = {
+  prefix: '/uv/',
+  encodeUrl: u => encodeURIComponent(String(u)),
+  decodeUrl: u => decodeURIComponent(String(u)),
+};
+
+const grid  = document.getElementById('grid');
+const frame = document.getElementById('frame');
+const back  = document.getElementById('back');
+const input = document.getElementById('search');
+const cloak = document.getElementById('cloak');
+
+let games = [];
+try {
+  const mod = await import(BASE_STATIC + '/assets/gg/gg.js');
+  games = mod.gamesData || [];
+} catch (e) {
+  grid.innerHTML = '<div class="empty">Failed to load games: ' + (e.message || e) + '</div>';
+}
+
+function resolveImg(src) {
+  if (!src) return '';
+  if (/^https?:\/\//i.test(src)) return src;
+  return BASE_STATIC + (src.startsWith('/') ? src : '/' + src);
+}
+
+function openFrame(src) {
+  frame.src = src;
+  frame.classList.add('on');
+  back.classList.add('on');
+}
+function closeFrame() {
+  frame.classList.remove('on');
+  back.classList.remove('on');
+  frame.src = 'about:blank';
+}
+back.addEventListener('click', closeFrame);
+
+function play(g) {
+  const link = String(g.link || '');
+  if (link.startsWith('__SCRAMJET__') || link.startsWith('/uv/')) {
+    // External/proxy game — can't serve without wisp backend on jsdelivr.
+    alert('This game is proxied — only available on the main site (vng.lol).');
+    return;
+  }
+  // Plain local path — iframe directly from ixl repo.
+  const path = link.startsWith('/') ? link : '/' + link;
+  openFrame(BASE_STATIC + path);
+}
+
+function render(q) {
+  grid.innerHTML = '';
+  const needle = (q || '').trim().toLowerCase();
+  const shown = needle ? games.filter(g => (g.title || '').toLowerCase().includes(needle)) : games;
+  if (!shown.length) {
+    grid.innerHTML = '<div class="empty">No games match “' + needle + '”.</div>';
+    return;
+  }
+  const frag = document.createDocumentFragment();
+  for (const g of shown) {
+    const card = document.createElement('div');
+    card.className = 'game-card';
+    const img = document.createElement('img');
+    img.loading = 'lazy';
+    img.src = resolveImg(g.imgSrc);
+    img.alt = '';
+    img.onerror = () => { img.style.background = '#050505'; img.removeAttribute('src'); };
+    const t = document.createElement('div');
+    t.className = 't';
+    t.textContent = g.title || '';
+    card.appendChild(img);
+    card.appendChild(t);
+    card.addEventListener('click', () => play(g));
+    const link = String(g.link || '');
+    if (link.startsWith('__SCRAMJET__') || link.startsWith('/uv/')) {
+      const tag = document.createElement('span');
+      tag.className = 'tag';
+      tag.textContent = 'Proxy';
+      card.appendChild(tag);
+    }
+    frag.appendChild(card);
+  }
+  grid.appendChild(frag);
+}
+
+let t;
+input.addEventListener('input', e => {
+  clearTimeout(t);
+  t = setTimeout(() => render(e.target.value), 120);
+});
+
+render('');
+cloak.classList.add('done');
+setTimeout(() => { cloak.style.display = 'none'; }, 300);
+</script>
+</body>
+</html>

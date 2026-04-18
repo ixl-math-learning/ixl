@@ -1,6 +1,5 @@
-// Minimal shell: install SW, iframe the real Voidv5 index.html. The SW
-// takes care of MIME rewriting, injecting globals, stubbing /api/* and
-// /~r/*, redirecting /cdn-cache/* to jsdelivr's npm mirror, etc.
+// Minimal shell: register SW (for MIME + path rewriting when games open),
+// then iframe our Voidv5-styled launcher page.
 (async function () {
   const BASE  = location.pathname.replace(/\/[^/]*$/, '');
   const frame = document.querySelector('#frame');
@@ -13,15 +12,11 @@
   }
   if (frame) frame.addEventListener('load', reveal);
 
-  const hash = (location.hash || '').replace(/^#/, '').replace(/^\/+/, '');
-  const targetUrl = BASE + '/static' + (hash ? '/' + hash : '/index.html');
-
   if (navigator.serviceWorker && navigator.serviceWorker.controller) {
     navigator.serviceWorker.register(BASE + '/sw.js', { scope: BASE + '/' }).catch(() => {});
-    frame.src = targetUrl;
+    frame.src = BASE + '/launcher-app.html' + location.hash;
     return;
   }
-
   try {
     if (!navigator.serviceWorker) throw new Error('no SW');
     const reg = await navigator.serviceWorker.register(BASE + '/sw.js', { scope: BASE + '/' });
@@ -36,10 +31,8 @@
         new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 8000))
       ]);
     }
-    if (!navigator.serviceWorker.controller) {
-      await navigator.serviceWorker.ready;
-    }
+    if (!navigator.serviceWorker.controller) await navigator.serviceWorker.ready;
   } catch (_) {}
 
-  frame.src = targetUrl;
+  frame.src = BASE + '/launcher-app.html' + location.hash;
 })();
