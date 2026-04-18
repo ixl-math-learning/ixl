@@ -84,7 +84,15 @@ async function injectIntoHtml(response) {
   var ct = (response.headers.get('Content-Type') || '').toLowerCase();
   if (ct.indexOf('html') === -1) return response;
   var text = await response.text();
-  var out = text.replace(/<head(\s[^>]*)?>/i, function (m) { return m + PRELUDE; });
+  // Rewrite bare-absolute paths ("/foo", "/foo/bar") that occur as values of
+  // href / src / action / data-src / data-href attributes so the HTML-level
+  // URLs are in-scope before any JS has a chance to read them.
+  // Skip //something (protocol-relative) and anything already under /gh/ | /npm/ | /esm/.
+  var out = text.replace(
+    /(\s(?:href|src|action|data-src|data-href|formaction)\s*=\s*)(["'])\/(?![\/])(?!gh\/)(?!npm\/)(?!esm\/)/gi,
+    function (m, attr, quote) { return attr + quote + STATIC_BASE + '/'; }
+  );
+  out = out.replace(/<head(\s[^>]*)?>/i, function (m) { return m + PRELUDE; });
   if (out === text) out = PRELUDE + out;
   var h = new Headers(response.headers);
   h.set('Content-Type', 'text/html; charset=utf-8');
