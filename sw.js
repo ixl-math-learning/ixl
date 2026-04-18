@@ -158,6 +158,28 @@ self.addEventListener('fetch', function (event) {
     return;
   }
 
+  // 0b. Navigation requests (iframe src=, location.href=) to paths outside
+  //    our base need to become REAL redirects to the in-base URL — so the
+  //    iframe's document URL ends up inside our SW scope, keeping the SW
+  //    attached to the new page. Otherwise the iframe navigates to an
+  //    unscoped URL and every subresource request escapes.
+  var isNav = event.request.mode === 'navigate' ||
+              event.request.destination === 'document' ||
+              event.request.destination === 'iframe';
+  if (isNav) {
+    // Skip known stubs below that aren't actually docs (shouldn't reach here anyway)
+    if (p.indexOf('/api/') !== 0 && p.indexOf('/s/') !== 0 && p.indexOf('/t/') !== 0 && p !== '/sw.js') {
+      var target = url.origin + STATIC_BASE + p + url.search + url.hash;
+      // /~r/N/ navigations should go to the library path, not /static
+      var mappedNav = resolveServerPath(p);
+      if (mappedNav) target = url.origin + mappedNav + url.search + url.hash;
+      // /cdn-cache navigations — unlikely but for completeness
+      if (p.indexOf('/cdn-cache/unpkg/') === 0) target = 'https://cdn.jsdelivr.net/npm/' + p.slice('/cdn-cache/unpkg/'.length) + url.search;
+      event.respondWith(Response.redirect(target, 302));
+      return;
+    }
+  }
+
   // 1. Mirrored library paths (/~r/N/...)
   var mapped = resolveServerPath(p);
   if (mapped) {
