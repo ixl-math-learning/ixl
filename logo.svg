@@ -31,6 +31,7 @@
         <iframe id="frame" title="Classroom"
           allow="fullscreen; clipboard-read; clipboard-write; autoplay; encrypted-media; gamepad; accelerometer; gyroscope; microphone; camera; midi; picture-in-picture"
           allowfullscreen="allowfullscreen" referrerpolicy="no-referrer"></iframe>
+        <div id="cloak"><div class="spin"></div></div>
         <script src="./assets/launcher.js"></script>
       </body>
     </html>
