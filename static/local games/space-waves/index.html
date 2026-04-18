@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Space Waves</title>
+    <style>
+      body { margin: 0; padding: 0; overflow: hidden; background: #000; }
+      #loading-text {
+        color: white; font-size: 48px; font-family: cursive;
+        text-align: center; margin-top: 20px;
+        position: absolute; width: 100%; z-index: 10;
+      }
+      #unity-canvas {
+        position: fixed; top: 0; left: 0;
+        width: 100%; height: 100%; outline: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="loading-text">LOADING...</div>
+    <canvas id="unity-canvas"></canvas>
+
+    <script>
+      const canvas = document.querySelector("#unity-canvas");
+      const loadingText = document.getElementById("loading-text");
+
+      const config = {
+        dataUrl:    "Build/e4aa851098e3e5d328e4d879078ad6c5.data",
+        frameworkUrl:"Build/f3dc87e8bc321dd382fbd3fa53e1091f.framework.js",
+        codeUrl:    "Build/9adf8a1aafea4c2333e26d66a8b36d56.wasm",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName:  "Space Waves",
+        productName:  "Space Waves",
+        productVersion: "1.0.0"
+      };
+
+      function resizeCanvas() {
+        canvas.width  = window.innerWidth;
+        canvas.height = window.innerHeight;
+        canvas.style.width  = window.innerWidth + "px";
+        canvas.style.height = window.innerHeight + "px";
+      }
+      window.addEventListener("load", resizeCanvas);
+      window.addEventListener("resize", resizeCanvas);
+
+      const script = document.createElement("script");
+      script.src = "Build/81bbae32c7a77bc49304934b19e72883.loader.js";
+      script.onload = () => {
+        createUnityInstance(canvas, config, (progress) => {
+          loadingText.innerText = "LOADING... " + Math.floor(progress * 100) + "%";
+        }).then((unityInstance) => {
+          loadingText.style.display = "none";
+          window.gameInstance = unityInstance;
+        }).catch((message) => {
+          loadingText.innerText = "Error: " + message;
+        });
+      };
+      document.body.appendChild(script);
+    </script>
+  </body>
+</html>

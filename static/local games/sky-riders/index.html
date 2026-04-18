@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Sky Riders</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #1a1a2e;
+        }
+        #unity-container {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+        }
+        #unity-canvas {
+            width: 100%;
+            height: 100%;
+            background: #231f20;
+        }
+        #loading-cover {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            background: #1a1a2e;
+            z-index: 10;
+        }
+        #loading-cover h1 {
+            color: #fff;
+            font-family: Arial, sans-serif;
+            margin-bottom: 30px;
+        }
+        .progress-bar {
+            width: 300px;
+            height: 20px;
+            background: #333;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            transition: width 0.3s;
+        }
+        #loading-text {
+            color: #aaa;
+            font-family: Arial, sans-serif;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div id="unity-container">
+        <canvas id="unity-canvas" tabindex="-1"></canvas>
+        <div id="loading-cover">
+            <h1>Sky Riders</h1>
+            <div class="progress-bar">
+                <div class="progress-bar-fill" id="progress-fill"></div>
+            </div>
+            <div id="loading-text">Loading... 0%</div>
+        </div>
+    </div>
+
+    <script src="Build/loader.js"></script>
+    <script>
+        var canvas = document.querySelector("#unity-canvas");
+        var loadingCover = document.querySelector("#loading-cover");
+        var progressFill = document.querySelector("#progress-fill");
+        var loadingText = document.querySelector("#loading-text");
+
+        var buildUrl = "Build";
+        var config = {
+            dataUrl: buildUrl + "/game.data",
+            frameworkUrl: buildUrl + "/framework.js",
+            codeUrl: buildUrl + "/game.wasm",
+            streamingAssetsUrl: "StreamingAssets",
+            companyName: "Stand By Games",
+            productName: "Sky Riders",
+            productVersion: "1.0",
+        };
+
+        if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+            var meta = document.createElement('meta');
+            meta.name = 'viewport';
+            meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+            document.getElementsByTagName('head')[0].appendChild(meta);
+        }
+
+        createUnityInstance(canvas, config, function (progress) {
+            var pct = Math.round(progress * 100);
+            progressFill.style.width = pct + "%";
+            loadingText.textContent = "Loading... " + pct + "%";
+        }).then(function (unityInstance) {
+            loadingCover.style.display = "none";
+        }).catch(function (message) {
+            alert(message);
+        });
+    </script>
+</body>
+</html>

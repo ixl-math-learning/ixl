@@ -1,0 +1,81 @@
+<!DOCTYPE html><html><head><script>
+// ── CrazyGames SDK Mock for offline play ──
+// Intercept dynamic script loading to prevent real SDK from loading
+(function() {
+    var _origCreateElement = document.createElement.bind(document);
+    document.createElement = function(tag) {
+        var el = _origCreateElement(tag);
+        if (tag.toLowerCase() === 'script') {
+            var _origSrcSet = el.__lookupSetter__('src') || Object.getOwnPropertyDescriptor(HTMLScriptElement.prototype, 'src').set;
+            Object.defineProperty(el, 'src', {
+                set: function(val) {
+                    if (val && val.indexOf('sdk.crazygames.com') !== -1) {
+                        console.log('[SDK Mock] Blocked real SDK load:', val);
+                        // Fire load event so the caller thinks it loaded
+                        setTimeout(function() {
+                            var evt = new Event('load');
+                            el.dispatchEvent(evt);
+                            if (el.onload) el.onload(evt);
+                        }, 10);
+                        return;
+                    }
+                    _origSrcSet.call(el, val);
+                },
+                get: function() { return el.getAttribute('src') || ''; }
+            });
+        }
+        return el;
+    };
+})();
+
+// Mock SDK objects
+window.CrazyGames = window.CrazyGames || {};
+window.CrazyGames.SDK = {
+    init: function() { return Promise.resolve(); },
+    game: {
+        sdkGameLoadingStart: function() {},
+        sdkGameLoadingStop: function() {},
+        gameplayStart: function() {},
+        gameplayStop: function() {},
+        happytime: function() {},
+        loadingStart: function() {},
+        loadingStop: function() {},
+    },
+    ad: {
+        requestAd: function(type, callbacks) {
+            callbacks = callbacks || {};
+            setTimeout(function() {
+                if (callbacks.adFinished) callbacks.adFinished();
+                else if (callbacks.adError) callbacks.adError();
+            }, 100);
+        },
+        hasAdblock: false,
+    },
+    user: {
+        isUserAccountAvailable: false,
+        showAuthPrompt: function() { return Promise.reject('offline'); },
+        showAccountLinkPrompt: function() { return Promise.reject('offline'); },
+        getUser: function() { return Promise.resolve(null); },
+        getToken: function() { return Promise.resolve(null); },
+        getXsollaUserToken: function() { return Promise.resolve(null); },
+        addScoreChangeListener: function() {},
+        addAuthListener: function() {},
+    },
+    data: {
+        save: function() { return Promise.resolve(); },
+        load: function() { return Promise.resolve(null); },
+        getItem: function() { return Promise.resolve(null); },
+        setItem: function() { return Promise.resolve(); },
+        removeItem: function() { return Promise.resolve(); },
+        clear: function() { return Promise.resolve(); },
+    },
+    banner: { requestBanner: function() {} },
+    environment: 'disabled',
+    isInitialized: true,
+};
+window.CrazyGames.CrazySDK = window.CrazyGames.SDK;
+
+// V3 SDK compat
+window.Crazygames = window.CrazyGames;
+</script>
+<meta charset="utf-8"><link rel="preload" href="forced_square.woff2" as="font" type="font/woff2" crossorigin="anonymous"><link rel="preload" href="images/logo.svg" as="image" type="image/svg+xml"><link rel="preload" href="images/discord.svg" as="image" type="image/svg+xml"><link rel="manifest" href="manifest.json"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,viewport-fit=cover,user-scalable=no"><script defer="defer" src="error_screen.bundle.js"></script><script defer="defer" src="main.bundle.js"></script><link rel="canonical" href="https://www.crazygames.com/game/polytrack"></head><body><canvas id="screen"></canvas><div id="ui"></div><div id="transition-layer"></div></body></html>

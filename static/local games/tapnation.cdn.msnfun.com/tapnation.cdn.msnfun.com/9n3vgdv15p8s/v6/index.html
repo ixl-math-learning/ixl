@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+
+    <script defer src="/s/script.js" data-website-id="b9510d8e-e1e5-4dff-ad86-297ebece5574"></script>
+    <noscript><img src="/t/p?payload=%7B%22website%22%3A%22b9510d8e-e1e5-4dff-ad86-297ebece5574%22%2C%22url%22%3A%22%2F%22%2C%22hostname%22%3A%22vng.lol%22%2C%22name%22%3A%22pageview%22%7D" style="display:none;"></noscript>
+    <link rel="manifest" href="manifest.json">
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Golf Orbit</title>
+    <link rel="shortcut icon" href="TemplateData/favicon.ico">
+    <link rel="stylesheet" href="TemplateData/style.css">
+    <script src="https://assets.msn.com/staticsb/statics/latest/msstart-games-sdk/msstart-v1.0.0-rc.20.min.js"></script>
+
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-814Y2X3KSF"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-814Y2X3KSF');
+</script>
+</head>
+<body>
+    <div id="unity-container">
+        <canvas id="unity-canvas" width="900" height="600" tabindex="-1"></canvas>
+        <div id="unity-loading-bar">
+            <div id="unity-logo"></div>
+            <div id="unity-progress-bar-empty">
+                <div id="unity-progress-bar-full"></div>
+            </div>
+        </div>
+        <div id="unity-warning"></div>
+    </div>
+
+    <script>
+        window.addEventListener("load", function () {
+            if ("ServiceWorker" in navigator) {
+                navigator.serviceWorker.register("ServiceWorker.js");
+            }
+        });
+
+        var container = document.querySelector("#unity-container");
+        var canvas = document.querySelector("#unity-canvas");
+        var loadingBar = document.querySelector("#unity-loading-bar");
+        var progressBarFull = document.querySelector("#unity-progress-bar-full");
+        var warningBanner = document.querySelector("#unity-warning");
+
+        function unityShowBanner(msg, type) {
+            function updateBannerVisibility() {
+                warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
+            }
+            var div = document.createElement('div');
+            div.innerHTML = msg;
+            warningBanner.appendChild(div);
+            if (type == 'error') div.style = 'background: red; padding: 10px;';
+            else {
+                if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
+                setTimeout(function () {
+                    warningBanner.removeChild(div);
+                    updateBannerVisibility();
+                }, 5000);
+            }
+            updateBannerVisibility();
+        }
+
+      var buildUrl = "Build";
+      var loaderUrl = buildUrl + "/9853637125e801e9aae48e78dbbdcfca.loader.js";
+      var config = {
+        dataUrl: buildUrl + "/c435997b2cc2b4e5ff1d329762ee774d.data.unityweb",
+        frameworkUrl: buildUrl + "/04a051262f8f16406986e06b8539c371.framework.js.unityweb",
+        codeUrl: buildUrl + "/41e18e97d75251175935126c5d24b998.wasm.unityweb",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "TapNationSAS",
+        productName: "Golf Orbit",
+        productVersion: "1.2",
+        showBanner: unityShowBanner,
+      };
+
+        if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+            var meta = document.createElement('meta');
+            meta.name = 'viewport';
+            meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+            document.getElementsByTagName('head')[0].appendChild(meta);
+        }
+
+        loadingBar.style.display = "block";
+
+        var script = document.createElement("script");
+        script.src = loaderUrl;
+        script.onload = () => {
+            createUnityInstance(canvas, config, (progress) => {
+                progressBarFull.style.width = 100 * progress + "%";
+            }).then((unityInstance) => {
+                window.gameInstance = unityInstance; // ✅ Unity is ready now
+                loadingBar.style.display = "none";
+
+                // ✅ Preload ads only AFTER Unity is initialized
+                LoadRewardedAd();
+                LoadInterstitialAd();
+
+            }).catch((message) => {
+                alert(message);
+            });
+        };
+        document.body.appendChild(script);
+    </script>
+    <script>
+
+        function NotifyMuteAudio()
+        {
+            $msstart.notifyGameMuted();
+        }
+        function NotifyUnmuteAudio() {
+            $msstart.notifyGameUnmuted();
+        }
+
+    </script>
+    <script>
+        // GLOBAL variables for ads
+        let interstitialAdInstance = null;
+        let rewardedAdInstance = null;
+
+        // Load interstitial ad
+        function LoadInterstitialAd() {
+            $msstart.loadAdsAsync().then(ad => {
+                interstitialAdInstance = ad;
+                console.log("Interstitial loaded");
+            }).catch(err => {
+                console.error("Interstitial load failed", err);
+            });
+        }
+
+        // Show interstitial ad
+        async function ShowInterstitialAd() {
+            if (!interstitialAdInstance) {
+                console.warn("[MSStart] Interstitial not loaded");
+                return;
+            }
+
+            try {
+                await new Promise(resolve => setTimeout(resolve, 100));
+                // 🔇 Mute only after ad object is ready
+                gameInstance.SendMessage("MSStartIntegration", "MuteAudio");
+
+                // ⏳ Small delay before showing ad (e.g., 300ms)
+                await new Promise(resolve => setTimeout(resolve, 300));
+
+                // Ask SDK to show the ad
+                const ad = await $msstart.showAdsAsync(interstitialAdInstance.instanceId);
+
+                // Wait for ad to finish
+                await ad.showAdsCompletedAsync;
+                console.log("[MSStart] Interstitial completed");
+            } catch (e) {
+                console.warn("[MSStart] Interstitial show error", e);
+            } finally {
+                // 🔊 Always unmute + reload
+                gameInstance.SendMessage("MSStartIntegration", "UnmuteAudio");
+                LoadInterstitialAd();
+            }
+        }
+
+        // Load rewarded ad
+        function LoadRewardedAd() {
+            $msstart.loadAdsAsync(true).then(ad => {
+                rewardedAdInstance = ad;
+                console.log("Rewarded loaded");
+            }).catch(err => {
+                console.error("Rewarded load failed", err);
+            });
+        }
+
+        // Show rewarded ad
+        async function ShowRewardedAd() {
+            if (!rewardedAdInstance) {
+                console.warn("Rewarded ad not loaded");
+                return;
+            }
+
+            try {
+                // 🔇 Mute only once ad is ready
+                gameInstance.SendMessage("MSStartIntegration", "MuteAudio");
+
+                await new Promise(resolve => setTimeout(resolve, 300));
+
+                const ad = await $msstart.showAdsAsync(rewardedAdInstance.instanceId);
+
+                // Wait for ad to complete
+                await ad.showAdsCompletedAsync;
+                console.log("Rewarded ad watched fully");
+
+                // Notify Unity about reward
+                gameInstance.SendMessage("MSStartIntegration", "OnRewardedAdComplete");
+            } catch (err) {
+                console.warn("Rewarded ad skipped or failed", err);
+            } finally {
+                // 🔊 Always unmute + reload
+                gameInstance.SendMessage("MSStartIntegration", "UnmuteAudio");
+                LoadRewardedAd();
+            }
+        }
+
+    </script>
+
+</body>
+</html>
+
