@@ -126,6 +126,18 @@ self.addEventListener('fetch', function (event) {
   // Out-of-scope absolute paths — start by mapping known server-only paths.
   if (method !== 'GET' && method !== 'HEAD') return;
 
+  // 0. Stubs for specific Voidv5 scripts that don't work standalone.
+  //    scramjet-preload tries to set up a SharedWorker whose wisp transport
+  //    won't connect; without a stub it spins in a "no MessagePort" retry
+  //    loop forever and pegs the CPU.
+  if (p === '/assets/js/scramjet-preload.js' ||
+      p.indexOf('/assets/js/adsence-tracking.js') === 0 ||
+      p === '/lib/pf.js' ||
+      p === '/popup-listener.js') {
+    event.respondWith(Promise.resolve(emptyJs()));
+    return;
+  }
+
   // 1. Mirrored library paths (/~r/N/...)
   var mapped = resolveServerPath(p);
   if (mapped) {
