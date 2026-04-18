@@ -198,9 +198,14 @@ self.addEventListener('fetch', function (event) {
     return;
   }
 
-  // 3. /api/* — return empty JSON
+  // 3. /api/* — return sensible empty shapes. The frontend expects specific
+  //    keys for some endpoints or throws "Failed to load ratings".
   if (p.indexOf('/api/') === 0) {
-    event.respondWith(Promise.resolve(emptyJson()));
+    var body = '{}';
+    if (p === '/api/game-ratings')     body = '{"success":true,"ratings":{}}';
+    else if (p === '/api/game-play-counts') body = '{}';
+    else if (p === '/api/ps')          body = '{"success":true}';
+    event.respondWith(new Response(body, { status: 200, headers: { 'Content-Type': 'application/json; charset=utf-8' } }));
     return;
   }
 
