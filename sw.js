@@ -62,6 +62,37 @@ async function handleProxy(event) {
   return fetch(event.request).catch(function () { return new Response('Network error', { status: 502 }); });
 }
 
+// jsdelivr serves HTML as text/plain (anti-XSS). For iframe navigation that
+// target HTML files, rewrite the Content-Type so the browser renders them.
+function mimeFor(pathname) {
+  var ext = (pathname.match(/\.([a-z0-9]+)(?:$|\?)/i) || [])[1];
+  if (!ext) return null;
+  ext = ext.toLowerCase();
+  var m = {
+    html: 'text/html; charset=utf-8',
+    htm:  'text/html; charset=utf-8',
+    xhtml:'application/xhtml+xml; charset=utf-8',
+    js:   'application/javascript; charset=utf-8',
+    mjs:  'application/javascript; charset=utf-8',
+    cjs:  'application/javascript; charset=utf-8',
+    css:  'text/css; charset=utf-8',
+    wasm: 'application/wasm',
+    json: 'application/json; charset=utf-8',
+    svg:  'image/svg+xml',
+  };
+  return m[ext] || null;
+}
+
+function withFixedMime(pathname, response) {
+  var want = mimeFor(pathname);
+  if (!want) return response;
+  var got = response.headers.get('Content-Type') || '';
+  if (got.toLowerCase().indexOf(want.split(';')[0].toLowerCase()) === 0) return response;
+  var h = new Headers(response.headers);
+  h.set('Content-Type', want);
+  return new Response(response.body, { status: response.status, statusText: response.statusText, headers: h });
+}
+
 self.addEventListener('fetch', function (event) {
   var url;
   try { url = new URL(event.request.url); } catch (_) { return; }
@@ -75,8 +106,13 @@ self.addEventListener('fetch', function (event) {
     return;
   }
 
-  // 2. Under our base — pass through to network
-  if (p.indexOf(B + '/') === 0 || p === B) return;
+  // 2. Under our base — fetch, but force correct Content-Type
+  if (p.indexOf(B + '/') === 0 || p === B) {
+    if (mimeFor(p)) {
+      event.respondWith(fetch(event.request).then(function (r) { return withFixedMime(p, r); }).catch(function (e) { return new Response('Network error: ' + e, { status: 502 }); }));
+    }
+    return;
+  }
 
   // 3. Absolute path outside BASE — rewrite to BASE/static<path>
   //    Only for GET/HEAD; anything else we let pass (rare, avoid mangling).
@@ -88,7 +124,7 @@ self.addEventListener('fetch', function (event) {
     fetch(newUrl, { credentials: event.request.credentials, cache: event.request.cache, redirect: event.request.redirect })
       .then(function (r) {
         if (r.status === 404) return fetch(event.request);
-        return r;
+        return withFixedMime(p, r);
       })
       .catch(function () { return fetch(event.request); })
   );
