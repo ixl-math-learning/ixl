@@ -1,10 +1,10 @@
-// Minimal service worker:
-//   * fix Content-Type for HTML/JS/etc (jsdelivr serves HTML as text/plain)
-//   * rewrite absolute paths from inside iframed games to /static/<path>
-//   * inject a click/nav interceptor into every HTML response so absolute
-//     links (href="/foo") navigate to /gh/<owner>/<repo>@<ref>/static/foo
-//     instead of escaping to the CDN origin and hitting jsdelivr's
-//     "Invalid URL" error.
+// Service worker: lets the real Voidv5 index.html run on jsdelivr by
+//   * fixing Content-Type for HTML/JS/etc (jsdelivr serves HTML as text/plain)
+//   * rewriting absolute paths outside our base to /static/<path>
+//   * stubbing the server-only routes the frontend expects (/~r/*, /api/*,
+//     /s/*, /t/*, /cdn-cache/unpkg/*, /sw.js)
+//   * injecting globals (__uv$config, LocalGameEncoder, lucide, umami,
+//     gtag, dataLayer) + a click/nav interceptor into every HTML response.
 var B = self.location.pathname.replace(/\/[^/]*$/, '');
 var STATIC_BASE = B + '/static';
 
@@ -16,6 +16,7 @@ self.addEventListener('activate', function (e) {
   ]));
 });
 
+// ---- MIME rewriting ----
 function mimeFor(p) {
   var ext = (p.match(/\.([a-z0-9]+)(?:$|\?)/i) || [])[1];
   if (!ext) return null;
@@ -33,10 +34,8 @@ function mimeFor(p) {
     svg:  'image/svg+xml',
   })[ext] || null;
 }
-
-function withFixedMime(p, r) {
-  var want = mimeFor(p);
-  if (!want) return r;
+function withMime(p, r) {
+  var want = mimeFor(p); if (!want) return r;
   var got = (r.headers.get('Content-Type') || '').toLowerCase();
   if (got.indexOf(want.split(';')[0].toLowerCase()) === 0) return r;
   var h = new Headers(r.headers);
@@ -44,63 +43,65 @@ function withFixedMime(p, r) {
   return new Response(r.body, { status: r.status, statusText: r.statusText, headers: h });
 }
 
-// The interceptor that gets injected into every HTML response. It rewrites
-// absolute-path link clicks, window.open calls, and direct location writes
-// so the iframe stays under /gh/<owner>/<repo>@<ref>/static/<path>.
-var INTERCEPTOR = [
-  '<script>',
-  '(function(){',
-    'var BASE=' + JSON.stringify(STATIC_BASE) + ';',
-    'function fix(u){',
-      'if(!u||typeof u!=="string")return u;',
-      'if(u.charAt(0)!=="/")return u;',
-      'if(u.indexOf("/gh/")===0||u.indexOf("/npm/")===0||u.indexOf("/esm/")===0)return u;',
-      'return BASE+u;',
-    '}',
-    'document.addEventListener("click",function(e){',
-      'if(e.defaultPrevented)return;',
-      'var a=e.target.closest&&e.target.closest("a");',
-      'if(!a)return;',
-      'var h=a.getAttribute("href");',
-      'if(!h)return;',
-      'var fixed=fix(h);',
-      'if(fixed===h)return;',
-      'e.preventDefault();',
-      'var t=a.getAttribute("target");',
-      'if(t==="_blank")window.open(fixed,t);else window.location.href=fixed;',
-    '},true);',
-    'var origOpen=window.open;',
-    'window.open=function(u){arguments[0]=fix(u);return origOpen.apply(this,arguments)};',
-    'document.addEventListener("submit",function(e){',
-      'var f=e.target;if(!f||!f.action)return;',
-      'try{var u=new URL(f.action);if(u.origin===location.origin){var fixed=fix(u.pathname+u.search+u.hash);if(fixed!==u.pathname+u.search+u.hash)f.action=fixed}}catch(_){}',
-    '},true);',
-  '})();',
-  '</script>'
+// ---- HTML interceptor injected into every HTML response ----
+var PRELUDE = [
+  '<script>(function(){',
+  // Stub globals that the Voidv5 frontend pokes at before its own scripts finish loading.
+  'try{window.__uv$config=window.__uv$config||{prefix:"/uv/",bare:"/bare/",encodeUrl:function(u){return encodeURIComponent(String(u))},decodeUrl:function(u){return decodeURIComponent(String(u))}};}catch(_){}',
+  'try{window.LocalGameEncoder=window.LocalGameEncoder||{createEncodedLink:function(p){return p}};}catch(_){}',
+  'try{window.lucide=window.lucide||{createIcons:function(){},icons:{}};}catch(_){}',
+  'try{window.umami=window.umami||{track:function(){},identify:function(){}};}catch(_){}',
+  'try{window.dataLayer=window.dataLayer||[];window.gtag=window.gtag||function(){window.dataLayer.push(arguments)};}catch(_){}',
+  'var BASE=' + JSON.stringify(STATIC_BASE) + ';',
+  'function fix(u){if(!u||typeof u!=="string")return u;if(u.charAt(0)!=="/")return u;if(u.indexOf("/gh/")===0||u.indexOf("/npm/")===0||u.indexOf("/esm/")===0)return u;return BASE+u}',
+  'document.addEventListener("click",function(e){if(e.defaultPrevented)return;var a=e.target.closest&&e.target.closest("a");if(!a)return;var h=a.getAttribute("href");if(!h)return;var f=fix(h);if(f===h)return;e.preventDefault();var t=a.getAttribute("target");if(t==="_blank")window.open(f,t);else window.location.href=f},true);',
+  'var origOpen=window.open;window.open=function(u){arguments[0]=fix(u);return origOpen.apply(this,arguments)};',
+  'document.addEventListener("submit",function(e){var f=e.target;if(!f||!f.action)return;try{var u=new URL(f.action);if(u.origin===location.origin){var p=u.pathname+u.search+u.hash;var fx=fix(p);if(fx!==p)f.action=fx}}catch(_){}},true);',
+  '})();</script>'
 ].join('');
 
-function injectInterceptor(response, pathname) {
+async function injectIntoHtml(response) {
   var ct = (response.headers.get('Content-Type') || '').toLowerCase();
   if (ct.indexOf('html') === -1) return response;
-  return response.text().then(function (text) {
-    var injected = text.replace(/<head(\s[^>]*)?>/i, function (m) { return m + INTERCEPTOR; });
-    if (injected === text) injected = INTERCEPTOR + text;
-    var h = new Headers(response.headers);
-    h.set('Content-Type', 'text/html; charset=utf-8');
-    h.delete('Content-Length');
-    return new Response(injected, { status: response.status, statusText: response.statusText, headers: h });
-  });
+  var text = await response.text();
+  var out = text.replace(/<head(\s[^>]*)?>/i, function (m) { return m + PRELUDE; });
+  if (out === text) out = PRELUDE + out;
+  var h = new Headers(response.headers);
+  h.set('Content-Type', 'text/html; charset=utf-8');
+  h.delete('Content-Length');
+  return new Response(out, { status: response.status, statusText: response.statusText, headers: h });
 }
 
-async function serveFixed(pathname, request, urlOverride) {
-  var fetchUrl = urlOverride || request.url;
-  var r = await fetch(fetchUrl, {
-    credentials: request.credentials,
-    cache: request.cache,
-    redirect: request.redirect
-  });
-  r = withFixedMime(pathname, r);
-  r = await injectInterceptor(r, pathname);
+// ---- stubs ----
+function emptyJs()    { return new Response('/* stubbed */', { status: 200, headers: { 'Content-Type': 'application/javascript; charset=utf-8' } }); }
+function emptyJson()  { return new Response('{}',            { status: 200, headers: { 'Content-Type': 'application/json; charset=utf-8' } }); }
+function noContent()  { return new Response('',              { status: 204 }); }
+
+// Map `/~r/N/...` and other known-server paths onto static replacements.
+// Returns null if path is not a known stub.
+function resolveServerPath(p) {
+  // /~r/1/ → scramjet runtime
+  if (p.indexOf('/~r/1/') === 0) return B + '/runtime/scramjet/' + p.slice(6);
+  // /~r/2/ → baremux
+  if (p.indexOf('/~r/2/') === 0) return B + '/runtime/baremux/'  + p.slice(6);
+  // /~r/3/ → epoxy
+  if (p.indexOf('/~r/3/') === 0) return B + '/runtime/epoxy/'    + p.slice(6);
+  // /~r/7/ → UV bundles (live in static/lib/uv on Voidv5)
+  if (p.indexOf('/~r/7/') === 0) return B + '/static/lib/uv/'    + p.slice(6);
+  return null;
+}
+
+async function serveFixed(pathname, requestOrUrl, urlOverride) {
+  var fetchUrl = urlOverride || (typeof requestOrUrl === 'string' ? requestOrUrl : requestOrUrl.url);
+  var opts = {};
+  if (typeof requestOrUrl !== 'string') {
+    opts.credentials = requestOrUrl.credentials;
+    opts.cache = requestOrUrl.cache;
+    opts.redirect = requestOrUrl.redirect;
+  }
+  var r = await fetch(fetchUrl, opts);
+  r = withMime(pathname, r);
+  r = await injectIntoHtml(r);
   return r;
 }
 
@@ -112,9 +113,9 @@ self.addEventListener('fetch', function (event) {
   var p = url.pathname;
   var method = event.request.method;
 
-  // Under our base: fetch from jsdelivr, fix MIME, inject interceptor into HTML.
+  // Under our base — fetch, fix MIME, inject globals into HTML.
   if (p.indexOf(B + '/') === 0 || p === B) {
-    if (mimeFor(p) || /\.html?$/i.test(p) || p === B || p === B + '/' || /\/$/.test(p)) {
+    if (mimeFor(p) || /\.html?$/i.test(p) || /\/$/.test(p)) {
       event.respondWith(serveFixed(p, event.request).catch(function (e) {
         return new Response('SW error: ' + (e && e.message || e), { status: 502 });
       }));
@@ -122,12 +123,57 @@ self.addEventListener('fetch', function (event) {
     return;
   }
 
-  // Absolute path outside our base (e.g., "/assets/foo.js" from a game iframe).
-  // Rewrite to BASE + /static + <path>. GET/HEAD only.
+  // Out-of-scope absolute paths — start by mapping known server-only paths.
   if (method !== 'GET' && method !== 'HEAD') return;
 
-  var newUrl = url.origin + B + '/static' + p + url.search;
+  // 1. Mirrored library paths (/~r/N/...)
+  var mapped = resolveServerPath(p);
+  if (mapped) {
+    event.respondWith(serveFixed(p, event.request, url.origin + mapped + url.search).catch(function () {
+      return fetch(event.request);
+    }));
+    return;
+  }
+
+  // 2. /cdn-cache/unpkg/<pkg> — redirect to jsdelivr's npm mirror
+  if (p.indexOf('/cdn-cache/unpkg/') === 0) {
+    var pkg = p.slice('/cdn-cache/unpkg/'.length);
+    event.respondWith(serveFixed(p, event.request, 'https://cdn.jsdelivr.net/npm/' + pkg + url.search).catch(function () {
+      return emptyJs();
+    }));
+    return;
+  }
+
+  // 3. /api/* — return empty JSON
+  if (p.indexOf('/api/') === 0) {
+    event.respondWith(Promise.resolve(emptyJson()));
+    return;
+  }
+
+  // 4. /s/* — umami tracking scripts (stub)
+  if (p.indexOf('/s/') === 0) {
+    event.respondWith(Promise.resolve(emptyJs()));
+    return;
+  }
+
+  // 5. /t/* — umami tracking pixel (noop)
+  if (p.indexOf('/t/') === 0) {
+    event.respondWith(Promise.resolve(noContent()));
+    return;
+  }
+
+  // 6. /sw.js (absolute, from inside iframe) — return empty SW
+  if (p === '/sw.js') {
+    event.respondWith(new Response('/* no-op SW */', { status: 200, headers: { 'Content-Type': 'application/javascript; charset=utf-8' } }));
+    return;
+  }
+
+  // 7. Everything else under absolute path → /static/<path>
+  var newUrl = url.origin + STATIC_BASE + p + url.search;
   event.respondWith(
-    serveFixed(p, event.request, newUrl).catch(function () { return fetch(event.request); })
+    serveFixed(p, event.request, newUrl).then(function (r) {
+      if (r.status === 404) return fetch(event.request);
+      return r;
+    }).catch(function () { return fetch(event.request); })
   );
 });
